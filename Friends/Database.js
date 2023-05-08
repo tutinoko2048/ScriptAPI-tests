@@ -34,26 +34,12 @@ export class Database {
     return this.block;
   }
   
-  
+  /** @typedef {import('./types').DatabaseTypes} DBTypes */
   /**
-   * @overload
-   * @param {typeof import('./FriendManager').TABLES.sentRequests} tableName
+   * @template {keyof DBTypes} T
+   * @param {T} tableName
    * @param {string} key
-   * @returns {string[]}
-   *
-   * @overload
-   * @param {typeof import('./FriendManager').TABLES.gotRequests} tableName
-   * @param {string} key
-   * @returns {string[]}
-   *
-   * @overload
-   * @param {typeof import('./FriendManager').TABLES.friends} tableName
-   * @param {string} key
-   * @returns {string[]}
-   *
-   * @param {string} tableName
-   * @param {string} key
-   * @returns {any}
+   * @returns {DBTypes[T]}
    */
   get(tableName, key) {
     return this.getTable(tableName)[key];
