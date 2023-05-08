@@ -59,8 +59,8 @@ export class FriendManager {
       const targetFriends = this.DB.get(TABLES.friends, targetId);
       const sourceMax = this.getMaxFriends(sourceId);
       const targetMax = this.getMaxFriends(targetId);
-      if (sourceFriends.length > sourceMax) return { error: true, message: `フレンド欄が不足しています！ (${sourceFriends.length} > ${sourceMax})` };
-      if (targetFriends.length > targetMax) return { error: true, message: `相手のフレンド欄が不足しています！` };
+      if (sourceMax !== -1 && sourceFriends.length >= sourceMax) return { error: true, message: `フレンド欄が不足しています！ (${sourceFriends.length} > ${sourceMax})` };
+      if (targetMax !== -1 && targetFriends.length >= targetMax) return { error: true, message: `相手のフレンド欄が不足しています！` };
       
       // リクエスト送信
       const sent = this.DB.get(TABLES.sentRequests, sourceId) ?? [];
@@ -167,8 +167,8 @@ export class FriendManager {
     // フレンドの人数制限
     const max1 = this.getMaxFriends(player1);
     const max2 = this.getMaxFriends(player2);
-    if (friends1.length > max1) return { error: true, message: `フレンド欄が不足しています！ (${friends1.length} > ${max1})` };
-    if (friends2.length > max2) return { error: true, message: `相手のフレンド欄が不足しています！` };
+    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド欄が不足しています！ (${friends1.length} > ${max1})` };
+    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド欄が不足しています！` };
     
     // 追加
     friends1.push(player2);
