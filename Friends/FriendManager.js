@@ -2,12 +2,14 @@
 
 import { world, Player } from '@minecraft/server';
 import { Database } from './Database';
+import { defaultMaxFriends } from './config';
 
 export const TABLES = /** @type {const} */ ({
   users: 'users',
   sentRequests: 'sentRequests',
   gotRequests: 'gotRequests',
-  friends: 'friends'
+  friends: 'friends',
+  maxFriends: 'maxFriends'
 });
 
 /** @typedef {{ [id: string]: string }} UserList */
@@ -47,13 +49,20 @@ export class FriendManager {
    */
   sendRequest(sourceId, targetName) {
     const target = world.getAllPlayers().find(p => p.name === targetName);
-    if (sourceId === target?.id) {
-      return { error: true, message: '自分とフレンドになることはできませんよ...?' };
-    }
+    if (sourceId === target?.id) return { error: true, message: '自分とフレンドになることはできませんよ...?' };
     try {
       const targetId = target?.id ?? this.getIdByName(targetName);
       if (!targetId) return { error: true, message: `プレイヤー 「${targetName}§c」 が見つかりませんでした` };
       
+      // フレンドの人数制限
+      const sourceFriends = this.DB.get(TABLES.friends, sourceId);
+      const targetFriends = this.DB.get(TABLES.friends, targetId);
+      const sourceMax = this.getMaxFriends(sourceId);
+      const targetMax = this.getMaxFriends(targetId);
+      if (sourceFriends.length > sourceMax) return { error: true, message: `フレンド欄が不足しています！ (${sourceFriends.length} > ${sourceMax})` };
+      if (targetFriends.length > targetMax) return { error: true, message: `相手のフレンド欄が不足しています！` };
+      
+      // リクエスト送信
       const sent = this.DB.get(TABLES.sentRequests, sourceId) ?? [];
       const got = this.DB.get(TABLES.gotRequests, targetId) ?? [];
       if (sent.includes(targetId) && got.includes(sourceId)) return { error: true, message: `${targetName} は既に申請済みです` };
@@ -69,6 +78,7 @@ export class FriendManager {
   }
   
   /**
+   * 送信/受信したリクエストを取得
    * @param {string} sourceId
    * @returns {Response}
    */
@@ -100,9 +110,7 @@ export class FriendManager {
       this.DB.set(TABLES.sentRequests, targetId, sent.length ? sent : undefined);
       this.DB.set(TABLES.gotRequests, sourceId, got.length ? got : undefined);
       
-      this.addFriend(sourceId, targetId);
-      
-      return { error: false };
+      return this.addFriend(sourceId, targetId);
     } catch {
       return { error: true, message: 'データベースの操作に失敗しました' };
     }
@@ -148,16 +156,27 @@ export class FriendManager {
   
   /**
    * acceptして両方フレンドになる
-   * @param {string} player1
-   * @param {string} player2
+   * @param {string} player1 (source player)
+   * @param {string} player2 (target player)
+   * @returns {Response}
    */
   addFriend(player1, player2) {
     const friends1 = this.DB.get(TABLES.friends, player1) ?? [];
     const friends2 = this.DB.get(TABLES.friends, player2) ?? [];
+    
+    // フレンドの人数制限
+    const max1 = this.getMaxFriends(player1);
+    const max2 = this.getMaxFriends(player2);
+    if (friends1.length > max1) return { error: true, message: `フレンド欄が不足しています！ (${friends1.length} > ${max1})` };
+    if (friends2.length > max2) return { error: true, message: `相手のフレンド欄が不足しています！` };
+    
+    // 追加
     friends1.push(player2);
     friends2.push(player1);
     this.DB.set(TABLES.friends, player1, friends1);
     this.DB.set(TABLES.friends, player2, friends2);
+    
+    return { error: false }
   }
   
   /**
@@ -171,6 +190,15 @@ export class FriendManager {
     
     this.DB.set(TABLES.friends, player1, friends1.length ? friends1 : undefined);
     this.DB.set(TABLES.friends, player2, friends2.length ? friends2 : undefined);
+  }
+  
+  /**
+   * フレンドの最大人数を取得 -1なら無限
+   * @param {string} player
+   * @returns {number}
+   */
+  getMaxFriends(player) {
+    return this.DB.get(TABLES.maxFriends, player) ?? defaultMaxFriends;
   }
   
   /**
