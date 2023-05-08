@@ -1,0 +1,13 @@
+{
+  "include": ["scripts/*"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "module": "ES2020",
+    "target": "es2021",
+    "noEmit": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  }
+}

@@ -1,0 +1,1 @@
+# scriptapi-addon-template
