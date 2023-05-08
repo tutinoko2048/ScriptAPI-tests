@@ -1,12 +1,14 @@
 {
-  "include": ["scripts/*"],
+  "include": ["scripts/", "Friends/"],
   "exclude": ["node_modules"],
+  "files": [ "index.d.ts" ],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
     "module": "ES2020",
     "target": "es2021",
     "noEmit": true,
+    "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true
   }
