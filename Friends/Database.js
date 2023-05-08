@@ -3,7 +3,7 @@
 // NOTE: Make an instance in or after worldInitialize event
 // Make sure the container block is always loaded
 
-import { world, MinecraftBlockTypes, ItemStack, BlockInventoryComponent } from '@minecraft/server';
+import { world, MinecraftBlockTypes, ItemStack } from '@minecraft/server';
 
 const DATA_BLOCK = 'minecraft:chest';
 const DATA_ITEM = 'minecraft:book';
@@ -90,7 +90,6 @@ export class Database {
   getTable(tableName) {
     if (tableName in this.cache) return this.cache[tableName];
     
-    /** @type {BlockInventoryComponent} */
     const { container } = this.chest.getComponent('minecraft:inventory');
     
     const { item } = this.getTableItem(tableName, container);
@@ -112,7 +111,6 @@ export class Database {
   setTable(tableName, data) {
     this.cache[tableName] = data;
     
-    /** @type {BlockInventoryComponent} */
     const { container } = this.chest.getComponent('minecraft:inventory');
     
     let created;
@@ -152,7 +150,6 @@ export class Database {
   }
   
   fetchTable() {
-    /** @type {BlockInventoryComponent} */
     const { container } = this.chest.getComponent('minecraft:inventory');
     const fetched = [];
     
