@@ -59,8 +59,8 @@ export class FriendManager {
       const targetFriends = this.DB.get(TABLES.friends, targetId);
       const sourceMax = this.getMaxFriends(sourceId);
       const targetMax = this.getMaxFriends(targetId);
-      if (sourceMax !== -1 && sourceFriends.length >= sourceMax) return { error: true, message: `フレンド欄が不足しています！ (${sourceFriends.length} > ${sourceMax})` };
-      if (targetMax !== -1 && targetFriends.length >= targetMax) return { error: true, message: `相手のフレンド欄が不足しています！` };
+      if (sourceMax !== -1 && sourceFriends.length >= sourceMax) return { error: true, message: `フレンド数が最大数に達しています！ (${sourceFriends.length} > ${sourceMax})` };
+      if (targetMax !== -1 && targetFriends.length >= targetMax) return { error: true, message: `相手のフレンド数が最大数に達しています！` };
       
       // リクエスト送信
       const sent = this.DB.get(TABLES.sentRequests, sourceId) ?? [];
@@ -167,8 +167,8 @@ export class FriendManager {
     // フレンドの人数制限
     const max1 = this.getMaxFriends(player1);
     const max2 = this.getMaxFriends(player2);
-    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド欄が不足しています！ (${friends1.length} > ${max1})` };
-    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド欄が不足しています！` };
+    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド数が最大数に達しています！ (${friends1.length} > ${max1})` };
+    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド数が最大数に達しています！` };
     
     // 追加
     friends1.push(player2);
@@ -194,11 +194,21 @@ export class FriendManager {
   
   /**
    * フレンドの最大人数を取得 -1なら無限
-   * @param {string} player
+   * @param {string} playerId プレイヤーのID (<Player>.id)
    * @returns {number}
    */
-  getMaxFriends(player) {
-    return this.DB.get(TABLES.maxFriends, player) ?? defaultMaxFriends;
+  getMaxFriends(playerId) {
+    return this.DB.get(TABLES.maxFriends, playerId) ?? defaultMaxFriends;
+  }
+  
+  /**
+   * フレンドの最大人数を設定
+   * @param {string} playerId プレイヤーのID (<Player>.id)
+   * @param {number} max 最大人数 -1なら無限
+   */
+  setMaxFriends(playerId, max) {
+    if (typeof max !== 'number') throw TypeError('The value provided for max count is not a number')
+    this.DB.set(TABLES.maxFriends, playerId, max);
   }
   
   /**

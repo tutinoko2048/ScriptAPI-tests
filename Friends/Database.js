@@ -46,9 +46,10 @@ export class Database {
   }
   
   /**
-   * @param {string} tableName
+   * @template {keyof DBTypes} T
+   * @param {T} tableName
    * @param {string} key
-   * @param {any} value
+   * @param {DBTypes[T]} value
    * @returns {void}
    */
   set(tableName, key, value) {

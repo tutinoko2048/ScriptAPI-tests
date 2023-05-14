@@ -6,6 +6,6 @@ declare module '@minecraft/server' {
   }
 
   interface Block {
-    getComponent(componentId: 'minecraft:inventory'): MC.BlockInventoryComponent;
+    getComponent(componentId: typeof MC.BlockInventoryComponent['componentId']): MC.BlockInventoryComponent;
   }
 }
