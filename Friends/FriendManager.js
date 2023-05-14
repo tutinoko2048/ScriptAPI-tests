@@ -12,9 +12,9 @@ export const TABLES = /** @type {const} */ ({
   maxFriends: 'maxFriends'
 });
 
-/** @typedef {{ [id: string]: string }} UserList */
-/** @typedef {{ id: string, name: string, online?: boolean }} User */
-/** @typedef {{ error: boolean, message?: string, got?: User[], sent?: User[], data?: User[], targetName?: string, targetId?: string }} Response */
+/** @typedef {import('./types').UserList} UserList */
+/** @typedef {import('./types').User} User */
+/** @typedef {import('./types').Response} Response */
 // source = じぶん, target = あいて
 
 export class FriendManager {
@@ -45,7 +45,7 @@ export class FriendManager {
   /**
    * @param {string} sourceId
    * @param {string} targetName
-   * @returns {Response}
+   * @returns {import('./types').SendResponse}
    */
   sendRequest(sourceId, targetName) {
     const target = world.getAllPlayers().find(p => p.name === targetName);
@@ -80,7 +80,7 @@ export class FriendManager {
   /**
    * 送信/受信したリクエストを取得
    * @param {string} sourceId
-   * @returns {Response}
+   * @returns {import('./types').FetchResponse}
    */
   fetchRequest(sourceId) {
     try {
@@ -137,7 +137,7 @@ export class FriendManager {
   
   /**
    * @param {string} sourceId
-   * @returns {Response}
+   * @returns {import('./types').FriendsResponse}
    */
   getFriends(sourceId) {
     try {
@@ -207,7 +207,7 @@ export class FriendManager {
    * @param {number} max 最大人数 -1なら無限
    */
   setMaxFriends(playerId, max) {
-    if (typeof max !== 'number') throw TypeError('The value provided for max count is not a number')
+    if (typeof max !== 'number') throw TypeError('The value provided for max count is not a number');
     this.DB.set(TABLES.maxFriends, playerId, max);
   }
   
