@@ -136,12 +136,12 @@ export class FriendManager {
   }
   
   /**
-   * @param {string} sourceId
+   * @param {string} playerId
    * @returns {import('./types').FriendsResponse}
    */
-  getFriends(sourceId) {
+  getFriends(playerId) {
     try {
-      const friends = this.DB.get(TABLES.friends, sourceId) ?? [];
+      const friends = this.DB.get(TABLES.friends, playerId) ?? [];
       const users = this.getUsers();
       const players = world.getAllPlayers().map(p => p.id);
       
