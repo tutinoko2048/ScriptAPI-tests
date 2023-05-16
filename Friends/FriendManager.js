@@ -157,10 +157,9 @@ export class FriendManager {
       const friends = this.DB.get(TABLES.friends, playerId) ?? [];
       const users = this.getUsers();
       const players = world.getAllPlayers().map(p => p.id);
-      
+
       /** @type {User[]} */
       const res = friends.map(id => ({ id, name: users[id], online: players.includes(id) }));
-      
       return { error: false, data: res }
     } catch (e) {
       console.error(e, e.stack);

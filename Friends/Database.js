@@ -27,8 +27,13 @@ export class Database {
   /** @type {import('@minecraft/server').Block} */
   get chest() {
     this.block ??= overworld.getBlock(this.blockLocation);
-    if (this.block?.typeId !== DATA_BLOCK) {
-      if (DEBUG) console.warn('chest: block not found');
+    try {
+      if (this.block?.typeId !== DATA_BLOCK) {
+        if (DEBUG) console.warn('chest: block not found');
+        this.block.setType(MinecraftBlockTypes.get(DATA_BLOCK));
+      }
+    } catch {
+      this.block = overworld.getBlock(this.blockLocation);
       this.block.setType(MinecraftBlockTypes.get(DATA_BLOCK));
     }
     return this.block;
@@ -152,7 +157,7 @@ export class Database {
   
   fetchTable() {
     const { container } = this.chest.getComponent('minecraft:inventory');
-    const fetched = [];
+    const fetched = /** @type {string[]} */ ([]);
     
     for (let i = 0; i < container.size; i++) {
       const item = container.getItem(i);
