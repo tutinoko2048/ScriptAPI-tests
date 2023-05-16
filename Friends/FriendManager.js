@@ -18,10 +18,16 @@ export const TABLES = /** @type {const} */ ({
 // source = じぶん, target = あいて
 
 export class FriendManager {
+  /** @type {Database} */
+  #DB;
+  
   /** @param {import('@minecraft/server').Vector3} chestLocation */
   constructor(chestLocation) {
-    this.DB = new Database(chestLocation);
+    this.#DB = new Database(chestLocation);
   }
+  
+  /** @type {Database} */
+  get DB() { return this.#DB; }
   
   /**
    * @param {Player} player
@@ -55,12 +61,12 @@ export class FriendManager {
       if (!targetId) return { error: true, message: `プレイヤー 「${targetName}§c」 が見つかりませんでした` };
       
       // フレンドの人数制限
-      const sourceFriends = this.DB.get(TABLES.friends, sourceId);
-      const targetFriends = this.DB.get(TABLES.friends, targetId);
+      const sourceFriends = this.DB.get(TABLES.friends, sourceId) ?? [];
+      const targetFriends = this.DB.get(TABLES.friends, targetId) ?? [];
       const sourceMax = this.getMaxFriends(sourceId);
       const targetMax = this.getMaxFriends(targetId);
-      if (sourceMax !== -1 && sourceFriends.length >= sourceMax) return { error: true, message: `フレンド数が最大数に達しています！ (${sourceFriends.length} > ${sourceMax})` };
-      if (targetMax !== -1 && targetFriends.length >= targetMax) return { error: true, message: `相手のフレンド数が最大数に達しています！` };
+      if (sourceMax !== -1 && sourceFriends.length >= sourceMax) return { error: true, message: `フレンド数が上限に達しています！ (${sourceFriends.length} > ${sourceMax})` };
+      if (targetMax !== -1 && targetFriends.length >= targetMax) return { error: true, message: `相手のフレンド数が上限に達しています！` };
       
       // リクエスト送信
       const sent = this.DB.get(TABLES.sentRequests, sourceId) ?? [];
@@ -72,7 +78,8 @@ export class FriendManager {
       this.DB.set(TABLES.gotRequests, targetId, got);
       return { error: false, targetId };
       
-    } catch {
+    } catch (e) {
+      console.error(e, e.stack);
       return { error: true, message: 'データベースの操作に失敗しました' };
     }
   }
@@ -93,7 +100,8 @@ export class FriendManager {
       const gotUsers = got.map(id => ({ id, name: users[id] }));
       
       return { error: false, got: gotUsers, sent: sentUsers };
-    } catch {
+    } catch (e) {
+      console.error(e, e.stack);
       return { error: true, message: 'データベースの操作に失敗しました' };
     }
   }
@@ -105,13 +113,17 @@ export class FriendManager {
    */
   acceptRequest(sourceId, targetId) {
     try {
+      const res = this.addFriend(sourceId, targetId);
+      if (res.error) return res; // 上限の時リクエストを削除しないようにする
+      
       const sent = (this.DB.get(TABLES.sentRequests, targetId) ?? []).filter(r => r !== sourceId);
       const got = (this.DB.get(TABLES.gotRequests, sourceId) ?? []).filter(r => r !== targetId);
       this.DB.set(TABLES.sentRequests, targetId, sent.length ? sent : undefined);
       this.DB.set(TABLES.gotRequests, sourceId, got.length ? got : undefined);
       
-      return this.addFriend(sourceId, targetId);
-    } catch {
+      return res;
+    } catch (e) {
+      console.error(e, e.stack);
       return { error: true, message: 'データベースの操作に失敗しました' };
     }
   }
@@ -130,7 +142,8 @@ export class FriendManager {
       this.DB.set(TABLES.gotRequests, targetId, got.length ? got : undefined);
       
       return { error: false }
-    } catch {
+    } catch (e) {
+      console.error(e, e.stack);
       return { error: true, message: 'データベースの操作に失敗しました' };
     }
   }
@@ -149,7 +162,8 @@ export class FriendManager {
       const res = friends.map(id => ({ id, name: users[id], online: players.includes(id) }));
       
       return { error: false, data: res }
-    } catch {
+    } catch (e) {
+      console.error(e, e.stack);
       return { error: true, message: 'データベースの操作に失敗しました' };
     }
   }
@@ -167,8 +181,8 @@ export class FriendManager {
     // フレンドの人数制限
     const max1 = this.getMaxFriends(player1);
     const max2 = this.getMaxFriends(player2);
-    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド数が最大数に達しています！ (${friends1.length} > ${max1})` };
-    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド数が最大数に達しています！` };
+    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド数が上限に達しています！ (${friends1.length} > ${max1})` };
+    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド数が上限に達しています！` };
     
     // 追加
     friends1.push(player2);
