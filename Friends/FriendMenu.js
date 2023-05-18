@@ -45,10 +45,12 @@ export class FriendMenu {
       .button(`フレンド申請 (${color(requests.got?.length)})`, icons.invite, 'got')
       .button(`送信した申請を管理 (${color(requests.sent?.length)})`, icons.invite, 'sent')
       .title(`§lフレンド §r§2${list.filter(u => u.online).length} オンライン §7| §c${list.filter(u => !u.online).length} オフライン§r`);
+    const max = this.friends.getMaxFriends(this.player.id);
     if (list.length === 0) {
       form.body('§oまだフレンドはいないようです...');
+    } else if (max === -1) { // 無制限の時
+      form.body(`フレンド数: ${list.length}/§o§p無制限§r`);
     } else {
-      const max = this.friends.getMaxFriends(this.player.id);
       form.body(`フレンド数: ${list.length >= max ? '§c' : ''}${list.length}/${max}`);
     }
     
