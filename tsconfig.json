@@ -1,6 +1,6 @@
 {
-  "include": ["scripts/", "Friends/"],
-  "exclude": ["node_modules"],
+  "include": [ "scripts/", "Friends/" ],
+  "exclude": [ "node_modules", "Friends/team.js" ],
   "files": [ "index.d.ts" ],
   "compilerOptions": {
     "allowJs": true,

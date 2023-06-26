@@ -6,7 +6,7 @@ import { chestLocation } from './config';
 import { FriendMenu } from './FriendMenu';
 import * as util from './util';
 
-export * from './team';
+//export * from './team';
 export * from './FriendMenu';
 
 /** @type {FriendManager|undefined} */
@@ -14,21 +14,19 @@ export let friends;
 /** @type {import('./Database').Database|undefined} */
 export let DB;
 
-world.events.worldInitialize.subscribe(async () => {
+world.afterEvents.worldInitialize.subscribe(async () => {
   await util.worldLoad(chestLocation);
   friends = new FriendManager(chestLocation);
   DB = friends.DB;
 });
 
-world.events.playerSpawn.subscribe(async ev => {
+world.afterEvents.playerSpawn.subscribe(async ev => {
   const { initialSpawn, player } = ev;
   if (!initialSpawn) return;
   
   const friends = await friendLoad();
-  // @ts-ignore
   if (!player.isRegistered) { // 登録
     friends.registerUser(player);
-    // @ts-ignore
     player.isRegistered = true;
   }
   
@@ -41,10 +39,8 @@ world.events.playerSpawn.subscribe(async ev => {
 system.runInterval(() => {
   if (!friends) return;
   for (const p of world.getPlayers()) {
-    // @ts-ignore
     if (p.isRegistered) continue; 
     friends.registerUser(p);
-    // @ts-ignore
     p.isRegistered = true;
   }
 }, 10*20);

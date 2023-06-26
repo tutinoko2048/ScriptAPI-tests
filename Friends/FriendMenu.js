@@ -101,9 +101,10 @@ export class FriendMenu {
     form.title('フレンド > フレンド申請')
       .textField('フレンド名', 'name');
     const { canceled, formValues } = await form.show(this.player);
-    if (canceled || !formValues?.[0]) return;
-    
-    const { error, message, targetId } = this.friends.sendRequest(this.player.id, formValues[0]);
+    if (canceled || !formValues) return;
+    const input = /** @type {string} */ (formValues[0]);
+
+    const { error, message, targetId } = this.friends.sendRequest(this.player.id, input);
     if (error) return this.player.sendMessage(`§c${message}`);
     this.player.sendMessage(`§a${formValues[0]} にフレンド申請を送信しました`);
     
