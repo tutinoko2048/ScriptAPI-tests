@@ -133,3 +133,8 @@ package-lock.json
 yarn.lock
 
 .codesandbox
+
+bdsx/
+wine/
+server/
+
