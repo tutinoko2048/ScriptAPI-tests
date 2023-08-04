@@ -1,28 +1,30 @@
 // @ts-check
-import { world, Player } from '@minecraft/server';
-import * as util from '../util/score';
+import { world } from '@minecraft/server';
+import * as util from './util';
+
+/** @typedef {import('@minecraft/server').Player} Player */
 
 // ワールド参加時 redけす
 // ゲーム終了時 red, redd を*で全部消し飛ばす
 
-const teamTag = /** @type {const} */ ({
+const TeamTag = /** @type {const} */ ({
   red: 'redman',
   blue: 'blueman',
   yellow: 'yellowman',
   lime: 'green'
 });
 
-const teamColor = {
+const TeamColor = /** @type {const} */ ({
   red: '§c',
   blue: '§1',
   yellow: '§e',
   lime: '§a'
-}
+});
 
 /**
  * @param {Player} player 参加させるプレイヤー
  * @param {import('./FriendManager').FriendManager} friends FriendManager
- * @param {(keyof teamTag)[]} teams 振り分けに使うチーム名の配列
+ * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
  */
 export function joinTeam(player, friends, teams, isStart) {
@@ -35,23 +37,23 @@ export function joinTeam(player, friends, teams, isStart) {
   
   player.sendMessage('§c§l敵チームとの協力プレイは禁止です！\n§r§b敵チームとの協力プレイをすると、サーバーからBANされます！');
   
-  player.sendMessage(`あなたは${teamColor[team]}§l${team.toUpperCase()}チーム§r§fに加入しました`);
-  player.addTag(teamTag[team]);
+  player.sendMessage(`あなたは${TeamColor[team]}§l${team.toUpperCase()}チーム§r§fに加入しました`);
+  player.addTag(TeamTag[team]);
 }
 
 /**
  * @param {Player} player
  * @param {import('./FriendManager').User[]} friendList フレンドリスト
- * @param {(keyof teamTag)[]} teams 振り分けに使うチーム名の配列
+ * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
- * @returns {keyof teamTag} プレイヤーが参加するチームのタグ
+ * @returns {keyof TeamTag} プレイヤーが参加するチームのタグ
  */
 export function selectTeam(player, friendList, teams, isStart) {
   const ids = friendList.map(u => u.id);
-  const players = world.getAllPlayers();
+  const players = world.getPlayers();
   const friends = players.filter(p => ids.includes(p.id));
   
-  const teamHPs = teams.map(team => ({ team, score: util.getFakeScore(`${team}player`, team) }));
+  const teamHPs = teams.map(team => ({ team, score: util.getFakeScore(`${team}player`, team) })); // ここgetScoreに置き換えたい
   
   // 全チームの人数
   const scores = getTeamCount(players, teams);
@@ -83,7 +85,7 @@ export function selectTeam(player, friendList, teams, isStart) {
 
 /**
  * @param {Player[]} players
- * @param {(keyof teamTag)[]} teams
+ * @param {(keyof TeamTag)[]} teams
  */
 function getTeamCount(players, teams) {
   return teams.map(team => (
@@ -92,4 +94,8 @@ function getTeamCount(players, teams) {
       count: players.filter(p => p.hasTag(team)).length
     }
   ))
+}
+
+function isBedGame() {
+  return util.getScore('system', 'game') === 1;
 }

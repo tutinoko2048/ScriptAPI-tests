@@ -1,9 +1,8 @@
-// @ts-check
 // Chest Database v2 made by RetoRuto9900K
 // NOTE: Make an instance in or after worldInitialize event
 // Make sure the container block is always loaded
 
-import { world, MinecraftBlockTypes, ItemStack } from '@minecraft/server';
+import { world, ItemStack, MinecraftBlockTypes } from '@minecraft/server';
 
 const DATA_BLOCK = 'minecraft:chest';
 const DATA_ITEM = 'minecraft:book';

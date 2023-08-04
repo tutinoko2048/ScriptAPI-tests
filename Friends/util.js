@@ -5,6 +5,44 @@ import * as UI from '@minecraft/server-ui';
 
 const dimension = world.getDimension('overworld');
 
+/** @typedef {import('@minecraft/server').Entity} Entity */
+
+/**
+ * @arg {Entity|string} target
+ * @arg {string} objective
+ * @arg {boolean} [useZero]
+ * @returns {number|null}
+ */
+export function getScore(target, objective, useZero) {
+  try {
+    return world.scoreboard.getObjective(objective).getScore(target);
+  } catch {
+    return useZero ? 0 : null;
+  }
+}
+
+/**
+ * @arg {Entity|string} target
+ * @arg {string} objective
+ * @arg {number} score setするスコア
+ */
+export function setScore(target, objective, score) {
+  world.scoreboard.getObjective(objective).setScore(target, score);
+}
+
+/**
+ * @arg {Entity|string} target
+ * @arg {string} objective
+ * @arg {number} score addするスコア
+ * @returns {number} add後のスコア
+ */
+export function addScore(target, objective, score) {
+  const newValue = getScore(target, objective, true) + score;
+  setScore(target, objective, newValue);
+  return newValue;
+}
+
+
 /**
  * @param {import('@minecraft/server').Vector3} loc
  * @returns {Promise<void>}
@@ -32,7 +70,7 @@ export function forceShow(player, form) {
     system.run(async function run() {
       const response = await form.show(player);
       const {canceled, cancelationReason: reason} = response;
-      if (canceled && reason === UI.FormCancelationReason.userBusy) return system.run(run);
+      if (canceled && reason === UI.FormCancelationReason.UserBusy) return system.run(run);
       res(response);
     });
   });
@@ -46,15 +84,15 @@ export async function confirmForm(player, { title = '確認', body, yes = 'OK', 
   const form = new UI.MessageFormData();
   form.title(title)
     .body(body)
-    .button1(yes)
-    .button2(no);
+    .button1(no)
+    .button2(yes);
   const { selection, canceled } = await form.show(player);
   if (canceled) return defaultValue;
   return selection === 1;
 }
 
 export function getPlayerById(id) {
-  return world.getAllPlayers().find(p => p.id === id);
+  return world.getPlayers().find(p => p.id === id);
 }
 
 export function randomValue(array) {

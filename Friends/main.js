@@ -6,7 +6,7 @@ import { chestLocation } from './config';
 import { FriendMenu } from './FriendMenu';
 import * as util from './util';
 
-//export * from './team';
+export * from './team';
 export * from './FriendMenu';
 
 /** @type {FriendManager|undefined} */
@@ -25,8 +25,10 @@ world.afterEvents.playerSpawn.subscribe(async ev => {
   if (!initialSpawn) return;
   
   const friends = await friendLoad();
+  // @ts-ignore
   if (!player.isRegistered) { // 登録
     friends.registerUser(player);
+    // @ts-ignore
     player.isRegistered = true;
   }
   
@@ -39,13 +41,15 @@ world.afterEvents.playerSpawn.subscribe(async ev => {
 system.runInterval(() => {
   if (!friends) return;
   for (const p of world.getPlayers()) {
+    // @ts-ignore
     if (p.isRegistered) continue; 
     friends.registerUser(p);
+    // @ts-ignore
     p.isRegistered = true;
   }
 }, 10*20);
 
-system.events.scriptEventReceive.subscribe(ev => {
+system.afterEvents.scriptEventReceive.subscribe(ev => {
   const { sourceEntity, id } = ev;
   
   if (sourceEntity instanceof Player && id === "friends:show") {

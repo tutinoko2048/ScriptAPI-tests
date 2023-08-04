@@ -1,11 +1,5 @@
 import { TABLES } from './FriendManager';
 
-declare module '@minecraft/server' {
-  interface Player {
-    isRegistered: boolean;
-  }
-}
-
 export type UserList = Record<string, string>
 
 export interface Response {

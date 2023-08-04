@@ -1,5 +1,4 @@
 // @ts-check
-
 import { Player } from '@minecraft/server';
 import * as UI from '@minecraft/server-ui';
 import { ActionForm } from './ActionForm';
@@ -45,13 +44,14 @@ export class FriendMenu {
       .button(`フレンド申請 (${color(requests.got?.length)})`, icons.invite, 'got')
       .button(`送信した申請を管理 (${color(requests.sent?.length)})`, icons.invite, 'sent')
       .title(`§lフレンド §r§2${list.filter(u => u.online).length} オンライン §7| §c${list.filter(u => !u.online).length} オフライン§r`);
+
     const max = this.friends.getMaxFriends(this.player.id);
     if (list.length === 0) {
       form.body('§oまだフレンドはいないようです...');
     } else if (max === -1) { // 無制限の時
       form.body(`フレンド数: ${list.length}/§o§p無制限§r`);
     } else {
-      form.body(`フレンド数: ${list.length >= max ? '§c' : ''}${list.length}/${max}`);
+      form.body(`フレンド数: ${list.length >= max ? '§c' : ''}${list.length}/${max}(COAL以上のランクがあると無限)`);
     }
     
     const { canceled, button } = await form.show(this.player);
@@ -101,10 +101,9 @@ export class FriendMenu {
     form.title('フレンド > フレンド申請')
       .textField('フレンド名', 'name');
     const { canceled, formValues } = await form.show(this.player);
-    if (canceled || !formValues) return;
-    const input = /** @type {string} */ (formValues[0]);
-
-    const { error, message, targetId } = this.friends.sendRequest(this.player.id, input);
+    if (canceled || !formValues?.[0]) return;
+    const targetName = /** @type {string} */ (formValues[0]);
+    const { error, message, targetId } = this.friends.sendRequest(this.player.id, targetName);
     if (error) return this.player.sendMessage(`§c${message}`);
     this.player.sendMessage(`§a${formValues[0]} にフレンド申請を送信しました`);
     

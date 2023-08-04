@@ -3,6 +3,7 @@
 import { world, Player } from '@minecraft/server';
 import { Database } from './Database';
 import { defaultMaxFriends } from './config';
+import * as util from './util';
 
 export const TABLES = /** @type {const} */ ({
   users: 'users',
@@ -16,6 +17,15 @@ export const TABLES = /** @type {const} */ ({
 /** @typedef {import('./types').User} User */
 /** @typedef {import('./types').Response} Response */
 // source = じぶん, target = あいて
+
+/** 
+ * @param {Player | String} p
+ * @param {String} m
+*/
+function sendMessage(p, m) {
+  if (p === "all") world.sendMessage(m);
+  else if (p instanceof Player) p.sendMessage(m);
+}
 
 export class FriendManager {
   /** @type {Database} */
@@ -54,8 +64,16 @@ export class FriendManager {
    * @returns {import('./types').SendResponse}
    */
   sendRequest(sourceId, targetName) {
-    const target = world.getAllPlayers().find(p => p.name === targetName);
-    if (sourceId === target?.id) return { error: true, message: '自分とフレンドになることはできませんよ...?' };
+    const target = world.getPlayers().find(p => p.name === targetName);
+    if (sourceId === target?.id) {
+      if (!target.hasTag('botti')) {
+        sendMessage(target, `§g§l《実績解除》\n§r§a実績「ぼっち」を達成しました！\n報酬：500SP`)
+        util.addScore(target, 'sp', 900);
+        target.runCommandAsync(`playsound random.levelup @s ~~1~ 0.7 0.5`);
+        target.addTag('botti')
+      }
+      return { error: true, message: '自分とフレンドになることはできませんよ...?' };
+    }
     try {
       const targetId = target?.id ?? this.getIdByName(targetName);
       if (!targetId) return { error: true, message: `プレイヤー 「${targetName}§c」 が見つかりませんでした` };
@@ -156,7 +174,7 @@ export class FriendManager {
     try {
       const friends = this.DB.get(TABLES.friends, playerId) ?? [];
       const users = this.getUsers();
-      const players = world.getAllPlayers().map(p => p.id);
+      const players = world.getPlayers().map(p => p.id);
 
       /** @type {User[]} */
       const res = friends.map(id => ({ id, name: users[id], online: players.includes(id) }));
@@ -180,8 +198,8 @@ export class FriendManager {
     // フレンドの人数制限
     const max1 = this.getMaxFriends(player1);
     const max2 = this.getMaxFriends(player2);
-    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド数が上限に達しています！ (${friends1.length} > ${max1})` };
-    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド数が上限に達しています！` };
+    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド数が上限に達しています！ (${friends1.length} > ${max1})\nCOAL以上のランクがあれば、フレンドを無限に登録可能になります…` };
+    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド数が上限に達しています！\nランクを紹介してあげてください…` };
     
     // 追加
     friends1.push(player2);
