@@ -6,6 +6,7 @@ import * as util from './util';
 
 // ワールド参加時 redけす
 // ゲーム終了時 red, redd を*で全部消し飛ばす
+// めも: redオブジェクトの中にredplayer, redplayersが入ってる
 
 const TeamTag = /** @type {const} */ ({
   red: 'redman',
@@ -53,29 +54,39 @@ export function selectTeam(player, friendList, teams, isStart) {
   const players = world.getPlayers();
   const friends = players.filter(p => ids.includes(p.id));
   
-  const teamHPs = teams.map(team => ({ team, score: util.getFakeScore(`${team}player`, team) })); // ここgetScoreに置き換えたい
-  
-  // 全チームの人数
+  const teamHPs = /** @type {{ [key in keyof TeamTag]: number }} */ (Object.fromEntries(teams.map(team => [ team, util.getScore(`${team}player`, team) ])));
+
+  // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
   
+  const isBedGame = getGame() === 1;
+    /** @param {keyof TeamTag} team */
+  const bedExists = (team) => teamHPs[team] === 100;
+  
   // 人数0除外+1番人数が少ないチーム
-  const sorted = /** @type {any} */ (scores.filter(d => isStart || !!d.count));
-  const noZero = scores.every(x => !!x.count); // 開始時は0だからフレンドは考えない
-  sorted.sort((a, b) => {
-    if (noZero && a.count === b.count) { // 同じ人数の時 フレンドがいる方を優先
-      a.hasFriend ??= friends.some(p => p.hasTag(a.team)); // hasTagの回数を減らすために保存しておく
-      b.hasFriend ??= friends.some(p => p.hasTag(b.team));
-      
-      return b.hasFriend - a.hasFriend;
+  const sorted = (scores.filter(d => isStart || !!d.count));
+  const zeroExists = scores.some(x => !x.count) // 人数0が一つでもあるかどうか
+  sorted.sort((team1, team2) => {
+    // ベッド存在を優先
+    if (isBedGame && (bedExists(team1.team) !== bedExists(team2.team))) {
+      return bedExists(team1.team) ? -1 : 1;
     }
-    return a.count - b.count;
+
+    // 人数少ない方優先
+    if (zeroExists || team1.count !== team2.count) { 
+      return team1.count - team2.count;
+    }
+
+    // 同じ人数の時 フレンドがいる方を優先
+    team1.hasFriend ??= friends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
+    return team1.hasFriend ? -1 : 1;
   });
   
-  let tag = sorted[0].team;
-  for (const { team, score } of teamHPs) {
+  const tag = sorted[0].team;
+  for (const [ team, score ] of Object.entries(teamHPs)) {
     if (player.hasTag(team + "d")) {
       player.removeTag(team + "d");
-      if (score != 0) return team;
+      if (score != 0) return /** @type {keyof TeamTag} */ (team);
     }
   }
   
@@ -86,6 +97,7 @@ export function selectTeam(player, friendList, teams, isStart) {
 /**
  * @param {Player[]} players
  * @param {(keyof TeamTag)[]} teams
+ * @returns {{ team: keyof TeamTag, count: number, hasFriend?: boolean }[]}
  */
 function getTeamCount(players, teams) {
   return teams.map(team => (
@@ -96,6 +108,6 @@ function getTeamCount(players, teams) {
   ))
 }
 
-function isBedGame() {
-  return util.getScore('system', 'game') === 1;
+function getGame() {
+  return util.getScore('system', 'game');
 }
