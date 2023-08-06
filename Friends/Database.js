@@ -38,7 +38,7 @@ export class Database {
     return this.block;
   }
   
-  /** @typedef {import('./types').DatabaseTypes} DBTypes */
+  /** @typedef {import('./Database').DatabaseTypes} DBTypes */
   /**
    * @template {keyof DBTypes} T
    * @param {T} tableName

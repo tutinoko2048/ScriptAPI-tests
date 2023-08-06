@@ -28,10 +28,3 @@ export interface User {
   /** Whether this user is online or not */
   online?: boolean;
 }
-
-export interface DatabaseTypes {
-  [TABLES.sentRequests]: string[];
-  [TABLES.gotRequests]: string[];
-  [TABLES.friends]: string[];
-  [TABLES.maxFriends]: number;
-}
