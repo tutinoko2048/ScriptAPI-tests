@@ -10,7 +10,7 @@
   },
   "author": "tutinoko2048",
   "devDependencies": {
-    "@minecraft/server": "^1.4.0-beta.1.20.10-stable",
+    "@minecraft/server": "^1.5.0-beta.1.20.20-preview.23",
     "@minecraft/server-ui": "^1.2.0-beta.1.20.10-stable",
     "eslint": "^8.39.0",
     "typescript": "^5.0.4"
