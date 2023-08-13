@@ -6,6 +6,7 @@ export interface DatabaseTypes {
   [TABLES.sentRequests]: string[];
   [TABLES.gotRequests]: string[];
   [TABLES.maxFriends]: number;
+  score: number;
 }
 
 interface DatabaseItem {
