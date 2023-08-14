@@ -14,12 +14,14 @@ export class SkyDB {
   }
 
   get<K extends keyof DatabaseTypes>(tableName: K, key: string): DatabaseTypes[K];
+  get(tableName: string, key: string): string | number | boolean | undefined;
   get(tableName: string, key: string): string | number | boolean | undefined {
     if (!(tableName in this.databases)) return undefined;
     return this.getTable(tableName).get(key);
   }
 
   set<K extends keyof DatabaseTypes>(tableName: K, key: string, value: DatabaseTypes[K]): void;
+  set(tableName: string, key: string, value: string | number | boolean): void;
   set(tableName: string, key: string, value: string | number | boolean): void {
     if (!(tableName in this.databases)) {
       this.createTable(tableName);
