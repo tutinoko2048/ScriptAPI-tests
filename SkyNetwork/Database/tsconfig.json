@@ -1,0 +1,14 @@
+{
+  "include": [ "./index.ts" ],
+  "exclude": [],
+  "compilerOptions": {
+    "module": "ES2020",
+    "target": "es2021",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "outDir": "./",
+    "declaration": true,
+  }
+}
