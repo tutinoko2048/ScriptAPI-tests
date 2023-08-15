@@ -1,9 +1,9 @@
 // @ts-check
 
 import { world, Player } from '@minecraft/server';
-import { Database } from './Database';
 import { defaultMaxFriends } from './config';
 import * as util from './util';
+import { db } from '../Database';
 
 export const TABLES = /** @type {const} */ ({
   users: 'users',
@@ -13,51 +13,146 @@ export const TABLES = /** @type {const} */ ({
   maxFriends: 'maxFriends'
 });
 
+const dbFailedMessage = 'データベースの操作に失敗しました';
+
 /** @typedef {import('./types').UserList} UserList */
 /** @typedef {import('./types').User} User */
 /** @typedef {import('./types').Response} Response */
 // source = じぶん, target = あいて
 
 /** 
- * @param {Player | String} p
- * @param {String} m
+ * @param {Player|string} p
+ * @param {string} m
 */
 function sendMessage(p, m) {
   if (p === "all") world.sendMessage(m);
   else if (p instanceof Player) p.sendMessage(m);
 }
 
-export class FriendManager {
-  /** @type {Database} */
-  #DB;
-  
-  /** @param {import('@minecraft/server').Vector3} chestLocation */
-  constructor(chestLocation) {
-    this.#DB = new Database(chestLocation);
+/** @returns {{ error: true, result: null } | { error: false, result: any[] }} */
+function toArray(data) {
+  try {
+    const result = JSON.parse(data) ?? [];
+    return { error: false, result }
+  } catch {
+    return { error: true, result: null }
   }
-  
-  /** @type {Database} */
-  get DB() { return this.#DB; }
-  
+}
+
+export class FriendAPI {
   /**
-   * @param {Player} player
+   * プレイヤーIDと名前を紐付けて登録
+   * @param {Player} player 
    */
-  registerUser(player) {
-    const users = this.getUsers();
-    users[player.id] = player.name;
-    this.setUsers(users);
+  static registerUser(player) {
+    db.set(TABLES.users, player.id, player.name);
   }
-  
-  /** @returns {UserList} */
-  getUsers() {
-    return this.DB.getTable(TABLES.users) ?? {};
+
+  /**
+   * playerIdからUserオブジェクトを取得
+   * @param {string} playerId 
+   * @returns {User}
+   */
+  static getUser(playerId) {
+    const name = db.get(TABLES.users, playerId);
+    return { id: playerId, name }
   }
-  
-  /** @param {UserList} users */
-  setUsers(users = {}) {
-    this.DB.setTable(TABLES.users, users);
+
+  /**
+   * 
+   * @param {string} playerName 
+   * @returns {string|undefined}
+   */
+  static getIdByName(playerName) {
+    for (const [id, name] of db.entries(TABLES.users)) {
+      if (name === playerName) return id;
+    }
   }
-  
+
+  /**
+   * フレンド一覧を取得
+   * @param {string} playerId 
+   * @returns {string[]}
+   */
+  static getFriends(playerId) {
+    const data = db.get(TABLES.friends, playerId) ?? '[]';
+    const { result, error } = toArray(data);
+    if (error) throw new Error('FriendAPI::getFriends Failed to parse JSON');
+    return result;
+  }
+
+  /**
+   * フレンド一覧を設定
+   * @param {string} playerId 
+   * @param {string[]} friends 
+   */
+  static setFriends(playerId, friends) {
+    db.set(TABLES.friends, playerId, JSON.stringify(friends));
+  }
+
+  /**
+   * 登録できるフレンドの最大数を取得
+   * @param {string} playerId 
+   * @returns {number}
+   */
+  static getMaxFriends(playerId) {
+    return db.get(TABLES.maxFriends, playerId) ?? defaultMaxFriends;
+  }
+
+  /**
+   * 登録できるフレンドの最大数を設定
+   * @param {string} playerId 
+   * @param {number} max -1なら無限
+   */
+  static setMaxFriends(playerId, max) {
+    if (typeof max !== 'number') throw TypeError('The value provided for max count is not a number');
+    db.set(TABLES.maxFriends, playerId, max);
+  }
+
+  /**
+   * playerIdからsentRequestsを取得
+   * @param {string} playerId 
+   * @returns {string[]}
+   */
+  static getSentRequests(playerId) {
+    const data = db.get(TABLES.sentRequests, playerId) ?? '[]';
+    const { result, error } = toArray(data);
+    if (error) throw new Error('FriendAPI::getSentRequests Failed to parse JSON');
+    return result;
+  }
+
+  /**
+   * @param {string} playerId 
+   * @param {string[]} requests 
+   */
+  static setSentRequests(playerId, requests) {
+    db.set(TABLES.sentRequests, playerId, JSON.stringify(requests));
+  }
+
+  /**
+   * playerIdからgotRequestsを取得
+   * @param {string} playerId 
+   * @returns {string[]}
+   */
+  static getGotRequests(playerId) {
+    const data = db.get(TABLES.gotRequests, playerId) ?? '[]';
+    const { result, error } = toArray(data);
+    if (error) throw new Error('FriendAPI::getGotRequests Failed to parse JSON');
+    return result;
+  }
+
+  /**
+   * @param {string} playerId 
+   * @param {string[]} requests 
+   */
+  static setGotRequests(playerId, requests) {
+    db.set(TABLES.gotRequests, playerId, JSON.stringify(requests));
+  }
+}
+
+export class FriendManager {
+  constructor() {}
+
   /**
    * @param {string} sourceId
    * @param {string} targetName
@@ -65,7 +160,7 @@ export class FriendManager {
    */
   sendRequest(sourceId, targetName) {
     const target = world.getPlayers().find(p => p.name === targetName);
-    if (sourceId === target?.id) {
+    if (sourceId === target?.id) { // 自分自身にリクエストしていたら
       if (!target.hasTag('botti')) {
         sendMessage(target, `§g§l《実績解除》\n§r§a実績「ぼっち」を達成しました！\n報酬：500SP`)
         util.addScore(target, 'sp', 900);
@@ -75,30 +170,36 @@ export class FriendManager {
       return { error: true, message: '自分とフレンドになることはできませんよ...?' };
     }
     try {
-      const targetId = target?.id ?? this.getIdByName(targetName);
+      const targetId = target?.id ?? FriendAPI.getIdByName(targetName);
       if (!targetId) return { error: true, message: `プレイヤー 「${targetName}§c」 が見つかりませんでした` };
       
       // フレンドの人数制限
-      const sourceFriends = this.DB.get(TABLES.friends, sourceId) ?? [];
-      const targetFriends = this.DB.get(TABLES.friends, targetId) ?? [];
-      const sourceMax = this.getMaxFriends(sourceId);
-      const targetMax = this.getMaxFriends(targetId);
-      if (sourceMax !== -1 && sourceFriends.length >= sourceMax) return { error: true, message: `フレンド数が上限に達しています！ (${sourceFriends.length} > ${sourceMax})` };
-      if (targetMax !== -1 && targetFriends.length >= targetMax) return { error: true, message: `相手のフレンド数が上限に達しています！` };
+      const sourceFriends = FriendAPI.getFriends(sourceId);
+      const targetFriends = FriendAPI.getFriends(targetId);
+      const sourceMax = FriendAPI.getMaxFriends(sourceId);
+      const targetMax = FriendAPI.getMaxFriends(targetId);
+      if (sourceMax !== -1 && sourceFriends.length >= sourceMax) {
+        return { error: true, message: `フレンド数が上限に達しています！ (${sourceFriends.length} > ${sourceMax})` };
+      }
+      if (targetMax !== -1 && targetFriends.length >= targetMax) {
+        return { error: true, message: `相手のフレンド数が上限に達しています！` };
+      }
       
       // リクエスト送信
-      const sent = this.DB.get(TABLES.sentRequests, sourceId) ?? [];
-      const got = this.DB.get(TABLES.gotRequests, targetId) ?? [];
-      if (sent.includes(targetId) && got.includes(sourceId)) return { error: true, message: `${targetName} は既に申請済みです` };
+      const sent = FriendAPI.getSentRequests(sourceId);
+      const got = FriendAPI.getGotRequests(targetId);
+      if (sent.includes(targetId) && got.includes(sourceId)) {
+        return { error: true, message: `${targetName} は既に申請済みです` };
+      }
       sent.push(targetId);
       got.push(sourceId);
-      this.DB.set(TABLES.sentRequests, sourceId, sent);
-      this.DB.set(TABLES.gotRequests, targetId, got);
+      FriendAPI.setSentRequests(sourceId, sent);
+      FriendAPI.setGotRequests(targetId, got);
       return { error: false, targetId };
       
     } catch (e) {
       console.error(e, e.stack);
-      return { error: true, message: 'データベースの操作に失敗しました' };
+      return { error: true, message: dbFailedMessage };
     }
   }
   
@@ -109,18 +210,15 @@ export class FriendManager {
    */
   fetchRequest(sourceId) {
     try {
-      const sent = this.DB.get(TABLES.sentRequests, sourceId) ?? []; // ids
-      const got = this.DB.get(TABLES.gotRequests, sourceId) ?? [];
-      const users = this.getUsers();
-      /** @type {User[]} */
-      const sentUsers = sent.map(id => ({ id, name: users[id] })); // id+name
-      /** @type {User[]} */
-      const gotUsers = got.map(id => ({ id, name: users[id] }));
+      const sent = FriendAPI.getSentRequests(sourceId);
+      const got = FriendAPI.getGotRequests(sourceId);
+      const sentUsers = sent.map(id => FriendAPI.getUser(id)); // Userオブジェクトに変換
+      const gotUsers = got.map(id => FriendAPI.getUser(id));
       
       return { error: false, got: gotUsers, sent: sentUsers };
     } catch (e) {
       console.error(e, e.stack);
-      return { error: true, message: 'データベースの操作に失敗しました' };
+      return { error: true, message: dbFailedMessage };
     }
   }
   
@@ -134,15 +232,15 @@ export class FriendManager {
       const res = this.addFriend(sourceId, targetId);
       if (res.error) return res; // 上限の時リクエストを削除しないようにする
       
-      const sent = (this.DB.get(TABLES.sentRequests, targetId) ?? []).filter(r => r !== sourceId);
-      const got = (this.DB.get(TABLES.gotRequests, sourceId) ?? []).filter(r => r !== targetId);
-      this.DB.set(TABLES.sentRequests, targetId, sent.length ? sent : undefined);
-      this.DB.set(TABLES.gotRequests, sourceId, got.length ? got : undefined);
+      const sent = FriendAPI.getSentRequests(targetId).filter(r => r !== sourceId);
+      const got = FriendAPI.getGotRequests(sourceId).filter(r => r !== targetId);
+      FriendAPI.setSentRequests(targetId, sent);
+      FriendAPI.setGotRequests(sourceId, got);
       
       return res;
     } catch (e) {
       console.error(e, e.stack);
-      return { error: true, message: 'データベースの操作に失敗しました' };
+      return { error: true, message: dbFailedMessage };
     }
   }
   
@@ -154,15 +252,15 @@ export class FriendManager {
    */
   cancelRequest(sourceId, targetId) {
     try {
-      const sent = (this.DB.get(TABLES.sentRequests, sourceId) ?? []).filter(r => r !== targetId);
-      const got = (this.DB.get(TABLES.gotRequests, targetId) ?? []).filter(r => r !== sourceId);
-      this.DB.set(TABLES.sentRequests, sourceId, sent.length ? sent : undefined);
-      this.DB.set(TABLES.gotRequests, targetId, got.length ? got : undefined);
+      const sent = FriendAPI.getSentRequests(sourceId).filter(r => r !== targetId);
+      const got = FriendAPI.getGotRequests(targetId).filter(r => r !== sourceId);
+      FriendAPI.setSentRequests(sourceId, sent);
+      FriendAPI.setGotRequests(targetId, got);
       
       return { error: false }
     } catch (e) {
       console.error(e, e.stack);
-      return { error: true, message: 'データベースの操作に失敗しました' };
+      return { error: true, message: dbFailedMessage };
     }
   }
   
@@ -170,18 +268,21 @@ export class FriendManager {
    * @param {string} playerId
    * @returns {import('./types').FriendsResponse}
    */
-  getFriends(playerId) {
+  getFriendList(playerId) {
     try {
-      const friends = this.DB.get(TABLES.friends, playerId) ?? [];
-      const users = this.getUsers();
-      const players = world.getPlayers().map(p => p.id);
+      const friends = FriendAPI.getFriends(playerId);
+      const playerIds = world.getPlayers().map(p => p.id);
 
       /** @type {User[]} */
-      const res = friends.map(id => ({ id, name: users[id], online: players.includes(id) }));
+      const res = friends.map(id => {
+        const user = FriendAPI.getUser(id);
+        user.online = playerIds.includes(id);
+        return user;
+      });
       return { error: false, data: res }
     } catch (e) {
       console.error(e, e.stack);
-      return { error: true, message: 'データベースの操作に失敗しました' };
+      return { error: true, message: dbFailedMessage };
     }
   }
   
@@ -192,20 +293,26 @@ export class FriendManager {
    * @returns {Response}
    */
   addFriend(player1, player2) {
-    const friends1 = this.DB.get(TABLES.friends, player1) ?? [];
-    const friends2 = this.DB.get(TABLES.friends, player2) ?? [];
+    const friends1 = FriendAPI.getFriends(player1);
+    const friends2 = FriendAPI.getFriends(player2);
     
     // フレンドの人数制限
-    const max1 = this.getMaxFriends(player1);
-    const max2 = this.getMaxFriends(player2);
-    if (max1 !== -1 && friends1.length >= max1) return { error: true, message: `フレンド数が上限に達しています！ (${friends1.length} > ${max1})\nCOAL以上のランクがあれば、フレンドを無限に登録可能になります…` };
-    if (max2 !== -1 && friends2.length >= max2) return { error: true, message: `相手のフレンド数が上限に達しています！\nランクを紹介してあげてください…` };
+    const max1 = FriendAPI.getMaxFriends(player1);
+    const max2 = FriendAPI.getMaxFriends(player2);
+    if (max1 !== -1 && friends1.length >= max1) return {
+       error: true,
+       message: `フレンド数が上限に達しています！ (${friends1.length} > ${max1})\nCOAL以上のランクがあれば、フレンドを無限に登録可能になります…`
+    };
+    if (max2 !== -1 && friends2.length >= max2) return {
+      error: true,
+      message: `相手のフレンド数が上限に達しています！\nランクを紹介してあげてください…`
+    };
     
     // 追加
     friends1.push(player2);
     friends2.push(player1);
-    this.DB.set(TABLES.friends, player1, friends1);
-    this.DB.set(TABLES.friends, player2, friends2);
+    FriendAPI.setFriends(player1, friends1);
+    FriendAPI.setFriends(player2, friends2);
     
     return { error: false }
   }
@@ -216,38 +323,9 @@ export class FriendManager {
    * @param {string} player2
    */
   deleteFriend(player1, player2) {
-    const friends1 = (this.DB.get(TABLES.friends, player1) ?? []).filter(r => r !== player2);
-    const friends2 = (this.DB.get(TABLES.friends, player2) ?? []).filter(r => r !== player1);
-    
-    this.DB.set(TABLES.friends, player1, friends1.length ? friends1 : undefined);
-    this.DB.set(TABLES.friends, player2, friends2.length ? friends2 : undefined);
-  }
-  
-  /**
-   * フレンドの最大人数を取得 -1なら無限
-   * @param {string} playerId プレイヤーのID (<Player>.id)
-   * @returns {number}
-   */
-  getMaxFriends(playerId) {
-    return this.DB.get(TABLES.maxFriends, playerId) ?? defaultMaxFriends;
-  }
-  
-  /**
-   * フレンドの最大人数を設定
-   * @param {string} playerId プレイヤーのID (<Player>.id)
-   * @param {number} max 最大人数 -1なら無限
-   */
-  setMaxFriends(playerId, max) {
-    if (typeof max !== 'number') throw TypeError('The value provided for max count is not a number');
-    this.DB.set(TABLES.maxFriends, playerId, max);
-  }
-  
-  /**
-   * @param {string} userName
-   * @returns {string|undefined}
-   */
-  getIdByName(userName) {
-    const users = this.getUsers();
-    return Object.keys(users).find(id => users[id] === userName);
+    const friends1 = FriendAPI.getFriends(player1).filter(r => r !== player2); // player2を削除=player2以外を抽出
+    const friends2 = FriendAPI.getFriends(player2).filter(r => r !== player1);
+    FriendAPI.setFriends(player1, friends1);
+    FriendAPI.setFriends(player2, friends2);
   }
 }

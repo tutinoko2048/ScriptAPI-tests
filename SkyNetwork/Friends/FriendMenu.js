@@ -1,8 +1,8 @@
 // @ts-check
-import { Player } from '@minecraft/server';
 import * as UI from '@minecraft/server-ui';
 import { ActionForm } from './ActionForm';
 import { confirmForm, getPlayerById, randomValue } from './util';
+import { FriendAPI } from './FriendManager';
 
 const icons = {
   add: 'textures/ui/color_plus',
@@ -20,7 +20,7 @@ const playerIcons = [ icons.player1, icons.player2, icons.player3 ];
 
 export class FriendMenu {
   /**
-   * @param {Player} player
+   * @param {import('@minecraft/server').Player} player
    * @param {import('./FriendManager').FriendManager} friends
    */
   constructor(player, friends) {
@@ -31,7 +31,7 @@ export class FriendMenu {
   }
   
   async main() {
-    const { error, message, data: list } = this.friends.getFriends(this.player.id);
+    const { error, message, data: list } = this.friends.getFriendList(this.player.id);
     if (error || !list) return this.player.sendMessage(`§c${message}`);
     const requests = this.friends.fetchRequest(this.player.id);
     if (requests.error) return this.player.sendMessage(`§c${requests.message}`);
@@ -45,7 +45,7 @@ export class FriendMenu {
       .button(`送信した申請を管理 (${color(requests.sent?.length)})`, icons.invite, 'sent')
       .title(`§lフレンド §r§2${list.filter(u => u.online).length} オンライン §7| §c${list.filter(u => !u.online).length} オフライン§r`);
 
-    const max = this.friends.getMaxFriends(this.player.id);
+    const max = FriendAPI.getMaxFriends(this.player.id);
     if (list.length === 0) {
       form.body('§oまだフレンドはいないようです...');
     } else if (max === -1) { // 無制限の時

@@ -1,6 +1,7 @@
 // @ts-check
 import { world } from '@minecraft/server';
 import * as util from './util';
+import { FriendAPI } from './FriendManager';
 
 /** @typedef {import('@minecraft/server').Player} Player */
 
@@ -24,14 +25,11 @@ const TeamColor = /** @type {const} */ ({
 
 /**
  * @param {Player} player 参加させるプレイヤー
- * @param {import('./FriendManager').FriendManager} friends FriendManager
  * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
  */
-export function joinTeam(player, friends, teams, isStart) {
-  const { error, data: list, message } = friends.getFriends(player.id);
-  if (error) return player.sendMessage(`§c${message ?? 'エラーが発生しました'} 管理者に連絡してください`);
-  const team = selectTeam(player, list ?? [], teams, isStart); // チームを決める
+export function joinTeam(player, teams, isStart) {
+  const team = selectTeam(player, teams, isStart); // チームを決める
   
   player.addTag(team); // 最終的なチーム
   if (!player.hasTag(team + "d")) player.addTag(team + "d"); // リログ用につけておく
@@ -44,15 +42,14 @@ export function joinTeam(player, friends, teams, isStart) {
 
 /**
  * @param {Player} player
- * @param {import('./FriendManager').User[]} friendList フレンドリスト
  * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
  * @returns {keyof TeamTag} プレイヤーが参加するチームのタグ
  */
-export function selectTeam(player, friendList, teams, isStart) {
-  const ids = friendList.map(u => u.id);
+export function selectTeam(player, teams, isStart) {
+  const friendList = FriendAPI.getFriends(player.id);
   const players = world.getPlayers();
-  const friends = players.filter(p => ids.includes(p.id));
+  const onlineFriends = players.filter(p => friendList.includes(p.id));
   
   const teamHPs = /** @type {{ [key in keyof TeamTag]: number }} */ (Object.fromEntries(teams.map(team => [ team, util.getScore(`${team}player`, team) ])));
 
@@ -78,7 +75,7 @@ export function selectTeam(player, friendList, teams, isStart) {
     }
 
     // 同じ人数の時 フレンドがいる方を優先
-    team1.hasFriend ??= friends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
+    team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
   
@@ -108,6 +105,7 @@ function getTeamCount(players, teams) {
   ))
 }
 
+/** @returns {number|null} */
 function getGame() {
   return util.getScore('system', 'game');
 }

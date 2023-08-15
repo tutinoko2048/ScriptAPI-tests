@@ -1,33 +1,23 @@
 // @ts-check
 
 import { world, system, Player } from '@minecraft/server';
-import { FriendManager } from './FriendManager';
-import { chestLocation } from './config';
+import { FriendAPI, FriendManager } from './FriendManager';
 import { FriendMenu } from './FriendMenu';
 import * as util from './util';
 
 export * from './team';
 export * from './FriendMenu';
 
-/** @type {FriendManager|undefined} */
-export let friends;
-/** @type {import('./Database').Database|undefined} */
-export let DB;
-
-world.afterEvents.worldInitialize.subscribe(async () => {
-  await util.worldLoad(chestLocation);
-  friends = new FriendManager(chestLocation);
-  DB = friends.DB;
-});
+const friends = new FriendManager();
+export { friends }
 
 world.afterEvents.playerSpawn.subscribe(async ev => {
   const { initialSpawn, player } = ev;
   if (!initialSpawn) return;
   
-  const friends = await friendLoad();
   // @ts-ignore
   if (!player.isRegistered) { // 登録
-    friends.registerUser(player);
+    FriendAPI.registerUser(player);
     // @ts-ignore
     player.isRegistered = true;
   }
@@ -39,11 +29,10 @@ world.afterEvents.playerSpawn.subscribe(async ev => {
 });
 
 system.runInterval(() => {
-  if (!friends) return;
   for (const p of world.getPlayers()) {
     // @ts-ignore
     if (p.isRegistered) continue; 
-    friends.registerUser(p);
+    FriendAPI.registerUser(p);
     // @ts-ignore
     p.isRegistered = true;
   }
@@ -59,16 +48,3 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
 }, {
   namespaces: [ 'friends' ]
 });
-
-/** @returns {Promise<FriendManager>} */
-export function friendLoad() {
-  return new Promise(r => {
-    system.run(function check() {
-      try {
-        if (friends?.DB) r(friends);
-      } catch {
-        system.run(check);
-      }
-    })
-  });
-}

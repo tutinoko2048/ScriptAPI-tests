@@ -1,5 +1,3 @@
-import { TABLES } from './FriendManager';
-
 export type UserList = Record<string, string>
 
 export interface Response {

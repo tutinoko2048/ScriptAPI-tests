@@ -1,14 +1,20 @@
 import { JaylyDB } from "./JaylyDB";
 
 interface DatabaseTypes {
+  /** [userId]: [userName] */
+  "users": string;
+  /** [userId]: JSON化したIDの配列 */
   "friends": string;
+  /** [userId]: JSON化したIDの配列 */
   "sentRequests": string;
+  /** [userId]: JSON化したIDの配列 */
   "gotRequests": string;
+  /** [userId]: number */
   "maxFriends": number;
 }
 
 export class SkyDB {
-  public databases: Record<string, JaylyDB>
+  public readonly databases: Record<string, JaylyDB>
   constructor() {
     this.databases = {}
   }
@@ -36,12 +42,14 @@ export class SkyDB {
     this.getTable(tableName).clear();
   }
 
-  keys(tableName: string) {
+  keys(tableName: string): Iterable<string> {
     if (!(tableName in this.databases)) return [];
     return this.getTable(tableName).keys();
   }
 
-  entries(tableName: string) {
+  entries<K extends keyof DatabaseTypes>(tableName: K): Iterable<[string, DatabaseTypes[K]]>
+  entries(tableName: string): Iterable<[string, string | number | boolean]>
+  entries(tableName: string): Iterable<[string, string | number | boolean]> {
     if (!(tableName in this.databases)) return [];
     return this.getTable(tableName).entries();
   }
