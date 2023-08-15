@@ -8,6 +8,7 @@ import { FriendAPI } from './FriendManager';
 // ワールド参加時 redけす
 // ゲーム終了時 red, redd を*で全部消し飛ばす
 // めも: redオブジェクトの中にredplayer, redplayersが入ってる
+// bedの時 ベッド存在してたらredplayerが100になる
 
 const TeamTag = /** @type {const} */ ({
   red: 'redman',
@@ -23,6 +24,8 @@ const TeamColor = /** @type {const} */ ({
   lime: '§a'
 });
 
+const isBedGame = () => getGame() === 1;
+
 /**
  * @param {Player} player 参加させるプレイヤー
  * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
@@ -30,6 +33,12 @@ const TeamColor = /** @type {const} */ ({
  */
 export function joinTeam(player, teams, isStart) {
   const team = selectTeam(player, teams, isStart); // チームを決める
+
+  // bedが存在していない=100より小さい時タグ付与
+  // @ts-ignore
+  if (isBedGame() && util.getScore(`${team}player`, team, true) < 100) {
+    player.addTag('notrespawn');
+  }
   
   player.addTag(team); // 最終的なチーム
   if (!player.hasTag(team + "d")) player.addTag(team + "d"); // リログ用につけておく
@@ -56,8 +65,7 @@ export function selectTeam(player, teams, isStart) {
   // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
   
-  const isBedGame = getGame() === 1;
-    /** @param {keyof TeamTag} team */
+  /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
   
   // 人数0除外+1番人数が少ないチーム
@@ -65,7 +73,7 @@ export function selectTeam(player, teams, isStart) {
   const zeroExists = scores.some(x => !x.count) // 人数0が一つでもあるかどうか
   sorted.sort((team1, team2) => {
     // ベッド存在を優先
-    if (isBedGame && (bedExists(team1.team) !== bedExists(team2.team))) {
+    if (isBedGame() && (bedExists(team1.team) !== bedExists(team2.team))) {
       return bedExists(team1.team) ? -1 : 1;
     }
 
