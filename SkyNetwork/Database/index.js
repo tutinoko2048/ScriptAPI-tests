@@ -9,9 +9,6 @@ export class SkyDB {
         return this.getTable(tableName).get(key);
     }
     set(tableName, key, value) {
-        if (!(tableName in this.databases)) {
-            this.createTable(tableName);
-        }
         this.getTable(tableName).set(key, value);
     }
     delete(tableName, key) {

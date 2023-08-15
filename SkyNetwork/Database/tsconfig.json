@@ -1,5 +1,5 @@
 {
-  "include": [ "./index.ts" ],
+  "include": [ "./*.ts" ],
   "exclude": [],
   "compilerOptions": {
     "module": "ES2020",

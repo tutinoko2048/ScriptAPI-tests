@@ -23,9 +23,6 @@ export class SkyDB {
   set<K extends keyof DatabaseTypes>(tableName: K, key: string, value: DatabaseTypes[K]): void;
   set(tableName: string, key: string, value: string | number | boolean): void;
   set(tableName: string, key: string, value: string | number | boolean): void {
-    if (!(tableName in this.databases)) {
-      this.createTable(tableName);
-    }
     this.getTable(tableName).set(key, value);
   }
 

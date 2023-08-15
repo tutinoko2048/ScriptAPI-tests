@@ -50,7 +50,6 @@ export class FriendManager {
   
   /** @returns {UserList} */
   getUsers() {
-    let a = this.DB.get('score', 'aa')
     return this.DB.getTable(TABLES.users) ?? {};
   }
   
