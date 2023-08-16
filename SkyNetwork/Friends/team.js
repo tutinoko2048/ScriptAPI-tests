@@ -113,7 +113,7 @@ function getTeamCount(players, teams) {
   ))
 }
 
-/** @returns {number|null} */
+/** @returns {number|undefined} */
 function getGame() {
   return util.getScore('system', 'game');
 }

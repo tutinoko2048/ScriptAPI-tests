@@ -42,16 +42,18 @@ export class SkyDB {
     this.getTable(tableName).clear();
   }
 
-  keys(tableName: string): Iterable<string> {
-    if (!(tableName in this.databases)) return [];
-    return this.getTable(tableName).keys();
+  *keys(tableName: string): Generator<string> {
+    if (!(tableName in this.databases)) return;
+    for (const key of this.getTable(tableName).keys())
+      yield key;
   }
 
-  entries<K extends keyof DatabaseTypes>(tableName: K): Iterable<[string, DatabaseTypes[K]]>
-  entries(tableName: string): Iterable<[string, string | number | boolean]>
-  entries(tableName: string): Iterable<[string, string | number | boolean]> {
-    if (!(tableName in this.databases)) return [];
-    return this.getTable(tableName).entries();
+  entries<K extends keyof DatabaseTypes>(tableName: K): Generator<[string, DatabaseTypes[K]]>
+  entries(tableName: string): Generator<[string, string | number | boolean]>
+  *entries(tableName: string): Generator<[string, string | number | boolean]> {
+    if (!(tableName in this.databases)) return;
+    for (const [key, value] of this.getTable(tableName).entries())
+      yield [key, value];
   }
 
   getTable(tableName: string): JaylyDB {

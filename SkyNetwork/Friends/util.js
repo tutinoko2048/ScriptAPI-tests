@@ -11,13 +11,13 @@ const dimension = world.getDimension('overworld');
  * @arg {Entity|string} target
  * @arg {string} objective
  * @arg {boolean} [useZero]
- * @returns {number|null}
+ * @returns {number|undefined}
  */
 export function getScore(target, objective, useZero) {
   try {
     return world.scoreboard.getObjective(objective).getScore(target);
   } catch {
-    return useZero ? 0 : null;
+    return useZero ? 0 : undefined;
   }
 }
 
@@ -51,7 +51,7 @@ export function worldLoad(loc) {
   return new Promise(r => {
     system.run(function check() {
       try {
-        dimension.getBlock(loc).typeId;
+        dimension.getBlock(loc)?.typeId;
         r();
       } catch {
         system.run(check);
