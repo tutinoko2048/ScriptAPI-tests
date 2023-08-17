@@ -15,6 +15,9 @@ export class SkyDB {
     reset(tableName) {
         this.getTable(tableName).clear();
     }
+    has(tableName, key) {
+        return this.getTable(tableName).has(key);
+    }
     *keys(tableName) {
         for (const key of this.getTable(tableName).keys())
             yield key;

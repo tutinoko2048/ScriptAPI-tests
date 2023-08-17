@@ -27,21 +27,25 @@ export class SkyDB {
     this.getTable(tableName).clear();
   }
 
-  *keys(tableName: string): Generator<string> {
+  has(tableName: string, key: string): boolean {
+    return this.getTable(tableName).has(key);
+  }
+
+  *keys(tableName: string): IterableIterator<string> {
     for (const key of this.getTable(tableName).keys())
       yield key;
   }
 
-  entries<K extends keyof DatabaseTypes>(tableName: K): Generator<[string, DatabaseTypes[K]]>
-  entries(tableName: string): Generator<[string, string | number | boolean]>
-  *entries(tableName: string): Generator<[string, string | number | boolean]> {
+  entries<K extends keyof DatabaseTypes>(tableName: K): IterableIterator<[string, DatabaseTypes[K]]>
+  entries(tableName: string): IterableIterator<[string, string | number | boolean]>
+  *entries(tableName: string): IterableIterator<[string, string | number | boolean]> {
     for (const [key, value] of this.getTable(tableName).entries())
       yield [key, value];
   }
 
-  values<K extends keyof DatabaseTypes>(tableName: K): Generator<DatabaseTypes[K]>
-  values(tableName: string): Generator<string | number | boolean>
-  *values(tableName: string): Generator<string | number | boolean> {
+  values<K extends keyof DatabaseTypes>(tableName: K): IterableIterator<DatabaseTypes[K]>
+  values(tableName: string): IterableIterator<string | number | boolean>
+  *values(tableName: string): IterableIterator<string | number | boolean> {
     for (const [_, value] of this.entries(tableName)) 
       yield value;
   }

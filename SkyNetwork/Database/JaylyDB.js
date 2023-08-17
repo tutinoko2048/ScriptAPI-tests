@@ -163,6 +163,10 @@ class JaylyDB {
     get size() {
         return this.localState.size;
     }
+
+    get objectiveId() {
+        return this.objective.id;
+    }
     /**
      * Clears every element in the database.
      */
