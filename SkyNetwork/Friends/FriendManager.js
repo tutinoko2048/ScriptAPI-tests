@@ -3,7 +3,7 @@
 import { world, Player } from '@minecraft/server';
 import { defaultMaxFriends } from './config';
 import * as util from './util';
-import { db } from '../Database';
+import { db } from '../Database/index';
 
 export const TABLES = /** @type {const} */ ({
   users: 'users',

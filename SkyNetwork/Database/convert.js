@@ -60,5 +60,5 @@ export function convertData(item) {
     }
   }
 
-  console.warn(`[convertData] objective: ${table.objective.id} として ${table.size} 個のキーを変換しました`);
+  console.warn(`[convertData] objective: ${table.objectiveId} として ${table.size} 個のキーを変換しました`);
 }
