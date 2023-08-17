@@ -87,7 +87,11 @@ export class FriendAPI {
    * @param {string[]} friends 
    */
   static setFriends(playerId, friends) {
-    db.set(TABLES.friends, playerId, JSON.stringify(friends));
+    if (friends.length > 0) {
+      db.set(TABLES.friends, playerId, JSON.stringify(friends));
+    } else {
+      db.delete(TABLES.friends, playerId);
+    }
   }
 
   /**
@@ -126,7 +130,11 @@ export class FriendAPI {
    * @param {string[]} requests 
    */
   static setSentRequests(playerId, requests) {
-    db.set(TABLES.sentRequests, playerId, JSON.stringify(requests));
+    if (requests.length > 0) {
+      db.set(TABLES.sentRequests, playerId, JSON.stringify(requests));
+    } else {
+      db.delete(TABLES.sentRequests, playerId);
+    }
   }
 
   /**
@@ -146,7 +154,11 @@ export class FriendAPI {
    * @param {string[]} requests 
    */
   static setGotRequests(playerId, requests) {
-    db.set(TABLES.gotRequests, playerId, JSON.stringify(requests));
+    if (requests.length > 0) {
+      db.set(TABLES.gotRequests, playerId, JSON.stringify(requests));
+    } else {
+      db.delete(TABLES.gotRequests, playerId);
+    }
   }
 }
 

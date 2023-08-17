@@ -43,7 +43,7 @@ export class FriendMenu {
     form.button('フレンドを追加', icons.add, 'request')
       .button(`フレンド申請 (${color(requests.got?.length)})`, icons.invite, 'got')
       .button(`送信した申請を管理 (${color(requests.sent?.length)})`, icons.invite, 'sent')
-      .title(`§lフレンド §r§2${list.filter(u => u.online).length} オンライン §7| §c${list.filter(u => !u.online).length} オフライン§r`);
+      .title(`§lフレンド §r§2${list.filter(u => u.online).length} オンライン §8| §c${list.filter(u => !u.online).length} オフライン§r`);
 
     const max = FriendAPI.getMaxFriends(this.player.id);
     if (list.length === 0) {
@@ -66,9 +66,7 @@ export class FriendMenu {
     }
   }
   
-  /**
-   * @param {User} user
-   */
+  /** @param {User} user */
   async friendInfo(user) {
     const form = new ActionForm();
     form.title(`フレンド > ${user.name}`)
@@ -195,6 +193,6 @@ export class FriendMenu {
    * @param {any} n
    */
 function color(n) {
-  return n ? `§e${n}§r` : `§7${n}§r`;
+  return n ? `§l§e${n}§r` : `§8${n}§r`;
 }
 
