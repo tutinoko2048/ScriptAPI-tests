@@ -1,17 +1,5 @@
 import { JaylyDB } from "./JaylyDB";
-
-interface DatabaseTypes {
-  /** [userId]: [userName] */
-  "users": string;
-  /** [userId]: JSON化したIDの配列 */
-  "friends": string;
-  /** [userId]: JSON化したIDの配列 */
-  "sentRequests": string;
-  /** [userId]: JSON化したIDの配列 */
-  "gotRequests": string;
-  /** [userId]: number */
-  "maxFriends": number;
-}
+import { DatabaseTypes } from "./DatabaseTypes";
 
 export class SkyDB {
   public readonly databases: Record<string, JaylyDB>
