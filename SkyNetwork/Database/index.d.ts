@@ -20,9 +20,11 @@ export declare class SkyDB {
     set(tableName: string, key: string, value: string | number | boolean): void;
     delete(tableName: string, key: string): boolean;
     reset(tableName: string): void;
-    keys(tableName: string): Iterable<string>;
-    entries<K extends keyof DatabaseTypes>(tableName: K): Iterable<[string, DatabaseTypes[K]]>;
-    entries(tableName: string): Iterable<[string, string | number | boolean]>;
+    keys(tableName: string): Generator<string>;
+    entries<K extends keyof DatabaseTypes>(tableName: K): Generator<[string, DatabaseTypes[K]]>;
+    entries(tableName: string): Generator<[string, string | number | boolean]>;
+    values<K extends keyof DatabaseTypes>(tableName: K): Generator<DatabaseTypes[K]>;
+    values(tableName: string): Generator<string | number | boolean>;
     getTable(tableName: string): JaylyDB;
     createTable(tableName: string): JaylyDB;
 }

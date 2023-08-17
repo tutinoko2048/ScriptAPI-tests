@@ -4,32 +4,28 @@ export class SkyDB {
         this.databases = {};
     }
     get(tableName, key) {
-        if (!(tableName in this.databases))
-            return undefined;
         return this.getTable(tableName).get(key);
     }
     set(tableName, key, value) {
         this.getTable(tableName).set(key, value);
     }
     delete(tableName, key) {
-        if (!(tableName in this.databases))
-            return false;
         return this.getTable(tableName).delete(key);
     }
     reset(tableName) {
-        if (!(tableName in this.databases))
-            return;
         this.getTable(tableName).clear();
     }
-    keys(tableName) {
-        if (!(tableName in this.databases))
-            return [];
-        return this.getTable(tableName).keys();
+    *keys(tableName) {
+        for (const key of this.getTable(tableName).keys())
+            yield key;
     }
-    entries(tableName) {
-        if (!(tableName in this.databases))
-            return [];
-        return this.getTable(tableName).entries();
+    *entries(tableName) {
+        for (const [key, value] of this.getTable(tableName).entries())
+            yield [key, value];
+    }
+    *values(tableName) {
+        for (const [_, value] of this.entries(tableName))
+            yield value;
     }
     getTable(tableName) {
         return this.databases[tableName] ?? this.createTable(tableName);

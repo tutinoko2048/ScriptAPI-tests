@@ -22,7 +22,6 @@ export class SkyDB {
   get<K extends keyof DatabaseTypes>(tableName: K, key: string): DatabaseTypes[K];
   get(tableName: string, key: string): string | number | boolean | undefined;
   get(tableName: string, key: string): string | number | boolean | undefined {
-    if (!(tableName in this.databases)) return undefined;
     return this.getTable(tableName).get(key);
   }
 
@@ -33,17 +32,14 @@ export class SkyDB {
   }
 
   delete(tableName: string, key: string): boolean {
-    if (!(tableName in this.databases)) return false;
     return this.getTable(tableName).delete(key);
   }
 
   reset(tableName: string): void {
-    if (!(tableName in this.databases)) return;
     this.getTable(tableName).clear();
   }
 
   *keys(tableName: string): Generator<string> {
-    if (!(tableName in this.databases)) return;
     for (const key of this.getTable(tableName).keys())
       yield key;
   }
@@ -51,9 +47,15 @@ export class SkyDB {
   entries<K extends keyof DatabaseTypes>(tableName: K): Generator<[string, DatabaseTypes[K]]>
   entries(tableName: string): Generator<[string, string | number | boolean]>
   *entries(tableName: string): Generator<[string, string | number | boolean]> {
-    if (!(tableName in this.databases)) return;
     for (const [key, value] of this.getTable(tableName).entries())
       yield [key, value];
+  }
+
+  values<K extends keyof DatabaseTypes>(tableName: K): Generator<DatabaseTypes[K]>
+  values(tableName: string): Generator<string | number | boolean>
+  *values(tableName: string): Generator<string | number | boolean> {
+    for (const [_, value] of this.entries(tableName)) 
+      yield value;
   }
 
   getTable(tableName: string): JaylyDB {

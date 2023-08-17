@@ -6,7 +6,7 @@ import { ActionFormData } from "@minecraft/server-ui";
 system.afterEvents.scriptEventReceive.subscribe(async ev => {
   if (ev.id === 'db:convert' && ev.sourceEntity instanceof Player) {
     const player = ev.sourceEntity;
-    const { block } = player.getBlockFromViewDirection();
+    const block = player.getBlockFromViewDirection()?.block;
     if (block?.typeId !== 'minecraft:chest') return player.sendMessage('移行するチェストを視点先に置いてください')
     const { container } = block.getComponent('minecraft:inventory');
     const items = [];
