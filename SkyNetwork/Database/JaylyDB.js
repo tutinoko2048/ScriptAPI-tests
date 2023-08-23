@@ -155,7 +155,7 @@ class JaylyDB {
                 console.error(`[JaylyDB] There is a sync issue with database '${id}'.`);
                 this.SYNC_OK = false;
             }
-        });
+        }, 2);
     }
     /**
      * @returns the number of elements in the database.
