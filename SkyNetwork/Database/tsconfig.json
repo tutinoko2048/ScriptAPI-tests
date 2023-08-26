@@ -1,5 +1,5 @@
 {
-  "include": [ "./*.ts" ],
+  "include": [ "./*.ts", "./lib/*.ts" ],
   "exclude": [],
   "compilerOptions": {
     "module": "ES2020",

@@ -1,4 +1,4 @@
-import { JaylyDB } from "./JaylyDB";
+import { JaylyDB } from "./lib/JaylyDB";
 import { DatabaseTypes } from "./DatabaseTypes";
 export declare class SkyDB {
     readonly databases: Record<string, JaylyDB>;

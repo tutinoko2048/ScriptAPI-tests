@@ -1,4 +1,4 @@
-import { JaylyDB } from "./JaylyDB";
+import { JaylyDB } from "./lib/JaylyDB";
 import { DatabaseTypes } from "./DatabaseTypes";
 
 export class SkyDB {
