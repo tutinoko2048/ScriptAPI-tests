@@ -24,7 +24,7 @@ export class ScoreDB implements Map<string, string | number | boolean> {
   private readonly cache = new Map<string, CacheData>()
   private readonly objective: ScoreboardObjective;
 
-  private fetchData(): void {
+  fetchData(): void {
     this.cache.clear();
     for (const participant of this.objective.getParticipants()) {
       if (participant.type !== ScoreboardIdentityType.FakePlayer) continue;

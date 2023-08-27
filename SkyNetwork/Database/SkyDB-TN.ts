@@ -1,10 +1,17 @@
-import { JaylyDB } from "./lib/JaylyDB";
+import { ScoreDB } from "./lib/ScoreDB";
 import { DatabaseTypes } from "./DatabaseTypes";
 
 export class SkyDB {
-  public readonly databases: Record<string, JaylyDB>
+  readonly databases: Record<string, ScoreDB>
+
   constructor() {
     this.databases = {}
+  }
+
+  reload(): void {
+    for (const db of Object.values(this.databases)) {
+      db.fetchData();
+    }
   }
 
   get<K extends keyof DatabaseTypes>(tableName: K, key: string): DatabaseTypes[K];
@@ -23,8 +30,14 @@ export class SkyDB {
     return this.getTable(tableName).delete(key);
   }
 
-  reset(tableName: string): void {
+  clear(tableName: string): void {
     this.getTable(tableName).clear();
+  }
+
+  /** @deprecated Use SkyDB::clear instead. */
+  reset(tableName: string): void {
+    this.clear();
+    console.warn('SkyDB::reset has been deprecated. Use SkyDB::clear instead.');
   }
 
   has(tableName: string, key: string): boolean {
@@ -50,12 +63,12 @@ export class SkyDB {
       yield value;
   }
 
-  getTable(tableName: string): JaylyDB {
+  getTable(tableName: string): ScoreDB {
     return this.databases[tableName] ?? this.createTable(tableName);
   }
 
-  createTable(tableName: string): JaylyDB {
-    this.databases[tableName] = new JaylyDB(tableName, false);
+  private createTable(tableName: string): ScoreDB {
+    this.databases[tableName] = new ScoreDB(tableName);
     return this.databases[tableName];
   }
 }
