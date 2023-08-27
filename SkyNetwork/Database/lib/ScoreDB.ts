@@ -1,5 +1,11 @@
+/**
+ * Scoreboard Database
+ * @author tutinoko2048
+ * Simple database system using scoreboard. Do not edit objective from outside this class!
+ * This database is based on JaylyDB, thanks.
+ */
+
 import { world, system, type ScoreboardObjective, ScoreboardIdentityType, ScoreboardIdentity } from '@minecraft/server';
-import { CachedManager } from 'discord.js';
 
 interface CacheData {
   identity: ScoreboardIdentity,
@@ -14,7 +20,7 @@ function stringifyData(data: Record<string, string | number | boolean>): string 
   return JSON.stringify(data).slice(1, -1);
 }
 
-class ScoreDB implements Map<string, string | number | boolean> {
+export class ScoreDB implements Map<string, string | number | boolean> {
   private readonly cache = new Map<string, CacheData>()
   private readonly objective: ScoreboardObjective;
 
@@ -34,7 +40,7 @@ class ScoreDB implements Map<string, string | number | boolean> {
 
   constructor(id: string) {
     const objectiveId = 'scoredb' + id;
-   this.objective = world.scoreboard.getObjective(objectiveId) ?? world.scoreboard.addObjective(objectiveId, objectiveId);
+    this.objective = world.scoreboard.getObjective(objectiveId) ?? world.scoreboard.addObjective(objectiveId, objectiveId);
 
     this.fetchData();
   }
@@ -90,4 +96,26 @@ class ScoreDB implements Map<string, string | number | boolean> {
     this.cache.forEach(data => this.objective.removeParticipant(data.identity));
     this.cache.clear();
   }
+
+  *entries(): IterableIterator<[string, string | number | boolean]> {
+    for (const [key, cacheData] of this.cache.entries()) yield [key, cacheData.value];
+  }
+
+  *keys(): IterableIterator<string> {
+    for (const [key] of this.entries()) yield key;
+  }
+
+  *values(): IterableIterator<string | number | boolean> {
+    for (const [_, value] of this.entries()) yield value;
+  }
+
+  forEach(callbackFn: (value: string | number | boolean, key: string, db: this) => void): void {
+    for (const [key, value] of this.entries()) callbackFn(value, key, this);
+  }
+
+  [Symbol.iterator](): IterableIterator<[string, string | number | boolean]> {
+    return this.entries();
+  }
+
+  [Symbol.toStringTag]: string = ScoreDB.name;
 }
