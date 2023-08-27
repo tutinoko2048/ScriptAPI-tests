@@ -1,10 +1,15 @@
 // @ts-check
+
+/*
+db:convert-lore loreDBから移行
+db:convert
+*/
 import { Player, system } from "@minecraft/server";
 import { db } from "./index";
 import { ActionFormData } from "@minecraft/server-ui";
 
 system.afterEvents.scriptEventReceive.subscribe(async ev => {
-  if (ev.id === 'db:convert' && ev.sourceEntity instanceof Player) {
+  if (ev.id === 'db:convert-lore' && ev.sourceEntity instanceof Player) {
     const player = ev.sourceEntity;
     const block = player.getBlockFromViewDirection()?.block;
     if (block?.typeId !== 'minecraft:chest') return player.sendMessage('移行するチェストを視点先に置いてください')
