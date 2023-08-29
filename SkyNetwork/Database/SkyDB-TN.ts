@@ -36,7 +36,7 @@ export class SkyDB {
 
   /** @deprecated Use SkyDB::clear instead. */
   reset(tableName: string): void {
-    this.clear();
+    this.clear(tableName);
     console.warn('SkyDB::reset has been deprecated. Use SkyDB::clear instead.');
   }
 

@@ -4,13 +4,28 @@
 db:convert-lore loreDBから移行
 db:convert
 */
-import { Player, system } from "@minecraft/server";
+import { Player, system, world } from "@minecraft/server";
 import { db } from "./index";
 import { ActionFormData } from "@minecraft/server-ui";
+import { JaylyDB } from "./lib/JaylyDB";
 
 system.afterEvents.scriptEventReceive.subscribe(async ev => {
-  if (ev.id === 'db:convert-lore' && ev.sourceEntity instanceof Player) {
-    const player = ev.sourceEntity;
+  if (!(ev.sourceEntity instanceof Player)) return;
+  const player = ev.sourceEntity;
+
+  if (ev.id === 'db:convert') {
+    const objectives = world.scoreboard.getObjectives().filter(obj => obj.id.startsWith('jaylydb:'));
+    if (objectives.length === 0) return player.sendMessage('JaylyDBのobjectiveが見つかりません');
+    const form = new ActionFormData();
+    objectives.forEach(obj => form.button(obj.id));
+    form.body(`${objectives.length} 個のtable`);
+    const { selection, canceled } = await form.show(player);
+    if (canceled) return;
+    console.warn(objectives[selection].id);
+    convertJaylyDB(objectives[selection]);
+  }
+
+  if (ev.id === 'db:convert-lore') {
     const block = player.getBlockFromViewDirection()?.block;
     if (block?.typeId !== 'minecraft:chest') return player.sendMessage('移行するチェストを視点先に置いてください')
     const { container } = block.getComponent('minecraft:inventory');
@@ -29,7 +44,7 @@ system.afterEvents.scriptEventReceive.subscribe(async ev => {
     const targetItem = items[selection];
     console.warn(targetItem.nameTag);
     try {
-      convertData(targetItem);
+      convertLoreDB(targetItem);
       player.sendMessage(`${targetItem.nameTag} を移行しました`);
     } catch (e) {
       player.sendMessage(`§c${e}`);
@@ -39,8 +54,21 @@ system.afterEvents.scriptEventReceive.subscribe(async ev => {
   namespaces: ['db']
 });
 
+/** @arg {import('@minecraft/server').ScoreboardObjective} objective */
+function convertJaylyDB(objective) {
+  const tableName = objective.id.replace('jaylydb:', '');
+  const jaylydb = new JaylyDB(tableName);
+  let keyCount = 0;
+  const table = db.getTable(tableName);
+  for (const [key, value] of jaylydb.entries()) {
+    table.set(key, value);
+    keyCount++;
+  }
+  console.warn(`[convertJaylyDB] objective: ${table.objectiveId} として ${keyCount} 個のキーを変換しました`);
+}
+
 /** @arg {import('@minecraft/server').ItemStack} item */
-export function convertData(item) {
+export function convertLoreDB(item) {
   const tableName = item.nameTag;
   if (!tableName) throw new Error('tableName(nameTag)がありません')
   const rawData = item.getLore()[0];
@@ -59,11 +87,11 @@ export function convertData(item) {
     if (typeof value === 'object') {
       const stringified = JSON.stringify(value);
       table.set(key, stringified);
-      console.warn(`[convertData] ${key} がobjectのためstringifyして保存しました (${stringified.length}/32767)`);
+      console.warn(`[convertLoreDB] ${key} がobjectのためstringifyして保存しました (${stringified.length}/32767)`);
     } else {
       table.set(key, value);
     }
   }
 
-  console.warn(`[convertData] objective: ${table.objectiveId} として ${table.size} 個のキーを変換しました`);
+  console.warn(`[convertLoreDB] objective: ${table.objectiveId} として ${table.size} 個のキーを変換しました`);
 }

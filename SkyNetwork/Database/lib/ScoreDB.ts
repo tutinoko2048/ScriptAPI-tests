@@ -5,7 +5,7 @@
  * This database is based on JaylyDB, thanks.
  */
 
-import { world, system, type ScoreboardObjective, ScoreboardIdentityType, ScoreboardIdentity } from '@minecraft/server';
+import { world, system, ScoreboardIdentityType, ScoreboardIdentity, type ScoreboardObjective } from '@minecraft/server';
 
 interface CacheData {
   identity: ScoreboardIdentity,
