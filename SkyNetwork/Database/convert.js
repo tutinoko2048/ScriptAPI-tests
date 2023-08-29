@@ -2,7 +2,7 @@
 
 /*
 db:convert-lore loreDBから移行
-db:convert
+db:convert JaylyDBから移行
 */
 import { Player, system, world } from "@minecraft/server";
 import { db } from "./index";
