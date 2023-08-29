@@ -39,7 +39,7 @@ export class ScoreDB implements Map<string, string | number | boolean> {
   }
 
   constructor(id: string) {
-    const objectiveId = 'scoredb' + id;
+    const objectiveId = 'scoredb:' + id;
     this.objective = world.scoreboard.getObjective(objectiveId) ?? world.scoreboard.addObjective(objectiveId, objectiveId);
 
     this.fetchData();

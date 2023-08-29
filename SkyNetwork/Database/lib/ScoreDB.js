@@ -30,7 +30,7 @@ export class ScoreDB {
     constructor(id) {
         this.cache = new Map();
         this[_a] = ScoreDB.name;
-        const objectiveId = 'scoredb' + id;
+        const objectiveId = 'scoredb:' + id;
         this.objective = world.scoreboard.getObjective(objectiveId) ?? world.scoreboard.addObjective(objectiveId, objectiveId);
         this.fetchData();
     }
