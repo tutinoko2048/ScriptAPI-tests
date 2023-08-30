@@ -3,6 +3,8 @@ import { world } from '@minecraft/server';
 import * as util from './util';
 import { FriendAPI } from './FriendManager';
 
+const DEBUG = false;
+
 /** @typedef {import('@minecraft/server').Player} Player */
 
 // ワールド参加時 redけす
@@ -50,20 +52,26 @@ export function joinTeam(player, teams, isStart) {
 }
 
 /**
- * @param {Player} player
+ * @param {Player} target
  * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
  * @returns {keyof TeamTag} プレイヤーが参加するチームのタグ
  */
-export function selectTeam(player, teams, isStart) {
-  const friendList = FriendAPI.getFriends(player.id);
+export function selectTeam(target, teams, isStart) {
+  const debugLogs = [`team selection start (player: ${target.name}, isStart:${isStart}, game: ${getGame()}`];
+
+  const friendList = FriendAPI.getFriends(target.id);
   const players = world.getPlayers();
   const onlineFriends = players.filter(p => friendList.includes(p.id));
   
-  const teamHPs = /** @type {{ [key in keyof TeamTag]: number }} */ (Object.fromEntries(teams.map(team => [ team, util.getScore(`${team}player`, team) ])));
+  const teamHPs = /** @type {{ [key in keyof TeamTag]: number }} */ (
+    Object.fromEntries(teams.map(team => [ team, util.getScore(`${team}player`, team) ]))
+  );
+  debugLogs.push(`teamHPs: ${JSON.stringify(teamHPs)}`);
 
   // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
+  debugLogs.push(`exclude as 0 player: ${scores.filter(x => !isStart && x.count === 0).map(x => x.team)}`);
   
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
@@ -86,16 +94,25 @@ export function selectTeam(player, teams, isStart) {
     team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
-  
+  debugLogs.push(`teamData: ${JSON.stringify(sorted)}`);
+  debugLogs.push(`sortOrder: ${sorted.map(x => x.team).join(', ')}`);
+  debugLogs.push(`selected: ${sorted[0].team}`);
+
   const tag = sorted[0].team;
   for (const [ team, score ] of Object.entries(teamHPs)) {
-    if (player.hasTag(team + "d")) {
-      player.removeTag(team + "d");
+    if (target.hasTag(team + "d")) {
+      target.removeTag(team + "d");
       if (score != 0) return /** @type {keyof TeamTag} */ (team);
     }
   }
   
-  if (!tag) player.sendMessage('§cチームの振り分けに失敗しました 管理者に連絡してください');
+  if (!tag) target.sendMessage('§cチームの振り分けに失敗しました 管理者に連絡してください');
+  
+  if (DEBUG) {
+    debugLogs.push('='.repeat(10));
+    console.warn(debugLogs.join('\n'));
+  }
+
   return tag;
 }
 
