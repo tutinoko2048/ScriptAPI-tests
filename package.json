@@ -6,14 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "type-stable": "npm i @minecraft/server@1.4.0-beta.1.20.10-stable -D & npm i @minecraft/server-ui@1.2.0-beta.1.20.10-stable -D",
-    "type-preview": "npm i @minecraft/server@1.6.0-beta.1.20.30-preview.24 @minecraft/server-ui@1.2.0-beta.1.20.30-preview.24",
+    "type-preview": "npm i @minecraft/server@1.6.0-beta.1.20.30-preview.25 -D & npm i @minecraft/server-ui@1.2.0-beta.1.20.30-preview.25 -D",
     "lint": "eslint . --ext .js"
   },
   "author": "tutinoko2048",
   "devDependencies": {
-    "@minecraft/server": "^1.4.0-beta.1.20.10-stable",
+    "@minecraft/server": "^1.6.0-beta.1.20.40-preview.20",
     "@minecraft/server-net": "1.0.0-beta.1.20.10-stable",
-    "@minecraft/server-ui": "1.2.0-beta.1.20.10-stable",
+    "@minecraft/server-ui": "^1.2.0-beta.1.20.30-preview.25",
     "eslint": "^8.39.0",
     "typescript": "^5.0.4"
   },
