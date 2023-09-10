@@ -4,5 +4,5 @@ interface FormatterOptions {
     arrayIndex?: boolean;
     hideFunction?: boolean;
 }
-export declare function format(value: any, options: FormatterOptions): string;
+export declare function format(value: any, options?: FormatterOptions): string;
 export {};

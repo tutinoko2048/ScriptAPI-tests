@@ -21,7 +21,7 @@ const f = {
   'null': () => `§7null§r`,
   'undefined': () => `§7undefined§r`,
   'class': (v: Function) => `§g[class ${v.name}]§r`,
-  'function': (v: Function) => `§5§oƒ§r §e${v.name || ''}()§r`,
+  'function': (v: Function) => `§5§oƒ§r §e${v.name ?? ''}()§r`,
   'constructor': (v: string) => `§l§7${v}§r`,
   'index': (v: string) => `§7${v}§r`,
   circular: () => '§c[Circular]§r',
@@ -41,9 +41,9 @@ class Formatter {
     return formatter.run(value, '', 1);
   }
   
-  private run(value, result, step) {
-    const nextLine = () => '\n'
-    const indent = (s) => ' '.repeat(2 * s);
+  private run(value: any, result: string, step: number): string {
+    const nextLine = () => '\n';
+    const indent = (s: number) => ' '.repeat(2 * s);
     const bracket = (b: string) => step % 2 ? `§e${b}§r` : `§d${b}§r`;
     const startBracket = (b: string, line?: boolean) => result += (line ? nextLine() : '') + bracket(b);
     const endBracket = (b: string, line: boolean) => result += (line ? `${nextLine()}${indent(step - 1)}` : '') + bracket(b);
@@ -65,13 +65,13 @@ class Formatter {
       if (value.__proto__) result += f.constructor(value.__proto__.constructor.name) + ' ';
       startBracket('{');
       
-      let short;
+      let short: boolean;
       if (step >= this.options.maxDepth) {
         result += ` ${f.omission()} `;
         short = true;
       } else {
         this.stack.push(value);
-        const entries = [];
+        const entries: string[] = [];
         for (const key in value) {
           const v = value[key];
           if (!this.options.hideFunction && typeof v === 'function') continue;
@@ -98,13 +98,13 @@ class Formatter {
       result += f.constructor(`Array(${value.length}) `);
       startBracket('[');
       
-      let short;
+      let short: boolean;
       if (step >= this.options.maxDepth) {
         result += ` ${f.omission()} `;
         short = true;
       } else {
         this.stack.push(value);
-        const entries = [];
+        const entries: string[] = [];
         for (const index in value) {
           const v = value[index];
           if (!this.options.hideFunction && typeof v === 'function') continue;
@@ -126,15 +126,15 @@ class Formatter {
   }
 }
 
-function isClass(obj: any) {
+function isClass(obj: any): boolean {
   return obj.toString().startsWith("class ");
 }
 
-function isObject(obj: any) {
+function isObject(obj: any): boolean {
   return typeof obj === 'object' && obj !== null && !Array.isArray(obj);
 }
 
-export function format(value: any, options: FormatterOptions): string {
+export function format(value: any, options?: FormatterOptions): string {
   const res =  Formatter.format(value, options);
   return noColor ? res.replace(/§./g, '') : res;
 }
