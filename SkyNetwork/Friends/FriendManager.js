@@ -88,7 +88,8 @@ export class FriendAPI {
    */
   static setFriends(playerId, friends) {
     if (friends.length > 0) {
-      db.set(TABLES.friends, playerId, JSON.stringify(friends));
+      const cleanFriends = [...new Set(friends)]; // remove duplication
+      db.set(TABLES.friends, playerId, JSON.stringify(cleanFriends));
     } else {
       db.delete(TABLES.friends, playerId);
     }
@@ -160,6 +161,16 @@ export class FriendAPI {
       db.delete(TABLES.gotRequests, playerId);
     }
   }
+
+  /**
+   * sourceに渡されたプレイヤーがtargetとフレンドかどうか確かめる
+   * @param {string} sourceId 
+   * @param {string} targetId 
+   */
+  static isFriend(sourceId, targetId) {
+    const friends = FriendAPI.getFriends(sourceId);
+    return friends.includes(targetId);
+  }
 }
 
 export class FriendManager {
@@ -190,6 +201,9 @@ export class FriendManager {
       const targetFriends = FriendAPI.getFriends(targetId);
       const sourceMax = FriendAPI.getMaxFriends(sourceId);
       const targetMax = FriendAPI.getMaxFriends(targetId);
+      if (sourceFriends.includes(targetId) && targetFriends.includes(sourceId)) {
+        return { error: true, message: `${targetName} とは既にフレンドです` }
+      }
       if (sourceMax !== -1 && sourceFriends.length >= sourceMax) {
         return { error: true, message: `フレンド数が上限に達しています！ (${sourceFriends.length} > ${sourceMax})` };
       }
