@@ -1,6 +1,6 @@
 import { JaylyDB } from "./lib/JaylyDB";
 import { DatabaseTypes } from "./DatabaseTypes";
-export declare class SkyDB {
+export declare class SkyDB_old {
     readonly databases: Record<string, JaylyDB>;
     constructor();
     get<K extends keyof DatabaseTypes>(tableName: K, key: string): DatabaseTypes[K];
@@ -18,5 +18,5 @@ export declare class SkyDB {
     getTable(tableName: string): JaylyDB;
     createTable(tableName: string): JaylyDB;
 }
-declare const db: SkyDB;
+declare const db: SkyDB_old;
 export { db };

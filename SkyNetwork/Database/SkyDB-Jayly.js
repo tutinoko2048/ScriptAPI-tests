@@ -1,5 +1,5 @@
 import { JaylyDB } from "./lib/JaylyDB";
-export class SkyDB {
+export class SkyDB_old {
     constructor() {
         this.databases = {};
     }
@@ -38,5 +38,5 @@ export class SkyDB {
         return this.databases[tableName];
     }
 }
-const db = new SkyDB();
+const db = new SkyDB_old();
 export { db };

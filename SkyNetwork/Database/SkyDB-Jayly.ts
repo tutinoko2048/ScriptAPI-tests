@@ -1,7 +1,7 @@
 import { JaylyDB } from "./lib/JaylyDB";
 import { DatabaseTypes } from "./DatabaseTypes";
 
-export class SkyDB {
+export class SkyDB_old {
   public readonly databases: Record<string, JaylyDB>
   constructor() {
     this.databases = {}
@@ -60,6 +60,6 @@ export class SkyDB {
   }
 }
 
-const db = new SkyDB();
+const db = new SkyDB_old();
 
 export { db }
