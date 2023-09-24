@@ -1,9 +1,5 @@
 // gametest-utility-library https://github.com/Lapis256/gametest-utility-library/blob/main/src/debug/toJson.js
 
-const blueRegex = /(true|false|undefined|null)/g;
-const numberRegex = /:\s*([\d|\.|-]+)/g;
-const orangeRegex = /(\{|\})/g;
-
 function isClass(obj) {
     return obj.toString().startsWith("class ");
 }
@@ -16,27 +12,27 @@ function isGenerator(obj) {
 
 function toJson(data, indent = 2, ignoreFunction = false) {
     return JSON.stringify(data, (key, value) => {
-        switch(typeof value) {
+        switch (typeof value) {
             case "function":
                 if (ignoreFunction) break;
-                if(isClass(value)) {
+                if (isClass(value)) {
                     return `[class ${value.name || key}]§r`;
                 }
                 return `[function ${value.name || key}]§r`;
             
-            case "object":
-                if(isGenerator(value)) {
+            case "object": {
+                if (isGenerator(value)) {
                     return `[generator ${key || "Generator"}]`;
                 }
-                if(Array.isArray(value)) {
+                if (Array.isArray(value)) {
                     return value;
                 }
                 let obj = {};
-                for(const i in value) {
+                for (const i in value) {
                     obj[i] = value[i];
                 }
                 return obj;
-            
+            }
             case "undefined":
                 return null;
             
