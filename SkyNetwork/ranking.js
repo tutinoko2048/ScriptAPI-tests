@@ -21,19 +21,72 @@ export const RankType = /** @type {const} */ ({
  * @returns {string}
  */
 export function updateRanking(mode) {
-  let ranking;
   if (mode instanceof Player) {
-    playerRanking(mode)
+    return playerRanking(mode);
   } else {
-    
+    return globalRanking(mode);
   }
-  return ranking;
 }
 
-/** @param {Player} player */
+/**
+ * @param {RankTypes} type 
+ * @returns {string}
+ */
+function globalRanking(type) {
+  const rankName = Object.entries(RankType).find(([ _, value ]) => value === type)[0];
+  if (!rankName) throw new TypeError(`Invalid rank type: ${type}`);
+  /** @type {string[]} */
+  const rows = [ `${type} ランキング\n` ];
+
+  const excluded = getExcluded();
+  if (type === RankType.ServerTime || type === RankType.PlayTime) {
+    const hourEntries = getSorted(type + 'h', excluded).slice(0, 30); // xxxtimeh
+    const timeEntries = hourEntries.map(entry => {
+      entry.value = (entry.value * 60) + getScore(entry.playerId, type + 'm', true); // 時間と分の合計
+      return entry;
+    });
+    timeEntries.sort((a, b) => b.value - a.value);
+    const result = timeEntries.slice(0, 10).map((entry, i) => {
+      const hours = getScore(entry.playerId, type + 'h', true);
+      const minutes = getScore(entry.playerId, type + 'm', true);
+      return `  §a#${i + 1}§r ${formatName(entry.playerId, true)}§r: ${hours}時間 ${minutes}分`;
+    });
+    rows.push(...result);
+
+  } else if (type === RankType.KD) {
+    const killEntries = getSorted(RankType.Kills, excluded);
+    const kdEntries = killEntries
+      .map(entry => {
+        const deaths = getScore(entry.playerId, RankType.Deaths);
+        if (entry.value + deaths < 100) return null; // K+D 100より下はnullをセット
+        entry.value = entry.value / deaths;
+        return entry;
+      })
+      .filter(Boolean); // null除外
+    kdEntries.sort((a, b) => b.value - a.value);
+    const result = kdEntries.slice(0, 10).map((entry, i) =>
+      `  §a#${i + 1}§r ${formatName(entry.playerId)}§r: ${entry.value.toFixed(1)}`
+    );
+    rows.push(...result);
+
+  } else { // その他特殊処理がいらないランキング
+    const entries = getSorted(type, excluded);
+    const result = entries.map((entry, i) =>
+      `  §a#${i + 1}§r ${formatName(entry.playerId)}§r: ${entry.value}`
+    );
+    rows.push(...result);
+  }
+
+  return rows.join('\n');
+}
+
+/**
+ * @param {Player} player
+ * @returns {string}
+ */
 function playerRanking(player) {
   /** @type {string[]} */
-  const rows = [ `${formatName(player.name)}§r さんの順位\n` ];
+  const rows = [ `${formatName(player)}§r さんの順位\n` ];
 
   const excluded = getExcluded();
   if (excluded.includes(player.id)) { // 除外リストに入ってたら
@@ -80,6 +133,8 @@ function playerRanking(player) {
     const rankIndex = entries.findIndex(entry => entry.playerId === player.id);
     rows.push(`  ${rankName}: §a#${rankIndex + 1}§r ${entries[rankIndex].value}`);
   }
+
+  return rows.join('\n');
 }
 
 /** 
