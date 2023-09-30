@@ -9,4 +9,7 @@ export interface DatabaseTypes {
   "gotRequests": string;
   /** [userId]: number */
   "maxFriends": number;
+
+  /** [userId]: boolean */
+  "rankingExcludes": boolean;
 }
