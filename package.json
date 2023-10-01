@@ -18,6 +18,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@minecraft/vanilla-data": "1.20.30"
+    "@minecraft/vanilla-data": "1.20.30",
+    "discord-api-types": "^0.37.58"
   }
 }
