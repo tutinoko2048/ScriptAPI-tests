@@ -16,26 +16,102 @@
  * ```json
  * {
  *   "module_name": "@minecraft/server",
- *   "version": "1.5.0-internal.1.20.20-preview.23"
+ *   "version": "1.7.0-internal.1.20.40-preview.23"
  * }
  * ```
  *
  */
+import * as minecraftcommon from '@minecraft/common';
 /**
  * @beta
+ * Description of the resulting intersection test on two
+ * BlockVolume objects
  */
 export enum BlockVolumeIntersection {
+    /**
+     * @beta
+     * @remarks
+     * Volume B has no intersection points with Volume A
+     *
+     */
     Disjoint = 0,
+    /**
+     * @beta
+     * @remarks
+     * Volume B resides completely inside Volume A
+     *
+     */
     Contains = 1,
+    /**
+     * @beta
+     * @remarks
+     * Volume B partially intersects Volume A
+     *
+     */
     Intersects = 2,
 }
 
 /**
  * @beta
+ * The Action enum determines how the CompoundBlockVolume
+ * considers the associated CompoundBlockVolumeItem when
+ * performing inside/outside calculations.
  */
 export enum CompoundBlockVolumeAction {
+    /**
+     * @beta
+     * @remarks
+     * The associated BlockVolume is considered a positive space,
+     * and any intersection tests are considered hits
+     *
+     */
     Add = 0,
+    /**
+     * @beta
+     * @remarks
+     * The associated BlockVolume is considered a negative or void
+     * space, and any intersection tests are considered misses.
+     * Using the Subtract action, it is possible to `punch holes`
+     * in block volumes so that any intersection tests may pass
+     * through such spaces
+     *
+     */
     Subtract = 1,
+}
+
+/**
+ * @beta
+ * An enum describing the relativity of the
+ * CompoundBlockVolumeItem, relative to the parent
+ * CompoundVolume.
+ */
+export enum CompoundBlockVolumePositionRelativity {
+    /**
+     * @beta
+     * @remarks
+     * The locations within the associated BlockVolume are relative
+     * to the CompoundBlockVolume to which they were added
+     *
+     */
+    Relative = 0,
+    /**
+     * @beta
+     * @remarks
+     * The locations within the associated BlockVolume are in
+     * absolute world space
+     *
+     */
+    Absolute = 1,
+}
+
+/**
+ * @beta
+ */
+export enum Difficulty {
+    Peaceful = 0,
+    Easy = 1,
+    Normal = 2,
+    Hard = 3,
 }
 
 /**
@@ -89,32 +165,148 @@ export enum Direction {
 
 /**
  * @beta
+ * Specifies a mechanism for displaying scores on a scoreboard.
  */
 export enum DisplaySlotId {
+    /**
+     * @beta
+     * @remarks
+     * Displays the score below the player's name.
+     *
+     */
     BelowName = 'BelowName',
+    /**
+     * @beta
+     * @remarks
+     * Displays the score as a list on the pause screen.
+     *
+     */
     List = 'List',
+    /**
+     * @beta
+     * @remarks
+     * Displays the score on the side of the player's screen.
+     *
+     */
     Sidebar = 'Sidebar',
 }
 
 /**
  * @beta
+ * Specifies different colors for use as dye.
  */
 export enum DyeColor {
+    /**
+     * @beta
+     * @remarks
+     * Black dye color.
+     *
+     */
     Black = 'Black',
+    /**
+     * @beta
+     * @remarks
+     * Blue dye color.
+     *
+     */
     Blue = 'Blue',
+    /**
+     * @beta
+     * @remarks
+     * Brown dye color.
+     *
+     */
     Brown = 'Brown',
+    /**
+     * @beta
+     * @remarks
+     * Cyan dye color.
+     *
+     */
     Cyan = 'Cyan',
+    /**
+     * @beta
+     * @remarks
+     * Gray dye color.
+     *
+     */
     Gray = 'Gray',
+    /**
+     * @beta
+     * @remarks
+     * Green dye color.
+     *
+     */
     Green = 'Green',
+    /**
+     * @beta
+     * @remarks
+     * Light blue dye color.
+     *
+     */
     LightBlue = 'LightBlue',
+    /**
+     * @beta
+     * @remarks
+     * Lime dye color.
+     *
+     */
     Lime = 'Lime',
+    /**
+     * @beta
+     * @remarks
+     * Magenta dye color.
+     *
+     */
     Magenta = 'Magenta',
+    /**
+     * @beta
+     * @remarks
+     * Orange dye color.
+     *
+     */
     Orange = 'Orange',
+    /**
+     * @beta
+     * @remarks
+     * Pink dye color.
+     *
+     */
     Pink = 'Pink',
+    /**
+     * @beta
+     * @remarks
+     * Purple dye color.
+     *
+     */
     Purple = 'Purple',
+    /**
+     * @beta
+     * @remarks
+     * Red dye color.
+     *
+     */
     Red = 'Red',
+    /**
+     * @beta
+     * @remarks
+     * Silver dye color.
+     *
+     */
     Silver = 'Silver',
+    /**
+     * @beta
+     * @remarks
+     * White dye color.
+     *
+     */
     White = 'White',
+    /**
+     * @beta
+     * @remarks
+     * Yellow dye color.
+     *
+     */
     Yellow = 'Yellow',
 }
 
@@ -162,6 +354,7 @@ export enum EasingType {
 export enum EntityDamageCause {
     anvil = 'anvil',
     blockExplosion = 'blockExplosion',
+    campfire = 'campfire',
     charging = 'charging',
     contact = 'contact',
     drowning = 'drowning',
@@ -182,6 +375,9 @@ export enum EntityDamageCause {
     override = 'override',
     piston = 'piston',
     projectile = 'projectile',
+    ramAttack = 'ramAttack',
+    sonicBoom = 'sonicBoom',
+    soulCampfire = 'soulCampfire',
     stalactite = 'stalactite',
     stalagmite = 'stalagmite',
     starve = 'starve',
@@ -191,6 +387,45 @@ export enum EntityDamageCause {
     thorns = 'thorns',
     'void' = 'void',
     wither = 'wither',
+}
+
+/**
+ * @beta
+ * An enumeration describing initialization cause of an entity.
+ */
+export enum EntityInitializationCause {
+    /**
+     * @beta
+     * @remarks
+     * Case when an entity is created as child of other entity or
+     * entities, e.g., cows making a cow or slimes making smaller
+     * slimes after dying.
+     *
+     */
+    Born = 'Born',
+    /**
+     * @beta
+     * @remarks
+     * Case when an entity is created by an event, e.g., Wandering
+     * trader spawning llamas.
+     *
+     */
+    Event = 'Event',
+    Loaded = 'Loaded',
+    /**
+     * @beta
+     * @remarks
+     * Case when an entity is naturally spawned in the world.
+     *
+     */
+    Spawned = 'Spawned',
+    /**
+     * @beta
+     * @remarks
+     * Case when an entity is transformed into another entity.
+     *
+     */
+    Transformed = 'Transformed',
 }
 
 /**
@@ -231,7 +466,7 @@ export enum EquipmentSlot {
      * Chestplate or Elytra.
      *
      */
-    chest = 'chest',
+    Chest = 'Chest',
     /**
      * @beta
      * @remarks
@@ -239,7 +474,7 @@ export enum EquipmentSlot {
      * Boots.
      *
      */
-    feet = 'feet',
+    Feet = 'Feet',
     /**
      * @beta
      * @remarks
@@ -247,7 +482,7 @@ export enum EquipmentSlot {
      * Helmets or Carved Pumpkins.
      *
      */
-    head = 'head',
+    Head = 'Head',
     /**
      * @beta
      * @remarks
@@ -255,7 +490,7 @@ export enum EquipmentSlot {
      * Leggings.
      *
      */
-    legs = 'legs',
+    Legs = 'Legs',
     /**
      * @beta
      * @remarks
@@ -263,7 +498,7 @@ export enum EquipmentSlot {
      * the currently active hotbar slot.
      *
      */
-    mainhand = 'mainhand',
+    Mainhand = 'Mainhand',
     /**
      * @beta
      * @remarks
@@ -271,7 +506,7 @@ export enum EquipmentSlot {
      * shields and maps.
      *
      */
-    offhand = 'offhand',
+    Offhand = 'Offhand',
 }
 
 /**
@@ -562,10 +797,30 @@ export enum WatchdogTerminateReason {
 
 /**
  * @beta
+ * Used to specify the type of weather condition within the
+ * world.
  */
 export enum WeatherType {
+    /**
+     * @beta
+     * @remarks
+     * Specifies a clear weather condition.
+     *
+     */
     Clear = 'Clear',
+    /**
+     * @beta
+     * @remarks
+     * Specifies a rain weather condition.
+     *
+     */
     Rain = 'Rain',
+    /**
+     * @beta
+     * @remarks
+     * Specifies a rain and thunder weather condition.
+     *
+     */
     Thunder = 'Thunder',
 }
 
@@ -584,6 +839,48 @@ export class Block {
      *
      */
     readonly dimension: Dimension;
+    /**
+     * @beta
+     * @remarks
+     * Returns true if this block is an air block (i.e., empty
+     * space).
+     *
+     * @throws This property can throw when used.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    readonly isAir: boolean;
+    /**
+     * @beta
+     * @remarks
+     * Returns true if this block is a liquid block - (e.g., a
+     * water block and a lava block are liquid, while an air block
+     * and a stone block are not. Water logged blocks are not
+     * liquid blocks).
+     *
+     * @throws This property can throw when used.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    readonly isLiquid: boolean;
+    /**
+     * @beta
+     * @remarks
+     * Returns true if this block is solid and impassible - (e.g.,
+     * a cobblestone block and a diamond block are solid, while a
+     * ladder block and a fence block are not).
+     *
+     * @throws This property can throw when used.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    readonly isSolid: boolean;
     /**
      * @beta
      * @remarks
@@ -606,6 +903,10 @@ export class Block {
      * block.
      *
      * @throws This property can throw when used.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     readonly permutation: BlockPermutation;
     /**
@@ -614,6 +915,10 @@ export class Block {
      * Gets the type of block.
      *
      * @throws This property can throw when used.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     readonly 'type': BlockType;
     /**
@@ -622,6 +927,10 @@ export class Block {
      * Identifier of the type of block for this block.
      *
      * @throws This property can throw when used.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     readonly typeId: string;
     /**
@@ -644,6 +953,28 @@ export class Block {
     readonly z: number;
     /**
      * @beta
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    above(steps?: number): Block | undefined;
+    /**
+     * @beta
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    below(steps?: number): Block | undefined;
+    /**
+     * @beta
+     */
+    bottomCenter(): Vector3;
+    /**
+     * @beta
      * @remarks
      * Checks to see whether it is valid to place the specified
      * block type or block permutation, on a specified face on this
@@ -658,8 +989,27 @@ export class Block {
      * Returns `true` if the block type or permutation can be
      * placed on this block, else `false`.
      * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     canPlace(blockToPlace: BlockPermutation | BlockType | string, faceToPlaceOn?: Direction): boolean;
+    /**
+     * @beta
+     */
+    center(): Vector3;
+    /**
+     * @beta
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    east(steps?: number): Block | undefined;
     /**
      * @beta
      * @remarks
@@ -674,6 +1024,10 @@ export class Block {
      * Returns the component object if it is present on the
      * particular block.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     getComponent(componentName: string): BlockComponent | undefined;
     /**
@@ -689,8 +1043,12 @@ export class Block {
      * Whether additional data facets of the item stack are
      * included.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
-    getItemStack(amount?: number, withData?: boolean): ItemStack;
+    getItemStack(amount?: number, withData?: boolean): ItemStack | undefined;
     /**
      * @beta
      * @remarks
@@ -700,6 +1058,10 @@ export class Block {
      * Returns undefined if redstone power is not applicable to
      * this block.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     getRedstonePower(): number | undefined;
     /**
@@ -710,6 +1072,10 @@ export class Block {
      * @returns
      * The list of tags that the block has.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     getTags(): string[];
     /**
@@ -724,6 +1090,10 @@ export class Block {
      * Returns `true` if the permutation of this block has the tag,
      * else `false`.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      * @example check_block_tags.js
      * ```typescript
      * import { world } from "@minecraft/server";
@@ -740,35 +1110,6 @@ export class Block {
     /**
      * @beta
      * @remarks
-     * Returns true if this block is an air block (i.e., empty
-     * space).
-     *
-     * @throws This function can throw errors.
-     */
-    isAir(): boolean;
-    /**
-     * @beta
-     * @remarks
-     * Returns true if this block is a liquid block - (e.g., a
-     * water block and a lava black are liquid, while an air block
-     * and a stone block are not).
-     *
-     * @throws This function can throw errors.
-     */
-    isLiquid(): boolean;
-    /**
-     * @beta
-     * @remarks
-     * Returns true if this block is solid and impassible - (e.g.,
-     * a cobblestone block and a diamond block are solid, while a
-     * ladder block and a fence block are not).
-     *
-     * @throws This function can throw errors.
-     */
-    isSolid(): boolean;
-    /**
-     * @beta
-     * @remarks
      * Returns true if this reference to a block is still valid
      * (for example, if the block is unloaded, references to that
      * block will no longer be valid.)
@@ -777,6 +1118,24 @@ export class Block {
      * True if this block object is still working and valid.
      */
     isValid(): boolean;
+    /**
+     * @beta
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    north(steps?: number): Block | undefined;
+    /**
+     * @beta
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    offset(offset: Vector3): Block | undefined;
     /**
      * @remarks
      * Sets the block in the dimension to the state of the
@@ -788,6 +1147,10 @@ export class Block {
      * Permutation that contains a set of property states for the
      * Block.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     setPermutation(permutation: BlockPermutation): void;
     /**
@@ -801,8 +1164,23 @@ export class Block {
      * Identifier of the type of block to apply - for example,
      * minecraft:powered_repeater.
      * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     setType(blockType: BlockType | string): void;
+    /**
+     * @beta
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    south(steps?: number): Block | undefined;
     /**
      * @beta
      * @remarks
@@ -818,8 +1196,21 @@ export class Block {
      * Returns `true` if the block permutation data was
      * successfully set, else `false`.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     trySetPermutation(permutation: BlockPermutation): boolean;
+    /**
+     * @beta
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    west(steps?: number): Block | undefined;
 }
 
 /**
@@ -859,57 +1250,6 @@ export class BlockAreaSize {
      *
      */
     equals(other: BlockAreaSize): boolean;
-}
-
-/**
- * @beta
- * Contains information regarding an event where a player
- * breaks a block.
- */
-// @ts-ignore Class inheritance allowed for native defined classes
-export class BlockBreakAfterEvent extends BlockEvent {
-    private constructor();
-    /**
-     * @remarks
-     * Returns permutation information about this block before it
-     * was broken.
-     *
-     */
-    readonly brokenBlockPermutation: BlockPermutation;
-    /**
-     * @remarks
-     * Player that broke the block for this event.
-     *
-     */
-    readonly player: Player;
-}
-
-/**
- * @beta
- * Manages callbacks that are connected to when a block is
- * broken.
- */
-export class BlockBreakAfterEventSignal {
-    private constructor();
-    /**
-     * @remarks
-     * Adds a callback that will be called when a block is broken
-     * by a player.
-     *
-     * This function can't be called in read-only mode.
-     *
-     */
-    subscribe(callback: (arg: BlockBreakAfterEvent) => void): (arg: BlockBreakAfterEvent) => void;
-    /**
-     * @remarks
-     * Removes a callback from being called when an block is
-     * broken.
-     *
-     * This function can't be called in read-only mode.
-     *
-     * @throws This function can throw errors.
-     */
-    unsubscribe(callback: (arg: BlockBreakAfterEvent) => void): void;
 }
 
 /**
@@ -1014,7 +1354,7 @@ export class BlockInventoryComponent extends BlockComponent {
      *
      * @throws This property can throw when used.
      */
-    readonly container: Container;
+    readonly container?: Container;
     static readonly componentId = 'minecraft:inventory';
 }
 
@@ -1141,7 +1481,7 @@ export class BlockPermutation {
      * Number of instances of this block to place in the prototype
      * item stack.
      */
-    getItemStack(amount?: number): ItemStack;
+    getItemStack(amount?: number): ItemStack | undefined;
     /**
      * @beta
      * @remarks
@@ -1315,50 +1655,6 @@ export class BlockPistonComponent extends BlockComponent {
 
 /**
  * @beta
- * Contains information regarding an event where a player
- * places a block.
- */
-// @ts-ignore Class inheritance allowed for native defined classes
-export class BlockPlaceAfterEvent extends BlockEvent {
-    private constructor();
-    /**
-     * @remarks
-     * Player that placed the block for this event.
-     *
-     */
-    readonly player: Player;
-}
-
-/**
- * @beta
- * Manages callbacks that are connected to when a block is
- * placed.
- */
-export class BlockPlaceAfterEventSignal {
-    private constructor();
-    /**
-     * @remarks
-     * Adds a callback that will be called when a block is placed
-     * by a player.
-     *
-     * This function can't be called in read-only mode.
-     *
-     */
-    subscribe(callback: (arg: BlockPlaceAfterEvent) => void): (arg: BlockPlaceAfterEvent) => void;
-    /**
-     * @remarks
-     * Removes a callback from being called when an block is
-     * placed.
-     *
-     * This function can't be called in read-only mode.
-     *
-     * @throws This function can throw errors.
-     */
-    unsubscribe(callback: (arg: BlockPlaceAfterEvent) => void): void;
-}
-
-/**
- * @beta
  * Represents a fluid container block that currently contains a
  * potion.
  */
@@ -1411,7 +1707,7 @@ export class BlockRecordPlayerComponent extends BlockComponent {
      *
      * @throws This function can throw errors.
      */
-    setRecord(recordItemType: ItemType): void;
+    setRecord(recordItemType: ItemType | string): void;
 }
 
 /**
@@ -1558,8 +1854,11 @@ export class BlockStates {
      * @remarks
      * Retrieves a specific block state instance.
      *
+     * @returns
+     * Returns the block state instance if it is found. If the
+     * block state instance is not found returns undefined.
      */
-    static get(stateName: string): BlockStateType;
+    static get(stateName: string): BlockStateType | undefined;
     /**
      * @remarks
      * Retrieves a set of all available block states.
@@ -1615,10 +1914,28 @@ export class BlockType {
 
 /**
  * @beta
+ * Contains a catalog of Minecraft Block Types that are
+ * available in this world.
  */
 export class BlockTypes {
     private constructor();
+    /**
+     * @remarks
+     * Returns a BlockType object for the specified identifier.
+     *
+     * @param typeName
+     * Identifier of the block type. Should follow a namespace:id
+     * pattern, such as minecraft:dirt.
+     * @returns
+     * BlockType object, or undefined if the block type is not
+     * available within this world.
+     */
     static get(typeName: string): BlockType | undefined;
+    /**
+     * @remarks
+     * Returns a collection of all available block types.
+     *
+     */
     static getAll(): BlockType[];
 }
 
@@ -1787,7 +2104,7 @@ export class BlockWaterContainerComponent extends BlockLiquidContainerComponent 
      * Color that is used as the base color for sign text.
      * @throws This function can throw errors.
      */
-    getCustomColor(): Color;
+    getCustomColor(): RGBA;
     /**
      * @remarks
      * Sets a custom base color used for the sign text.
@@ -1796,7 +2113,7 @@ export class BlockWaterContainerComponent extends BlockLiquidContainerComponent 
      *
      * @throws This function can throw errors.
      */
-    setCustomColor(color: Color): void;
+    setCustomColor(color: RGBA): void;
 }
 
 /**
@@ -1956,11 +2273,18 @@ export class ButtonPushAfterEventSignal extends IButtonPushAfterEventSignal {
 
 /**
  * @beta
+ * Contains methods relating to the active camera for the
+ * specified player.
  */
 export class Camera {
     private constructor();
     /**
      * @remarks
+     * Clears the active camera for the specified player. Causes
+     * the specified players to end any in-progress camera
+     * perspectives, including any eased camera motions, and return
+     * to their normal perspective.
+     *
      * This function can't be called in read-only mode.
      *
      * @throws This function can throw errors.
@@ -1968,25 +2292,36 @@ export class Camera {
     clear(): void;
     /**
      * @remarks
+     * Begins a camera fade transition. A fade transition is a
+     * full-screen color that fades-in, holds, and then fades-out.
+     *
      * This function can't be called in read-only mode.
      *
+     * @param fadeCameraOptions
+     * Additional options around camera fade operations.
      * @throws This function can throw errors.
      */
     fade(fadeCameraOptions?: CameraFadeOptions): void;
     /**
      * @remarks
+     * Sets the current active camera for the specified player.
+     *
      * This function can't be called in read-only mode.
      *
+     * @param cameraPreset
+     * Identifier of a camera preset file defined within JSON.
+     * @param setOptions
+     * Additional options for the camera.
      * @throws This function can throw errors.
      */
     setCamera(
         cameraPreset: string,
         setOptions?:
-            | ScriptCameraDefaultOptions
-            | ScriptCameraSetFacingOptions
-            | ScriptCameraSetLocationOptions
-            | ScriptCameraSetPosOptions
-            | ScriptCameraSetRotOptions,
+            | CameraDefaultOptions
+            | CameraSetFacingOptions
+            | CameraSetLocationOptions
+            | CameraSetPosOptions
+            | CameraSetRotOptions,
     ): void;
 }
 
@@ -2178,7 +2513,13 @@ export class Component {
  * defining a further single 'void' cube inside the larger one.
  * Similarly, the Compound Block Volume can represent irregular
  * shaped volumes (e.g. a tree consists of a trunk and lots of
- * leaf cubes which are not necessarily contiguously placed)
+ * leaf cubes which are not necessarily contiguously placed).
+ * Each of the volumes added to the CompoundBlockVolume are (by
+ * default) relative to the origin set (either at construction
+ * or via one of the set functions).
+ * However, it is also possible to push volumes to the compound
+ * collection which are absolute in nature and are not affected
+ * by origin changes.
  */
 export class CompoundBlockVolume {
     /**
@@ -2195,6 +2536,16 @@ export class CompoundBlockVolume {
      *
      */
     readonly volumeCount: number;
+    /**
+     * @remarks
+     * Create a CompoundBlockVolume object
+     *
+     * @param origin
+     * An optional world space origin on which to center the
+     * compound volume.
+     * If not specified, the origin is set to (0,0,0)
+     */
+    constructor(origin?: Vector3);
     /**
      * @remarks
      * Clear the contents of the volume stack
@@ -2216,7 +2567,9 @@ export class CompoundBlockVolume {
      * subtractive volume to the same location, then the iterator
      * will step over the initial volume because it is considered
      * negative space)
-     *
+     * Note that the Block Locations returned by this iterator are
+     * in absolute world space (irrespective of whether the
+     * compound volume items pushed are absolute or relative)
      *
      * This function can't be called in read-only mode.
      *
@@ -2226,6 +2579,9 @@ export class CompoundBlockVolume {
      * @remarks
      * Get the largest bounding box that represents a container for
      * all of the volumes on the stack
+     * Note that the bounding box returned is represented in
+     * absolute world space  (irrespective of whether the compound
+     * volume items pushed are absolute or relative)
      *
      * This function can't be called in read-only mode.
      *
@@ -2234,7 +2590,10 @@ export class CompoundBlockVolume {
     /**
      * @remarks
      * Get the max block location of the outermost bounding
-     * rectangle which represents the volumes on the stack
+     * rectangle which represents the volumes on the stack.
+     * Note that the max location returned is in absolute world
+     * space (irrespective of whether the compound volume items
+     * pushed are absolute or relative)
      *
      * This function can't be called in read-only mode.
      *
@@ -2243,7 +2602,10 @@ export class CompoundBlockVolume {
     /**
      * @remarks
      * Get the min block location of the outermost bounding
-     * rectangle which represents the volumes on the stack
+     * rectangle which represents the volumes on the stack.
+     * Note that the min location returned is in absolute world
+     * space (irrespective of whether the compound volume items
+     * pushed are absolute or relative)
      *
      * This function can't be called in read-only mode.
      *
@@ -2251,8 +2613,26 @@ export class CompoundBlockVolume {
     getMin(): Vector3;
     /**
      * @remarks
-     * Return a boolean representing whether or not a given block
-     * location is inside a positive block volume.
+     * Fetch the origin in world space of the compound volume
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    getOrigin(): Vector3;
+    /**
+     * @remarks
+     * Return a boolean which signals if there are any volume items
+     * pushed to the volume
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    isEmpty(): boolean;
+    /**
+     * @remarks
+     * Return a boolean representing whether or not a given
+     * absolute world space block location is inside a positive
+     * block volume.
      * E.g. if the stack contains a large cube followed by a
      * slightly smaller negative cube, and the test location is
      * within the negative cube - the function will return false
@@ -2262,21 +2642,29 @@ export class CompoundBlockVolume {
      *
      * This function can't be called in read-only mode.
      *
-     * @param delta
-     * block location to test
      */
-    isInside(delta: Vector3): boolean;
+    isInside(worldLocation: Vector3): boolean;
     /**
      * @remarks
      * Inspect the last entry pushed to the volume stack without
-     * affecting the stack contents
+     * affecting the stack contents.
      *
      * This function can't be called in read-only mode.
      *
+     * @param forceRelativity
+     * Determine whether the function returns a
+     * CompoundBlockVolumeItem which is forced into either relative
+     * or absolute coordinate system.
+     * `true` = force returned item to be relative to volume origin
+     * `false` = force returned item to be absolute world space
+     * location
+     *
+     * If no flag is specified, the item returned retains whatever
+     * relativity it had when it was pushed
      * @returns
      * Returns undefined if the stack is empty
      */
-    peekLastVolume(): CompoundBlockVolumeItem | undefined;
+    peekLastVolume(forceRelativity?: CompoundBlockVolumePositionRelativity): CompoundBlockVolumeItem | undefined;
     /**
      * @remarks
      * Remove the last entry from the volume stack.  This will
@@ -2290,7 +2678,10 @@ export class CompoundBlockVolume {
      * @remarks
      * Push a volume item to the stack.  The volume item contains
      * an 'action' parameter which determines whether this volume
-     * is a positive or negative space
+     * is a positive or negative space.
+     * The item also contains a `locationRelativity` which
+     * determines whether it is relative or absolute to the
+     * compound volume origin
      *
      * This function can't be called in read-only mode.
      *
@@ -2313,16 +2704,47 @@ export class CompoundBlockVolume {
     replaceOrAddLastVolume(item: CompoundBlockVolumeItem): boolean;
     /**
      * @remarks
-     * Move the root block location of the volume by a given
-     * amount.  This effectively adds the specified delta to the
-     * block location of all of the volumes in the stack
+     * Set the origin of the compound volume to an absolute world
+     * space location
      *
      * This function can't be called in read-only mode.
      *
-     * @param delta
-     * Amount to move
+     * @param preserveExistingVolumes
+     * This optional boolean flag determines whether the relative
+     * `CompoundBlockVolumeItem`'s are frozen in place, or are
+     * affected by the new origin.
+     * Imagine a scenario where you have a series of relative
+     * locations around an origin which make up a sphere; all of
+     * these locations are in the range of -2 to 2.
+     * Push each of these locations to the compound volume as
+     * relative items.
+     * Now, move the origin and all of the locations representing
+     * the sphere move accordingly.
+     * However, let's say you want to add a 2nd sphere next to the
+     * 1st.
+     * In this case, set the new origin a few locations over, but
+     * 'preserveExistingVolumes' = true.
+     * This will set a new origin, but the existing sphere
+     * locations will remain relative to the original origin.
+     * Now, you can push the relative sphere locations again (this
+     * time they will be relative to the new origin) - resulting in
+     * 2 spheres next to each other.
      */
-    translate(delta: Vector3): void;
+    setOrigin(position: Vector3, preserveExistingVolumes?: boolean): void;
+    /**
+     * @remarks
+     * Similar to {@link
+     * @minecraft-server/CompoundBlockVolume.setOrigin} - this
+     * function will translate the origin by a given delta to a new
+     * position
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param preserveExistingVolumes
+     * See the description for the arguments to {@link
+     * @minecraft-server/CompoundBlockVolume.setOrigin}
+     */
+    translateOrigin(delta: Vector3, preserveExistingVolumes?: boolean): void;
 }
 
 /**
@@ -2365,7 +2787,7 @@ export class Container {
      * The stack of items to add.
      * @throws This function can throw errors.
      */
-    addItem(itemStack: ItemStack): ItemStack;
+    addItem(itemStack: ItemStack): ItemStack | undefined;
     /**
      * @remarks
      * Clears all inventory items in the container.
@@ -2512,7 +2934,7 @@ export class Container {
      * fromInventory.container.transferItem(0, toInventory.container);
      * ```
      */
-    transferItem(fromSlot: number, toContainer: Container): ItemStack;
+    transferItem(fromSlot: number, toContainer: Container): ItemStack | undefined;
 }
 
 /**
@@ -2931,10 +3353,17 @@ export class DefinitionModifier {
 export class Dimension {
     private constructor();
     /**
+     * @beta
+     * @remarks
+     * Height range of the dimension.
+     *
+     * @throws This property can throw when used.
+     */
+    readonly heightRange: NumberRange;
+    /**
      * @remarks
      * Identifier of the dimension.
      *
-     * @throws This property can throw when used.
      */
     readonly id: string;
     /**
@@ -2951,6 +3380,10 @@ export class Dimension {
      * @param explosionOptions
      * Additional configurable options for the explosion.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      * @example createExplosion.ts
      * ```typescript
      *   const overworld = mc.world.getDimension("overworld");
@@ -3033,6 +3466,10 @@ export class Dimension {
      * trying to interact with a position outside of dimension
      * height range
      *
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     getBlock(location: Vector3): Block | undefined;
     /**
@@ -3156,6 +3593,13 @@ export class Dimension {
     /**
      * @beta
      * @remarks
+     * This function can't be called in read-only mode.
+     *
+     */
+    getWeather(): WeatherType;
+    /**
+     * @beta
+     * @remarks
      * Runs a command synchronously using the context of the
      * broader dimenion.
      *
@@ -3173,6 +3617,8 @@ export class Dimension {
      * command. Note that in many cases, if the command does not
      * operate (e.g., a target selector found no matches), this
      * method will not throw an exception.
+     *
+     * {@link CommandError}
      */
     runCommand(commandString: string): CommandResult;
     /**
@@ -3199,14 +3645,19 @@ export class Dimension {
     /**
      * @beta
      * @remarks
-     * Sets the current weather within the dimesion
+     * Sets the current weather within the dimension
      *
      * This function can't be called in read-only mode.
      *
      * @param weatherType
-     * Set of weather to apply.
+     * Set the type of weather to apply.
+     * @param duration
+     * Sets the duration of the weather (in ticks). If no duration
+     * is provided, the duration will be set to a random duration
+     * between 300 and 900 seconds.
+     * @throws This function can throw errors.
      */
-    setWeather(weatherType: WeatherType): void;
+    setWeather(weatherType: WeatherType, duration?: number): void;
     /**
      * @beta
      * @remarks
@@ -3223,6 +3674,10 @@ export class Dimension {
      * @returns
      * Newly created entity at the specified location.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      * @example createOldHorse.ts
      * ```typescript
      *   const overworld = mc.world.getDimension("overworld");
@@ -3277,6 +3732,10 @@ export class Dimension {
      * @returns
      * Newly created item stack entity at the specified location.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      * @example itemStacks.ts
      * ```typescript
      * const overworld = mc.world.getDimension('overworld');
@@ -3323,6 +3782,10 @@ export class Dimension {
      * A set of optional, customizable variables that can be
      * adjusted for this particle.
      * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      * @example spawnParticle.ts
      * ```typescript
      *   for (let i = 0; i < 100; i++) {
@@ -3339,7 +3802,7 @@ export class Dimension {
      *   }
      * ```
      */
-    spawnParticle(effectName: string, location: Vector3, molangVariables: MolangVariableMap): void;
+    spawnParticle(effectName: string, location: Vector3, molangVariables?: MolangVariableMap): void;
 }
 
 /**
@@ -3348,6 +3811,11 @@ export class Dimension {
  */
 export class DimensionType {
     private constructor();
+    /**
+     * @remarks
+     * Identifier of the dimension type.
+     *
+     */
     readonly typeId: string;
 }
 
@@ -3369,37 +3837,6 @@ export class DimensionTypes {
      *
      */
     static getAll(): DimensionType[];
-}
-
-/**
- * @beta
- * Class used in conjunction with {@link PropertyRegistry} to
- * define dynamic properties that can be used on entities of a
- * specified type or at the global World- level.
- */
-export class DynamicPropertiesDefinition {
-    /**
-     * @remarks
-     * Defines a boolean dynamic property.
-     *
-     * @throws This function can throw errors.
-     */
-    defineBoolean(identifier: string, defaultValue?: boolean): DynamicPropertiesDefinition;
-    /**
-     * @remarks
-     * Defines a number dynamic property.
-     *
-     * @throws This function can throw errors.
-     */
-    defineNumber(identifier: string, defaultValue?: number): DynamicPropertiesDefinition;
-    /**
-     * @remarks
-     * Defines a string dynamic property.
-     *
-     * @throws This function can throw errors.
-     */
-    defineString(identifier: string, maxLength: number, defaultValue?: string): DynamicPropertiesDefinition;
-    defineVector(identifier: string, defaultValue?: Vector3): DynamicPropertiesDefinition;
 }
 
 /**
@@ -3779,7 +4216,6 @@ export class Entity {
      * property is accessible even if {@link Entity.isValid} is
      * false.
      *
-     * @throws This property can throw when used.
      */
     readonly id: string;
     /**
@@ -3817,6 +4253,14 @@ export class Entity {
      * @throws This property can throw when used.
      */
     readonly isOnGround: boolean;
+    /**
+     * @beta
+     * @remarks
+     * If true, the entity is currently sleeping.
+     *
+     * @throws This property can throw when used.
+     */
+    readonly isSleeping: boolean;
     /**
      * @beta
      * @remarks
@@ -3877,8 +4321,8 @@ export class Entity {
      * @beta
      * @remarks
      * Returns a scoreboard identity that represents this entity.
+     * Will remain valid when the entity is killed.
      *
-     * @throws This property can throw when used.
      */
     readonly scoreboardIdentity?: ScoreboardIdentity;
     /**
@@ -3892,11 +4336,10 @@ export class Entity {
     readonly target: Entity;
     /**
      * @remarks
-     * Unique identifier of the type of the entity - for example,
+     * Identifier of the type of the entity - for example,
      * 'minecraft:skeleton'. This property is accessible even if
      * {@link Entity.isValid} is false.
      *
-     * @throws This property can throw when used.
      */
     readonly typeId: string;
     /**
@@ -4086,6 +4529,11 @@ export class Entity {
     applyKnockback(directionX: number, directionZ: number, horizontalStrength: number, verticalStrength: number): void;
     /**
      * @beta
+     * @throws This function can throw errors.
+     */
+    clearDynamicProperties(): void;
+    /**
+     * @beta
      * @remarks
      * Sets the current velocity of the Entity to zero. Note that
      * this method may not have an impact on Players.
@@ -4204,6 +4652,16 @@ export class Entity {
     getDynamicProperty(identifier: string): boolean | number | string | Vector3 | undefined;
     /**
      * @beta
+     * @throws This function can throw errors.
+     */
+    getDynamicPropertyIds(): string[];
+    /**
+     * @beta
+     * @throws This function can throw errors.
+     */
+    getDynamicPropertyTotalByteCount(): number;
+    /**
+     * @beta
      * @remarks
      * Returns the effect for the specified EffectType on the
      * entity, undefined if the effect is not present, or throws an
@@ -4257,10 +4715,29 @@ export class Entity {
     /**
      * @beta
      * @remarks
+     * Gets an entity Property value. If the property was set using
+     * the setProperty function within the same tick, the updated
+     * value will not be reflected until the subsequent tick.
+     *
+     * @param identifier
+     * The entity Property identifier.
+     * @returns
+     * Returns the current property value. For enum properties, a
+     * string is returned. For float and int properties, a number
+     * is returned. For undefined properties, undefined is
+     * returned.
+     * @throws
+     * Throws if the entity is invalid.
+     */
+    getProperty(identifier: string): boolean | number | string | undefined;
+    /**
+     * @beta
+     * @remarks
      * Returns the current rotation component of this entity.
      *
      * @returns
-     * Returns the current rotation component of this entity.
+     * Returns a Vec2 containing the rotation of this entity (in
+     * degrees).
      * @throws This function can throw errors.
      */
     getRotation(): Vector2;
@@ -4376,6 +4853,11 @@ export class Entity {
     kill(): boolean;
     /**
      * @beta
+     * @throws This function can throw errors.
+     */
+    matches(options: EntityQueryOptions): boolean;
+    /**
+     * @beta
      * @remarks
      * Cause the entity to play the given animation.
      *
@@ -4392,15 +4874,15 @@ export class Entity {
     /**
      * @beta
      * @remarks
-     * Removes a specified property.
+     * Immediately removes the entity from the world. The removed
+     * entity will not perform a death animation or drop loot upon
+     * removal.
      *
-     * @param identifier
-     * The property identifier.
-     * @returns
-     * Returns whether the given property existed on the entity.
+     * This function can't be called in read-only mode.
+     *
      * @throws This function can throw errors.
      */
-    removeDynamicProperty(identifier: string): boolean;
+    remove(): void;
     /**
      * @beta
      * @remarks
@@ -4434,6 +4916,30 @@ export class Entity {
     /**
      * @beta
      * @remarks
+     * Resets an Entity Property back to its default value, as
+     * specified in the Entity's definition. This property change
+     * is not applied until the next tick.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param identifier
+     * The Entity Property identifier.
+     * @returns
+     * Returns the default property value. For enum properties, a
+     * string is returned. For float and int properties, a number
+     * is returned. For undefined properties, undefined is
+     * returned.
+     * @throws
+     * Throws if the entity is invalid.
+     *
+     * {@link minecraftcommon.EngineError}
+     *
+     * {@link Error}
+     */
+    resetProperty(identifier: string): boolean | number | string;
+    /**
+     * @beta
+     * @remarks
      * Runs a synchronous command on the entity.
      *
      * This function can't be called in read-only mode.
@@ -4445,6 +4951,10 @@ export class Entity {
      * A command result containing whether the command was
      * successful.
      * @throws This function can throw errors.
+     *
+     * {@link CommandError}
+     *
+     * {@link Error}
      */
     runCommand(commandString: string): CommandResult;
     /**
@@ -4473,7 +4983,7 @@ export class Entity {
      * Data value of the property to set.
      * @throws This function can throw errors.
      */
-    setDynamicProperty(identifier: string, value: boolean | number | string | Vector3): void;
+    setDynamicProperty(identifier: string, value?: boolean | number | string | Vector3): void;
     /**
      * @beta
      * @remarks
@@ -4526,14 +5036,38 @@ export class Entity {
     /**
      * @beta
      * @remarks
+     * Sets an Entity Property to the provided value. This property
+     * change is not applied until the next tick.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param identifier
+     * The Entity Property identifier.
+     * @param value
+     * The property value. The provided type must be compatible
+     * with the type specified in the entity's definition.
+     * @throws
+     * Throws if the entity is invalid.
+     * Throws if an invalid identifier is provided.
+     * Throws if the provided value type does not match the
+     * property type.
+     * Throws if the provided value is outside the expected range
+     * (int, float properties).
+     * Throws if the provided string value does not match the set
+     * of accepted enum values (enum properties
+     */
+    setProperty(identifier: string, value: boolean | number | string): void;
+    /**
+     * @beta
+     * @remarks
      * Sets the main rotation of the entity.
      *
      * This function can't be called in read-only mode.
      *
      * @param rotation
-     * The x and y rotation of the entity. For most mobs, the x
-     * rotation controls the head tilt and the y rotation controls
-     * the body rotation.
+     * The x and y rotation of the entity (in degrees). For most
+     * mobs, the x rotation controls the head tilt and the y
+     * rotation controls the body rotation.
      * @throws This function can throw errors.
      */
     setRotation(rotation: Vector2): void;
@@ -4583,7 +5117,9 @@ export class Entity {
      * @param eventName
      * Name of the entity type event to trigger. If a namespace is
      * not specified, minecraft: is assumed.
-     * @throws This function can throw errors.
+     * @throws
+     * If the event is not defined in the definition of the entity,
+     * an error will be thrown.
      * @example triggerEvent.ts
      * ```typescript
      *   const creeper = overworld.spawnEntity("minecraft:creeper", targetLocation);
@@ -4771,6 +5307,12 @@ export class EntityAttributeComponent extends EntityComponent {
 // @ts-ignore Class inheritance allowed for native defined classes
 export class EntityBaseMovementComponent extends EntityComponent {
     private constructor();
+    /**
+     * @remarks
+     * Maximum turn rate for this movement modality of the mob.
+     *
+     * @throws This property can throw when used.
+     */
     readonly maxTurn: number;
 }
 
@@ -4984,13 +5526,25 @@ export class EntityDieAfterEvent {
 
 /**
  * @beta
+ * Supports registering for an event that fires after an entity
+ * has died.
  */
 export class EntityDieAfterEventSignal {
     private constructor();
     /**
      * @remarks
+     * Subscribes to an event that fires when an entity dies.
+     *
      * This function can't be called in read-only mode.
      *
+     * @param callback
+     * Function to call when an entity dies.
+     * @param options
+     * Additional filtering options for when the subscription
+     * fires.
+     * @returns
+     * Returns the closure that can be used in future downstream
+     * calls to unsubscribe.
      */
     subscribe(
         callback: (arg: EntityDieAfterEvent) => void,
@@ -4998,6 +5552,9 @@ export class EntityDieAfterEventSignal {
     ): (arg: EntityDieAfterEvent) => void;
     /**
      * @remarks
+     * Stops this event from calling your function when an entity
+     * dies.
+     *
      * This function can't be called in read-only mode.
      *
      * @throws This function can throw errors.
@@ -5011,9 +5568,9 @@ export class EntityDieAfterEventSignal {
  * exists for all mob entities.
  */
 // @ts-ignore Class inheritance allowed for native defined classes
-export class EntityEquipmentInventoryComponent extends EntityComponent {
+export class EntityEquippableComponent extends EntityComponent {
     private constructor();
-    static readonly componentId = 'minecraft:equipment_inventory';
+    static readonly componentId = 'minecraft:equippable';
     /**
      * @remarks
      * Gets the equipped item for the given EquipmentSlot.
@@ -5029,6 +5586,7 @@ export class EntityEquipmentInventoryComponent extends EntityComponent {
      */
     getEquipment(equipmentSlot: EquipmentSlot): ItemStack | undefined;
     /**
+     * @beta
      * @remarks
      * Gets the ContainerSlot corresponding to the given
      * EquipmentSlot.
@@ -5089,6 +5647,8 @@ export class EntityFlyingSpeedComponent extends EntityComponent {
     private constructor();
     /**
      * @remarks
+     * Current value of the flying speed of the associated entity.
+     *
      * This property can't be edited in read-only mode.
      *
      */
@@ -5105,6 +5665,9 @@ export class EntityFrictionModifierComponent extends EntityComponent {
     private constructor();
     /**
      * @remarks
+     * Current value of the friction modifier of the associated
+     * entity.
+     *
      * This property can't be edited in read-only mode.
      *
      */
@@ -5122,7 +5685,9 @@ export class EntityGroundOffsetComponent extends EntityComponent {
     private constructor();
     /**
      * @remarks
-     * Value of this particular ground offset.
+     * Value of this particular ground offset. Note that this value
+     * is effectively read only; setting the ground offset value
+     * will not have an impact on the related entity.
      *
      * This property can't be edited in read-only mode.
      *
@@ -5140,6 +5705,10 @@ export class EntityHealableComponent extends EntityComponent {
     private constructor();
     /**
      * @beta
+     * @remarks
+     * A set of filters that healable items might be associated
+     * with.
+     *
      * @throws This property can throw when used.
      */
     readonly filters: FilterGroup;
@@ -5238,6 +5807,11 @@ export class EntityHealthComponent extends EntityAttributeComponent {
  */
 export class EntityHitBlockAfterEvent {
     private constructor();
+    /**
+     * @remarks
+     * Face of the block that was hit.
+     *
+     */
     readonly blockFace: Direction;
     /**
      * @remarks
@@ -5695,6 +6269,57 @@ export class EntityLeashableComponent extends EntityComponent {
 
 /**
  * @beta
+ * Contains data related to an entity loaded within the world.
+ * This could happen when an unloaded chunk is reloaded, or
+ * when an entity changes dimensions.
+ */
+export class EntityLoadAfterEvent {
+    private constructor();
+    /**
+     * @remarks
+     * Entity that was loaded.
+     *
+     * This property can't be edited in read-only mode.
+     *
+     */
+    entity: Entity;
+}
+
+/**
+ * @beta
+ * Registers a script-based event handler for handling what
+ * happens when an entity loads.
+ */
+export class EntityLoadAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Method to register an event handler for what happens when an
+     * entity loads.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param callback
+     * Function that handles the load event.
+     */
+    subscribe(callback: (arg: EntityLoadAfterEvent) => void): (arg: EntityLoadAfterEvent) => void;
+    /**
+     * @remarks
+     * Unregisters a method that was previously subscribed to the
+     * subscription event.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param callback
+     * Original function that was passed into the subscribe event,
+     * that is to be unregistered.
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: EntityLoadAfterEvent) => void): void;
+}
+
+/**
+ * @beta
  * Additional variant value. Can be used to further
  * differentiate variants.
  */
@@ -6133,37 +6758,110 @@ export class EntityPushThroughComponent extends EntityComponent {
  * from the world (for example, the entity is unloaded because
  * it is not close to players.)
  */
-export class EntityRemovedAfterEvent {
+export class EntityRemoveAfterEvent {
     private constructor();
     /**
      * @remarks
-     * Reference to an entity that was removed.
+     * Id of the entity that was removed.
      *
      */
-    readonly removedEntity: string;
+    readonly removedEntityId: string;
+    /**
+     * @remarks
+     * Identifier of the type of the entity removed - for example,
+     * 'minecraft:skeleton'.
+     *
+     */
+    readonly typeId: string;
 }
 
 /**
  * @beta
+ * Allows registration for an event that fires when an entity
+ * is removed from  the game (for example, unloaded, or a few
+ * seconds after they are dead.)
  */
-export class EntityRemovedAfterEventSignal {
+export class EntityRemoveAfterEventSignal {
     private constructor();
     /**
      * @remarks
+     * Will call your function every time an entity is removed from
+     * the game.
+     *
      * This function can't be called in read-only mode.
      *
+     * @param callback
+     * Function to call.
+     * @param options
+     * Additional filtering options for this event.
+     * @returns
+     * Returns a closure that can be used in subsequent unsubscribe
+     * operations.
      */
     subscribe(
-        callback: (arg: EntityRemovedAfterEvent) => void,
+        callback: (arg: EntityRemoveAfterEvent) => void,
         options?: EntityEventOptions,
-    ): (arg: EntityRemovedAfterEvent) => void;
+    ): (arg: EntityRemoveAfterEvent) => void;
     /**
      * @remarks
+     * Unsubscribes your function from subsequent calls when an
+     * entity is removed.
+     *
      * This function can't be called in read-only mode.
      *
      * @throws This function can throw errors.
      */
-    unsubscribe(callback: (arg: EntityRemovedAfterEvent) => void): void;
+    unsubscribe(callback: (arg: EntityRemoveAfterEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Data for an event that happens when an entity is being
+ * removed from the world (for example, the entity is unloaded
+ * because it is not close to players.)
+ */
+export class EntityRemoveBeforeEvent {
+    private constructor();
+    /**
+     * @remarks
+     * Reference to an entity that is being removed.
+     *
+     */
+    readonly removedEntity: Entity;
+}
+
+/**
+ * @beta
+ * Allows registration for an event that fires when an entity
+ * is being removed from  the game (for example, unloaded, or a
+ * few seconds after they are dead.)
+ */
+export class EntityRemoveBeforeEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Will call your function every time an entity is being
+     * removed from the game.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param callback
+     * Function to call.
+     * @returns
+     * Returns a closure that can be used in subsequent unsubscribe
+     * operations.
+     */
+    subscribe(callback: (arg: EntityRemoveBeforeEvent) => void): (arg: EntityRemoveBeforeEvent) => void;
+    /**
+     * @remarks
+     * Unsubscribes your function from subsequent calls when an
+     * entity is being removed.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: EntityRemoveBeforeEvent) => void): void;
 }
 
 /**
@@ -6328,6 +7026,8 @@ export class EntitySkinIdComponent extends EntityComponent {
     private constructor();
     /**
      * @remarks
+     * Returns the value of the skin Id identifier of the entity.
+     *
      * This property can't be edited in read-only mode.
      *
      */
@@ -6342,6 +7042,12 @@ export class EntitySkinIdComponent extends EntityComponent {
  */
 export class EntitySpawnAfterEvent {
     private constructor();
+    /**
+     * @remarks
+     * Initialization cause (Spawned, Born ...).
+     *
+     */
+    readonly cause: EntityInitializationCause;
     /**
      * @remarks
      * Entity that was spawned.
@@ -6583,7 +7289,7 @@ export class ExplosionAfterEvent {
      * A collection of blocks impacted by this explosion event.
      *
      */
-    getImpactedBlocks(): Vector3[];
+    getImpactedBlocks(): Block[];
 }
 
 /**
@@ -6636,7 +7342,7 @@ export class ExplosionBeforeEvent extends ExplosionAfterEvent {
      * @param blocks
      * New list of blocks that are impacted by this explosion.
      */
-    setImpactedBlocks(blocks: Vector3[]): void;
+    setImpactedBlocks(blocks: Block[]): void;
 }
 
 /**
@@ -7052,13 +7758,19 @@ export class ItemDefinitionTriggeredAfterEvent {
      *
      */
     readonly eventName: string;
+    /**
+     * @remarks
+     * Related item stack that the definitional change has been
+     * triggered upon.
+     *
+     */
     itemStack: ItemStack;
     /**
      * @remarks
      * Returns the source entity that triggered this item event.
      *
      */
-    readonly source: Player;
+    readonly source?: Player;
 }
 
 /**
@@ -7268,7 +7980,6 @@ export class ItemReleaseUseAfterEventSignal {
  */
 export class ItemStack {
     /**
-     * @beta
      * @remarks
      * Number of the items in the stack. Valid values range between
      * 1-255. The provided value will be clamped to the item's
@@ -7289,7 +8000,6 @@ export class ItemStack {
      */
     readonly isStackable: boolean;
     /**
-     * @beta
      * @remarks
      * Gets or sets whether the item is kept on death.
      *
@@ -7298,7 +8008,6 @@ export class ItemStack {
      */
     keepOnDeath: boolean;
     /**
-     * @beta
      * @remarks
      * Gets or sets the item's lock mode. The default value is
      * `ItemLockMode.none`.
@@ -7316,7 +8025,6 @@ export class ItemStack {
      */
     readonly maxAmount: number;
     /**
-     * @beta
      * @remarks
      * Given name of this stack of items. The name tag is displayed
      * when hovering over the item. Setting the name tag to an
@@ -7372,6 +8080,26 @@ export class ItemStack {
      */
     clone(): ItemStack;
     /**
+     * @beta
+     * @remarks
+     * Get the list of block types this item can break in Adventure
+     * mode.
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    getCanDestroy(): string[];
+    /**
+     * @beta
+     * @remarks
+     * Get the list of block types this item can be placed on in
+     * Adventure mode.
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    getCanPlaceOn(): string[];
+    /**
      * @remarks
      * Gets a component (that represents additional capabilities)
      * for an item stack.
@@ -7380,7 +8108,7 @@ export class ItemStack {
      * The identifier of the component (e.g., 'minecraft:food') to
      * retrieve. If no namespace prefix is specified, 'minecraft:'
      * is assumed. If the component is not present on the item
-     * stack, undefined is returned.
+     * stack or doesn't exist, undefined is returned.
      * @example durability.ts
      * ```typescript
      * // Get the maximum durability of a custom sword item
@@ -7404,7 +8132,7 @@ export class ItemStack {
      * ItemStack.
      *
      * @returns
-     * An array of lore strings. If the item does not have lore,
+     * An array of lore lines. If the item does not have lore,
      * returns an empty array.
      */
     getLore(): string[];
@@ -7447,6 +8175,11 @@ export class ItemStack {
      * item stacks. The amount of each item stack is not taken into
      * consideration.
      *
+     * @param itemStack
+     * ItemStack to check stacking compatability with.
+     * @returns
+     * True if the Item Stack is stackable with the itemStack
+     * passed in.
      */
     isStackableWith(itemStack: ItemStack): boolean;
     /**
@@ -7458,6 +8191,8 @@ export class ItemStack {
      *
      * This function can't be called in read-only mode.
      *
+     * @param blockIdentifiers
+     * String list of block types that the item can destroy.
      * @throws
      * Throws if any of the provided block identifiers are invalid.
      * @example example.ts
@@ -7478,6 +8213,8 @@ export class ItemStack {
      *
      * This function can't be called in read-only mode.
      *
+     * @param blockIdentifiers
+     * String list of block types that the item can be placed on.
      * @throws
      * Throws if any of the provided block identifiers are invalid.
      * @example example.ts
@@ -7492,10 +8229,15 @@ export class ItemStack {
      * @beta
      * @remarks
      * Sets the lore value - a secondary display string - for an
-     * ItemStack.
+     * ItemStack. The lore list is cleared if set to an empty
+     * string or undefined.
      *
      * This function can't be called in read-only mode.
      *
+     * @param loreList
+     * List of lore lines. Each element in the list represents a
+     * new line. The maximum lore line count is 20. The maximum
+     * lore line length is 50 characters.
      * @throws This function can throw errors.
      * @example diamondAwesomeSword.ts
      * ```typescript
@@ -7796,25 +8538,6 @@ export class ItemType {
 
 /**
  * @beta
- */
-export class ItemTypeIterator implements Iterable<ItemType> {
-    private constructor();
-    /**
-     * @remarks
-     * This function can't be called in read-only mode.
-     *
-     */
-    [Symbol.iterator](): Iterator<ItemType>;
-    /**
-     * @remarks
-     * This function can't be called in read-only mode.
-     *
-     */
-    next(): IteratorResult<ItemType>;
-}
-
-/**
- * @beta
  * Returns the set of item types registered within Minecraft.
  */
 export class ItemTypes {
@@ -7824,14 +8547,14 @@ export class ItemTypes {
      * Returns a specific item type, if available within Minecraft.
      *
      */
-    static get(itemId: string): ItemType;
+    static get(itemId: string): ItemType | undefined;
     /**
      * @remarks
      * Retrieves all available item types registered within
      * Minecraft.
      *
      */
-    static getAll(): ItemTypeIterator;
+    static getAll(): ItemType[];
 }
 
 /**
@@ -8137,1083 +8860,6 @@ export class MinecraftDimensionTypes {
 
 /**
  * @beta
- */
-export class MinecraftItemTypes {
-    private constructor();
-    static readonly acaciaBoat: ItemType;
-    static readonly acaciaButton: ItemType;
-    static readonly acaciaChestBoat: ItemType;
-    static readonly acaciaDoor: ItemType;
-    static readonly acaciaFence: ItemType;
-    static readonly acaciaFenceGate: ItemType;
-    static readonly acaciaHangingSign: ItemType;
-    static readonly acaciaLog: ItemType;
-    static readonly acaciaPressurePlate: ItemType;
-    static readonly acaciaSign: ItemType;
-    static readonly acaciaStairs: ItemType;
-    static readonly acaciaTrapdoor: ItemType;
-    static readonly activatorRail: ItemType;
-    static readonly allaySpawnEgg: ItemType;
-    static readonly allow: ItemType;
-    static readonly amethystBlock: ItemType;
-    static readonly amethystCluster: ItemType;
-    static readonly amethystShard: ItemType;
-    static readonly ancientDebris: ItemType;
-    static readonly andesiteStairs: ItemType;
-    static readonly anglerPotterySherd: ItemType;
-    static readonly anvil: ItemType;
-    static readonly apple: ItemType;
-    static readonly archerPotterySherd: ItemType;
-    static readonly armorStand: ItemType;
-    static readonly armsUpPotterySherd: ItemType;
-    static readonly arrow: ItemType;
-    static readonly axolotlBucket: ItemType;
-    static readonly axolotlSpawnEgg: ItemType;
-    static readonly azalea: ItemType;
-    static readonly azaleaLeaves: ItemType;
-    static readonly azaleaLeavesFlowered: ItemType;
-    static readonly bakedPotato: ItemType;
-    static readonly bamboo: ItemType;
-    static readonly bambooBlock: ItemType;
-    static readonly bambooButton: ItemType;
-    static readonly bambooChestRaft: ItemType;
-    static readonly bambooDoor: ItemType;
-    static readonly bambooFence: ItemType;
-    static readonly bambooFenceGate: ItemType;
-    static readonly bambooHangingSign: ItemType;
-    static readonly bambooMosaic: ItemType;
-    static readonly bambooMosaicSlab: ItemType;
-    static readonly bambooMosaicStairs: ItemType;
-    static readonly bambooPlanks: ItemType;
-    static readonly bambooPressurePlate: ItemType;
-    static readonly bambooRaft: ItemType;
-    static readonly bambooSign: ItemType;
-    static readonly bambooSlab: ItemType;
-    static readonly bambooStairs: ItemType;
-    static readonly bambooTrapdoor: ItemType;
-    static readonly banner: ItemType;
-    static readonly bannerPattern: ItemType;
-    static readonly barrel: ItemType;
-    static readonly barrier: ItemType;
-    static readonly basalt: ItemType;
-    static readonly batSpawnEgg: ItemType;
-    static readonly beacon: ItemType;
-    static readonly bed: ItemType;
-    static readonly bedrock: ItemType;
-    static readonly beef: ItemType;
-    static readonly beehive: ItemType;
-    static readonly beeNest: ItemType;
-    static readonly beeSpawnEgg: ItemType;
-    static readonly beetroot: ItemType;
-    static readonly beetrootSeeds: ItemType;
-    static readonly beetrootSoup: ItemType;
-    static readonly bell: ItemType;
-    static readonly bigDripleaf: ItemType;
-    static readonly birchBoat: ItemType;
-    static readonly birchButton: ItemType;
-    static readonly birchChestBoat: ItemType;
-    static readonly birchDoor: ItemType;
-    static readonly birchFence: ItemType;
-    static readonly birchFenceGate: ItemType;
-    static readonly birchHangingSign: ItemType;
-    static readonly birchLog: ItemType;
-    static readonly birchPressurePlate: ItemType;
-    static readonly birchSign: ItemType;
-    static readonly birchStairs: ItemType;
-    static readonly birchTrapdoor: ItemType;
-    static readonly blackCandle: ItemType;
-    static readonly blackCarpet: ItemType;
-    static readonly blackConcrete: ItemType;
-    static readonly blackDye: ItemType;
-    static readonly blackGlazedTerracotta: ItemType;
-    static readonly blackShulkerBox: ItemType;
-    static readonly blackStainedGlass: ItemType;
-    static readonly blackStainedGlassPane: ItemType;
-    static readonly blackstone: ItemType;
-    static readonly blackstoneSlab: ItemType;
-    static readonly blackstoneStairs: ItemType;
-    static readonly blackstoneWall: ItemType;
-    static readonly blackWool: ItemType;
-    static readonly bladePotterySherd: ItemType;
-    static readonly blastFurnace: ItemType;
-    static readonly blazePowder: ItemType;
-    static readonly blazeRod: ItemType;
-    static readonly blazeSpawnEgg: ItemType;
-    static readonly blueCandle: ItemType;
-    static readonly blueCarpet: ItemType;
-    static readonly blueConcrete: ItemType;
-    static readonly blueDye: ItemType;
-    static readonly blueGlazedTerracotta: ItemType;
-    static readonly blueIce: ItemType;
-    static readonly blueShulkerBox: ItemType;
-    static readonly blueStainedGlass: ItemType;
-    static readonly blueStainedGlassPane: ItemType;
-    static readonly blueWool: ItemType;
-    static readonly boat: ItemType;
-    static readonly bone: ItemType;
-    static readonly boneBlock: ItemType;
-    static readonly boneMeal: ItemType;
-    static readonly book: ItemType;
-    static readonly bookshelf: ItemType;
-    static readonly borderBlock: ItemType;
-    static readonly bordureIndentedBannerPattern: ItemType;
-    static readonly bow: ItemType;
-    static readonly bowl: ItemType;
-    static readonly brainCoral: ItemType;
-    static readonly bread: ItemType;
-    static readonly brewerPotterySherd: ItemType;
-    static readonly brewingStand: ItemType;
-    static readonly brick: ItemType;
-    static readonly brickBlock: ItemType;
-    static readonly brickStairs: ItemType;
-    static readonly brownCandle: ItemType;
-    static readonly brownCarpet: ItemType;
-    static readonly brownConcrete: ItemType;
-    static readonly brownDye: ItemType;
-    static readonly brownGlazedTerracotta: ItemType;
-    static readonly brownMushroom: ItemType;
-    static readonly brownMushroomBlock: ItemType;
-    static readonly brownShulkerBox: ItemType;
-    static readonly brownStainedGlass: ItemType;
-    static readonly brownStainedGlassPane: ItemType;
-    static readonly brownWool: ItemType;
-    static readonly brush: ItemType;
-    static readonly bubbleCoral: ItemType;
-    static readonly bucket: ItemType;
-    static readonly buddingAmethyst: ItemType;
-    static readonly burnPotterySherd: ItemType;
-    static readonly cactus: ItemType;
-    static readonly cake: ItemType;
-    static readonly calcite: ItemType;
-    static readonly calibratedSculkSensor: ItemType;
-    static readonly camelSpawnEgg: ItemType;
-    static readonly campfire: ItemType;
-    static readonly candle: ItemType;
-    static readonly carpet: ItemType;
-    static readonly carrot: ItemType;
-    static readonly carrotOnAStick: ItemType;
-    static readonly cartographyTable: ItemType;
-    static readonly carvedPumpkin: ItemType;
-    static readonly catSpawnEgg: ItemType;
-    static readonly cauldron: ItemType;
-    static readonly caveSpiderSpawnEgg: ItemType;
-    static readonly chain: ItemType;
-    static readonly chainCommandBlock: ItemType;
-    static readonly chainmailBoots: ItemType;
-    static readonly chainmailChestplate: ItemType;
-    static readonly chainmailHelmet: ItemType;
-    static readonly chainmailLeggings: ItemType;
-    static readonly charcoal: ItemType;
-    static readonly cherryBoat: ItemType;
-    static readonly cherryButton: ItemType;
-    static readonly cherryChestBoat: ItemType;
-    static readonly cherryDoor: ItemType;
-    static readonly cherryFence: ItemType;
-    static readonly cherryFenceGate: ItemType;
-    static readonly cherryHangingSign: ItemType;
-    static readonly cherryLeaves: ItemType;
-    static readonly cherryLog: ItemType;
-    static readonly cherryPlanks: ItemType;
-    static readonly cherryPressurePlate: ItemType;
-    static readonly cherrySapling: ItemType;
-    static readonly cherrySign: ItemType;
-    static readonly cherrySlab: ItemType;
-    static readonly cherryStairs: ItemType;
-    static readonly cherryTrapdoor: ItemType;
-    static readonly cherryWood: ItemType;
-    static readonly chest: ItemType;
-    static readonly chestBoat: ItemType;
-    static readonly chestMinecart: ItemType;
-    static readonly chicken: ItemType;
-    static readonly chickenSpawnEgg: ItemType;
-    static readonly chiseledBookshelf: ItemType;
-    static readonly chiseledDeepslate: ItemType;
-    static readonly chiseledNetherBricks: ItemType;
-    static readonly chiseledPolishedBlackstone: ItemType;
-    static readonly chorusFlower: ItemType;
-    static readonly chorusFruit: ItemType;
-    static readonly chorusPlant: ItemType;
-    static readonly clay: ItemType;
-    static readonly clayBall: ItemType;
-    static readonly clock: ItemType;
-    static readonly coal: ItemType;
-    static readonly coalBlock: ItemType;
-    static readonly coalOre: ItemType;
-    static readonly coastArmorTrimSmithingTemplate: ItemType;
-    static readonly cobbledDeepslate: ItemType;
-    static readonly cobbledDeepslateSlab: ItemType;
-    static readonly cobbledDeepslateStairs: ItemType;
-    static readonly cobbledDeepslateWall: ItemType;
-    static readonly cobblestone: ItemType;
-    static readonly cobblestoneWall: ItemType;
-    static readonly cocoaBeans: ItemType;
-    static readonly cod: ItemType;
-    static readonly codBucket: ItemType;
-    static readonly codSpawnEgg: ItemType;
-    static readonly commandBlock: ItemType;
-    static readonly commandBlockMinecart: ItemType;
-    static readonly comparator: ItemType;
-    static readonly compass: ItemType;
-    static readonly composter: ItemType;
-    static readonly concrete: ItemType;
-    static readonly concretePowder: ItemType;
-    static readonly conduit: ItemType;
-    static readonly cookedBeef: ItemType;
-    static readonly cookedChicken: ItemType;
-    static readonly cookedCod: ItemType;
-    static readonly cookedMutton: ItemType;
-    static readonly cookedPorkchop: ItemType;
-    static readonly cookedRabbit: ItemType;
-    static readonly cookedSalmon: ItemType;
-    static readonly cookie: ItemType;
-    static readonly copperBlock: ItemType;
-    static readonly copperIngot: ItemType;
-    static readonly copperOre: ItemType;
-    static readonly coral: ItemType;
-    static readonly coralBlock: ItemType;
-    static readonly coralFan: ItemType;
-    static readonly coralFanDead: ItemType;
-    static readonly cowSpawnEgg: ItemType;
-    static readonly crackedDeepslateBricks: ItemType;
-    static readonly crackedDeepslateTiles: ItemType;
-    static readonly crackedNetherBricks: ItemType;
-    static readonly crackedPolishedBlackstoneBricks: ItemType;
-    static readonly craftingTable: ItemType;
-    static readonly creeperBannerPattern: ItemType;
-    static readonly creeperSpawnEgg: ItemType;
-    static readonly crimsonButton: ItemType;
-    static readonly crimsonDoor: ItemType;
-    static readonly crimsonFence: ItemType;
-    static readonly crimsonFenceGate: ItemType;
-    static readonly crimsonFungus: ItemType;
-    static readonly crimsonHangingSign: ItemType;
-    static readonly crimsonHyphae: ItemType;
-    static readonly crimsonNylium: ItemType;
-    static readonly crimsonPlanks: ItemType;
-    static readonly crimsonPressurePlate: ItemType;
-    static readonly crimsonRoots: ItemType;
-    static readonly crimsonSign: ItemType;
-    static readonly crimsonSlab: ItemType;
-    static readonly crimsonStairs: ItemType;
-    static readonly crimsonStem: ItemType;
-    static readonly crimsonTrapdoor: ItemType;
-    static readonly crossbow: ItemType;
-    static readonly cryingObsidian: ItemType;
-    static readonly cutCopper: ItemType;
-    static readonly cutCopperSlab: ItemType;
-    static readonly cutCopperStairs: ItemType;
-    static readonly cyanCandle: ItemType;
-    static readonly cyanCarpet: ItemType;
-    static readonly cyanConcrete: ItemType;
-    static readonly cyanDye: ItemType;
-    static readonly cyanGlazedTerracotta: ItemType;
-    static readonly cyanShulkerBox: ItemType;
-    static readonly cyanStainedGlass: ItemType;
-    static readonly cyanStainedGlassPane: ItemType;
-    static readonly cyanWool: ItemType;
-    static readonly dangerPotterySherd: ItemType;
-    static readonly darkOakBoat: ItemType;
-    static readonly darkOakButton: ItemType;
-    static readonly darkOakChestBoat: ItemType;
-    static readonly darkOakDoor: ItemType;
-    static readonly darkOakFence: ItemType;
-    static readonly darkOakFenceGate: ItemType;
-    static readonly darkOakHangingSign: ItemType;
-    static readonly darkOakLog: ItemType;
-    static readonly darkOakPressurePlate: ItemType;
-    static readonly darkOakSign: ItemType;
-    static readonly darkOakStairs: ItemType;
-    static readonly darkOakTrapdoor: ItemType;
-    static readonly darkPrismarineStairs: ItemType;
-    static readonly daylightDetector: ItemType;
-    static readonly deadBrainCoral: ItemType;
-    static readonly deadBubbleCoral: ItemType;
-    static readonly deadbush: ItemType;
-    static readonly deadFireCoral: ItemType;
-    static readonly deadHornCoral: ItemType;
-    static readonly deadTubeCoral: ItemType;
-    static readonly decoratedPot: ItemType;
-    static readonly deepslate: ItemType;
-    static readonly deepslateBricks: ItemType;
-    static readonly deepslateBrickSlab: ItemType;
-    static readonly deepslateBrickStairs: ItemType;
-    static readonly deepslateBrickWall: ItemType;
-    static readonly deepslateCoalOre: ItemType;
-    static readonly deepslateCopperOre: ItemType;
-    static readonly deepslateDiamondOre: ItemType;
-    static readonly deepslateEmeraldOre: ItemType;
-    static readonly deepslateGoldOre: ItemType;
-    static readonly deepslateIronOre: ItemType;
-    static readonly deepslateLapisOre: ItemType;
-    static readonly deepslateRedstoneOre: ItemType;
-    static readonly deepslateTiles: ItemType;
-    static readonly deepslateTileSlab: ItemType;
-    static readonly deepslateTileStairs: ItemType;
-    static readonly deepslateTileWall: ItemType;
-    static readonly deny: ItemType;
-    static readonly detectorRail: ItemType;
-    static readonly diamond: ItemType;
-    static readonly diamondAxe: ItemType;
-    static readonly diamondBlock: ItemType;
-    static readonly diamondBoots: ItemType;
-    static readonly diamondChestplate: ItemType;
-    static readonly diamondHelmet: ItemType;
-    static readonly diamondHoe: ItemType;
-    static readonly diamondHorseArmor: ItemType;
-    static readonly diamondLeggings: ItemType;
-    static readonly diamondOre: ItemType;
-    static readonly diamondPickaxe: ItemType;
-    static readonly diamondShovel: ItemType;
-    static readonly diamondSword: ItemType;
-    static readonly dioriteStairs: ItemType;
-    static readonly dirt: ItemType;
-    static readonly dirtWithRoots: ItemType;
-    static readonly discFragment5: ItemType;
-    static readonly dispenser: ItemType;
-    static readonly dolphinSpawnEgg: ItemType;
-    static readonly donkeySpawnEgg: ItemType;
-    static readonly doublePlant: ItemType;
-    static readonly dragonBreath: ItemType;
-    static readonly dragonEgg: ItemType;
-    static readonly driedKelp: ItemType;
-    static readonly driedKelpBlock: ItemType;
-    static readonly dripstoneBlock: ItemType;
-    static readonly dropper: ItemType;
-    static readonly drownedSpawnEgg: ItemType;
-    static readonly duneArmorTrimSmithingTemplate: ItemType;
-    static readonly dye: ItemType;
-    static readonly echoShard: ItemType;
-    static readonly egg: ItemType;
-    static readonly elderGuardianSpawnEgg: ItemType;
-    static readonly elytra: ItemType;
-    static readonly emerald: ItemType;
-    static readonly emeraldBlock: ItemType;
-    static readonly emeraldOre: ItemType;
-    static readonly emptyMap: ItemType;
-    static readonly enchantedBook: ItemType;
-    static readonly enchantedGoldenApple: ItemType;
-    static readonly enchantingTable: ItemType;
-    static readonly endBricks: ItemType;
-    static readonly endBrickStairs: ItemType;
-    static readonly endCrystal: ItemType;
-    static readonly enderChest: ItemType;
-    static readonly enderDragonSpawnEgg: ItemType;
-    static readonly enderEye: ItemType;
-    static readonly endermanSpawnEgg: ItemType;
-    static readonly endermiteSpawnEgg: ItemType;
-    static readonly enderPearl: ItemType;
-    static readonly endPortalFrame: ItemType;
-    static readonly endRod: ItemType;
-    static readonly endStone: ItemType;
-    static readonly evokerSpawnEgg: ItemType;
-    static readonly experienceBottle: ItemType;
-    static readonly explorerPotterySherd: ItemType;
-    static readonly exposedCopper: ItemType;
-    static readonly exposedCutCopper: ItemType;
-    static readonly exposedCutCopperSlab: ItemType;
-    static readonly exposedCutCopperStairs: ItemType;
-    static readonly eyeArmorTrimSmithingTemplate: ItemType;
-    static readonly farmland: ItemType;
-    static readonly feather: ItemType;
-    static readonly fence: ItemType;
-    static readonly fenceGate: ItemType;
-    static readonly fermentedSpiderEye: ItemType;
-    static readonly fieldMasonedBannerPattern: ItemType;
-    static readonly filledMap: ItemType;
-    static readonly fireCharge: ItemType;
-    static readonly fireCoral: ItemType;
-    static readonly fireworkRocket: ItemType;
-    static readonly fireworkStar: ItemType;
-    static readonly fishingRod: ItemType;
-    static readonly fletchingTable: ItemType;
-    static readonly flint: ItemType;
-    static readonly flintAndSteel: ItemType;
-    static readonly flowerBannerPattern: ItemType;
-    static readonly floweringAzalea: ItemType;
-    static readonly flowerPot: ItemType;
-    static readonly foxSpawnEgg: ItemType;
-    static readonly frame: ItemType;
-    static readonly friendPotterySherd: ItemType;
-    static readonly frogSpawn: ItemType;
-    static readonly frogSpawnEgg: ItemType;
-    static readonly frostedIce: ItemType;
-    static readonly furnace: ItemType;
-    static readonly ghastSpawnEgg: ItemType;
-    static readonly ghastTear: ItemType;
-    static readonly gildedBlackstone: ItemType;
-    static readonly glass: ItemType;
-    static readonly glassBottle: ItemType;
-    static readonly glassPane: ItemType;
-    static readonly glisteringMelonSlice: ItemType;
-    static readonly globeBannerPattern: ItemType;
-    static readonly glowBerries: ItemType;
-    static readonly glowFrame: ItemType;
-    static readonly glowInkSac: ItemType;
-    static readonly glowLichen: ItemType;
-    static readonly glowSquidSpawnEgg: ItemType;
-    static readonly glowstone: ItemType;
-    static readonly glowstoneDust: ItemType;
-    static readonly goatHorn: ItemType;
-    static readonly goatSpawnEgg: ItemType;
-    static readonly goldBlock: ItemType;
-    static readonly goldenApple: ItemType;
-    static readonly goldenAxe: ItemType;
-    static readonly goldenBoots: ItemType;
-    static readonly goldenCarrot: ItemType;
-    static readonly goldenChestplate: ItemType;
-    static readonly goldenHelmet: ItemType;
-    static readonly goldenHoe: ItemType;
-    static readonly goldenHorseArmor: ItemType;
-    static readonly goldenLeggings: ItemType;
-    static readonly goldenPickaxe: ItemType;
-    static readonly goldenRail: ItemType;
-    static readonly goldenShovel: ItemType;
-    static readonly goldenSword: ItemType;
-    static readonly goldIngot: ItemType;
-    static readonly goldNugget: ItemType;
-    static readonly goldOre: ItemType;
-    static readonly graniteStairs: ItemType;
-    static readonly grass: ItemType;
-    static readonly grassPath: ItemType;
-    static readonly gravel: ItemType;
-    static readonly grayCandle: ItemType;
-    static readonly grayCarpet: ItemType;
-    static readonly grayConcrete: ItemType;
-    static readonly grayDye: ItemType;
-    static readonly grayGlazedTerracotta: ItemType;
-    static readonly grayShulkerBox: ItemType;
-    static readonly grayStainedGlass: ItemType;
-    static readonly grayStainedGlassPane: ItemType;
-    static readonly grayWool: ItemType;
-    static readonly greenCandle: ItemType;
-    static readonly greenCarpet: ItemType;
-    static readonly greenConcrete: ItemType;
-    static readonly greenDye: ItemType;
-    static readonly greenGlazedTerracotta: ItemType;
-    static readonly greenShulkerBox: ItemType;
-    static readonly greenStainedGlass: ItemType;
-    static readonly greenStainedGlassPane: ItemType;
-    static readonly greenWool: ItemType;
-    static readonly grindstone: ItemType;
-    static readonly guardianSpawnEgg: ItemType;
-    static readonly gunpowder: ItemType;
-    static readonly hangingRoots: ItemType;
-    static readonly hardenedClay: ItemType;
-    static readonly hayBlock: ItemType;
-    static readonly heartbreakPotterySherd: ItemType;
-    static readonly heartOfTheSea: ItemType;
-    static readonly heartPotterySherd: ItemType;
-    static readonly heavyWeightedPressurePlate: ItemType;
-    static readonly hoglinSpawnEgg: ItemType;
-    static readonly honeyBlock: ItemType;
-    static readonly honeyBottle: ItemType;
-    static readonly honeycomb: ItemType;
-    static readonly honeycombBlock: ItemType;
-    static readonly hopper: ItemType;
-    static readonly hopperMinecart: ItemType;
-    static readonly hornCoral: ItemType;
-    static readonly horseSpawnEgg: ItemType;
-    static readonly hostArmorTrimSmithingTemplate: ItemType;
-    static readonly howlPotterySherd: ItemType;
-    static readonly huskSpawnEgg: ItemType;
-    static readonly ice: ItemType;
-    static readonly infestedDeepslate: ItemType;
-    static readonly inkSac: ItemType;
-    static readonly ironAxe: ItemType;
-    static readonly ironBars: ItemType;
-    static readonly ironBlock: ItemType;
-    static readonly ironBoots: ItemType;
-    static readonly ironChestplate: ItemType;
-    static readonly ironDoor: ItemType;
-    static readonly ironGolemSpawnEgg: ItemType;
-    static readonly ironHelmet: ItemType;
-    static readonly ironHoe: ItemType;
-    static readonly ironHorseArmor: ItemType;
-    static readonly ironIngot: ItemType;
-    static readonly ironLeggings: ItemType;
-    static readonly ironNugget: ItemType;
-    static readonly ironOre: ItemType;
-    static readonly ironPickaxe: ItemType;
-    static readonly ironShovel: ItemType;
-    static readonly ironSword: ItemType;
-    static readonly ironTrapdoor: ItemType;
-    static readonly jigsaw: ItemType;
-    static readonly jukebox: ItemType;
-    static readonly jungleBoat: ItemType;
-    static readonly jungleButton: ItemType;
-    static readonly jungleChestBoat: ItemType;
-    static readonly jungleDoor: ItemType;
-    static readonly jungleFence: ItemType;
-    static readonly jungleFenceGate: ItemType;
-    static readonly jungleHangingSign: ItemType;
-    static readonly jungleLog: ItemType;
-    static readonly junglePressurePlate: ItemType;
-    static readonly jungleSign: ItemType;
-    static readonly jungleStairs: ItemType;
-    static readonly jungleTrapdoor: ItemType;
-    static readonly kelp: ItemType;
-    static readonly ladder: ItemType;
-    static readonly lantern: ItemType;
-    static readonly lapisBlock: ItemType;
-    static readonly lapisLazuli: ItemType;
-    static readonly lapisOre: ItemType;
-    static readonly largeAmethystBud: ItemType;
-    static readonly lavaBucket: ItemType;
-    static readonly lead: ItemType;
-    static readonly leather: ItemType;
-    static readonly leatherBoots: ItemType;
-    static readonly leatherChestplate: ItemType;
-    static readonly leatherHelmet: ItemType;
-    static readonly leatherHorseArmor: ItemType;
-    static readonly leatherLeggings: ItemType;
-    static readonly leaves: ItemType;
-    static readonly leaves2: ItemType;
-    static readonly lectern: ItemType;
-    static readonly lever: ItemType;
-    static readonly lightBlock: ItemType;
-    static readonly lightBlueCandle: ItemType;
-    static readonly lightBlueCarpet: ItemType;
-    static readonly lightBlueConcrete: ItemType;
-    static readonly lightBlueDye: ItemType;
-    static readonly lightBlueGlazedTerracotta: ItemType;
-    static readonly lightBlueShulkerBox: ItemType;
-    static readonly lightBlueStainedGlass: ItemType;
-    static readonly lightBlueStainedGlassPane: ItemType;
-    static readonly lightBlueWool: ItemType;
-    static readonly lightGrayCandle: ItemType;
-    static readonly lightGrayCarpet: ItemType;
-    static readonly lightGrayConcrete: ItemType;
-    static readonly lightGrayDye: ItemType;
-    static readonly lightGrayShulkerBox: ItemType;
-    static readonly lightGrayStainedGlass: ItemType;
-    static readonly lightGrayStainedGlassPane: ItemType;
-    static readonly lightGrayWool: ItemType;
-    static readonly lightningRod: ItemType;
-    static readonly lightWeightedPressurePlate: ItemType;
-    static readonly limeCandle: ItemType;
-    static readonly limeCarpet: ItemType;
-    static readonly limeConcrete: ItemType;
-    static readonly limeDye: ItemType;
-    static readonly limeGlazedTerracotta: ItemType;
-    static readonly limeShulkerBox: ItemType;
-    static readonly limeStainedGlass: ItemType;
-    static readonly limeStainedGlassPane: ItemType;
-    static readonly limeWool: ItemType;
-    static readonly lingeringPotion: ItemType;
-    static readonly litPumpkin: ItemType;
-    static readonly llamaSpawnEgg: ItemType;
-    static readonly lodestone: ItemType;
-    static readonly lodestoneCompass: ItemType;
-    static readonly log: ItemType;
-    static readonly log2: ItemType;
-    static readonly loom: ItemType;
-    static readonly magentaCandle: ItemType;
-    static readonly magentaCarpet: ItemType;
-    static readonly magentaConcrete: ItemType;
-    static readonly magentaDye: ItemType;
-    static readonly magentaGlazedTerracotta: ItemType;
-    static readonly magentaShulkerBox: ItemType;
-    static readonly magentaStainedGlass: ItemType;
-    static readonly magentaStainedGlassPane: ItemType;
-    static readonly magentaWool: ItemType;
-    static readonly magma: ItemType;
-    static readonly magmaCream: ItemType;
-    static readonly magmaCubeSpawnEgg: ItemType;
-    static readonly mangroveBoat: ItemType;
-    static readonly mangroveButton: ItemType;
-    static readonly mangroveChestBoat: ItemType;
-    static readonly mangroveDoor: ItemType;
-    static readonly mangroveFence: ItemType;
-    static readonly mangroveFenceGate: ItemType;
-    static readonly mangroveHangingSign: ItemType;
-    static readonly mangroveLeaves: ItemType;
-    static readonly mangroveLog: ItemType;
-    static readonly mangrovePlanks: ItemType;
-    static readonly mangrovePressurePlate: ItemType;
-    static readonly mangrovePropagule: ItemType;
-    static readonly mangroveRoots: ItemType;
-    static readonly mangroveSign: ItemType;
-    static readonly mangroveSlab: ItemType;
-    static readonly mangroveStairs: ItemType;
-    static readonly mangroveTrapdoor: ItemType;
-    static readonly mangroveWood: ItemType;
-    static readonly mediumAmethystBud: ItemType;
-    static readonly melonBlock: ItemType;
-    static readonly melonSeeds: ItemType;
-    static readonly melonSlice: ItemType;
-    static readonly milkBucket: ItemType;
-    static readonly minecart: ItemType;
-    static readonly minerPotterySherd: ItemType;
-    static readonly mobSpawner: ItemType;
-    static readonly mojangBannerPattern: ItemType;
-    static readonly monsterEgg: ItemType;
-    static readonly mooshroomSpawnEgg: ItemType;
-    static readonly mossBlock: ItemType;
-    static readonly mossCarpet: ItemType;
-    static readonly mossyCobblestone: ItemType;
-    static readonly mossyCobblestoneStairs: ItemType;
-    static readonly mossyStoneBrickStairs: ItemType;
-    static readonly mournerPotterySherd: ItemType;
-    static readonly mud: ItemType;
-    static readonly mudBricks: ItemType;
-    static readonly mudBrickSlab: ItemType;
-    static readonly mudBrickStairs: ItemType;
-    static readonly mudBrickWall: ItemType;
-    static readonly muddyMangroveRoots: ItemType;
-    static readonly muleSpawnEgg: ItemType;
-    static readonly mushroomStew: ItemType;
-    static readonly musicDisc11: ItemType;
-    static readonly musicDisc13: ItemType;
-    static readonly musicDisc5: ItemType;
-    static readonly musicDiscBlocks: ItemType;
-    static readonly musicDiscCat: ItemType;
-    static readonly musicDiscChirp: ItemType;
-    static readonly musicDiscFar: ItemType;
-    static readonly musicDiscMall: ItemType;
-    static readonly musicDiscMellohi: ItemType;
-    static readonly musicDiscOtherside: ItemType;
-    static readonly musicDiscPigstep: ItemType;
-    static readonly musicDiscRelic: ItemType;
-    static readonly musicDiscStal: ItemType;
-    static readonly musicDiscStrad: ItemType;
-    static readonly musicDiscWait: ItemType;
-    static readonly musicDiscWard: ItemType;
-    static readonly mutton: ItemType;
-    static readonly mycelium: ItemType;
-    static readonly nameTag: ItemType;
-    static readonly nautilusShell: ItemType;
-    static readonly netherbrick: ItemType;
-    static readonly netherBrick: ItemType;
-    static readonly netherBrickFence: ItemType;
-    static readonly netherBrickStairs: ItemType;
-    static readonly netherGoldOre: ItemType;
-    static readonly netheriteAxe: ItemType;
-    static readonly netheriteBlock: ItemType;
-    static readonly netheriteBoots: ItemType;
-    static readonly netheriteChestplate: ItemType;
-    static readonly netheriteHelmet: ItemType;
-    static readonly netheriteHoe: ItemType;
-    static readonly netheriteIngot: ItemType;
-    static readonly netheriteLeggings: ItemType;
-    static readonly netheritePickaxe: ItemType;
-    static readonly netheriteScrap: ItemType;
-    static readonly netheriteShovel: ItemType;
-    static readonly netheriteSword: ItemType;
-    static readonly netheriteUpgradeSmithingTemplate: ItemType;
-    static readonly netherrack: ItemType;
-    static readonly netherSprouts: ItemType;
-    static readonly netherStar: ItemType;
-    static readonly netherWart: ItemType;
-    static readonly netherWartBlock: ItemType;
-    static readonly normalStoneStairs: ItemType;
-    static readonly noteblock: ItemType;
-    static readonly oakBoat: ItemType;
-    static readonly oakChestBoat: ItemType;
-    static readonly oakFence: ItemType;
-    static readonly oakHangingSign: ItemType;
-    static readonly oakLog: ItemType;
-    static readonly oakSign: ItemType;
-    static readonly oakStairs: ItemType;
-    static readonly observer: ItemType;
-    static readonly obsidian: ItemType;
-    static readonly ocelotSpawnEgg: ItemType;
-    static readonly ochreFroglight: ItemType;
-    static readonly orangeCandle: ItemType;
-    static readonly orangeCarpet: ItemType;
-    static readonly orangeConcrete: ItemType;
-    static readonly orangeDye: ItemType;
-    static readonly orangeGlazedTerracotta: ItemType;
-    static readonly orangeShulkerBox: ItemType;
-    static readonly orangeStainedGlass: ItemType;
-    static readonly orangeStainedGlassPane: ItemType;
-    static readonly orangeWool: ItemType;
-    static readonly oxidizedCopper: ItemType;
-    static readonly oxidizedCutCopper: ItemType;
-    static readonly oxidizedCutCopperSlab: ItemType;
-    static readonly oxidizedCutCopperStairs: ItemType;
-    static readonly packedIce: ItemType;
-    static readonly packedMud: ItemType;
-    static readonly painting: ItemType;
-    static readonly pandaSpawnEgg: ItemType;
-    static readonly paper: ItemType;
-    static readonly parrotSpawnEgg: ItemType;
-    static readonly pearlescentFroglight: ItemType;
-    static readonly phantomMembrane: ItemType;
-    static readonly phantomSpawnEgg: ItemType;
-    static readonly piglinBannerPattern: ItemType;
-    static readonly piglinBruteSpawnEgg: ItemType;
-    static readonly piglinSpawnEgg: ItemType;
-    static readonly pigSpawnEgg: ItemType;
-    static readonly pillagerSpawnEgg: ItemType;
-    static readonly pinkCandle: ItemType;
-    static readonly pinkCarpet: ItemType;
-    static readonly pinkConcrete: ItemType;
-    static readonly pinkDye: ItemType;
-    static readonly pinkGlazedTerracotta: ItemType;
-    static readonly pinkPetals: ItemType;
-    static readonly pinkShulkerBox: ItemType;
-    static readonly pinkStainedGlass: ItemType;
-    static readonly pinkStainedGlassPane: ItemType;
-    static readonly pinkWool: ItemType;
-    static readonly piston: ItemType;
-    static readonly pitcherPlant: ItemType;
-    static readonly pitcherPod: ItemType;
-    static readonly planks: ItemType;
-    static readonly plentyPotterySherd: ItemType;
-    static readonly podzol: ItemType;
-    static readonly pointedDripstone: ItemType;
-    static readonly poisonousPotato: ItemType;
-    static readonly polarBearSpawnEgg: ItemType;
-    static readonly polishedAndesiteStairs: ItemType;
-    static readonly polishedBasalt: ItemType;
-    static readonly polishedBlackstone: ItemType;
-    static readonly polishedBlackstoneBricks: ItemType;
-    static readonly polishedBlackstoneBrickSlab: ItemType;
-    static readonly polishedBlackstoneBrickStairs: ItemType;
-    static readonly polishedBlackstoneBrickWall: ItemType;
-    static readonly polishedBlackstoneButton: ItemType;
-    static readonly polishedBlackstonePressurePlate: ItemType;
-    static readonly polishedBlackstoneSlab: ItemType;
-    static readonly polishedBlackstoneStairs: ItemType;
-    static readonly polishedBlackstoneWall: ItemType;
-    static readonly polishedDeepslate: ItemType;
-    static readonly polishedDeepslateSlab: ItemType;
-    static readonly polishedDeepslateStairs: ItemType;
-    static readonly polishedDeepslateWall: ItemType;
-    static readonly polishedDioriteStairs: ItemType;
-    static readonly polishedGraniteStairs: ItemType;
-    static readonly poppedChorusFruit: ItemType;
-    static readonly porkchop: ItemType;
-    static readonly potato: ItemType;
-    static readonly potion: ItemType;
-    static readonly powderSnowBucket: ItemType;
-    static readonly prismarine: ItemType;
-    static readonly prismarineBricksStairs: ItemType;
-    static readonly prismarineCrystals: ItemType;
-    static readonly prismarineShard: ItemType;
-    static readonly prismarineStairs: ItemType;
-    static readonly prizePotterySherd: ItemType;
-    static readonly pufferfish: ItemType;
-    static readonly pufferfishBucket: ItemType;
-    static readonly pufferfishSpawnEgg: ItemType;
-    static readonly pumpkin: ItemType;
-    static readonly pumpkinPie: ItemType;
-    static readonly pumpkinSeeds: ItemType;
-    static readonly purpleCandle: ItemType;
-    static readonly purpleCarpet: ItemType;
-    static readonly purpleConcrete: ItemType;
-    static readonly purpleDye: ItemType;
-    static readonly purpleGlazedTerracotta: ItemType;
-    static readonly purpleShulkerBox: ItemType;
-    static readonly purpleStainedGlass: ItemType;
-    static readonly purpleStainedGlassPane: ItemType;
-    static readonly purpleWool: ItemType;
-    static readonly purpurBlock: ItemType;
-    static readonly purpurStairs: ItemType;
-    static readonly quartz: ItemType;
-    static readonly quartzBlock: ItemType;
-    static readonly quartzBricks: ItemType;
-    static readonly quartzOre: ItemType;
-    static readonly quartzStairs: ItemType;
-    static readonly rabbit: ItemType;
-    static readonly rabbitFoot: ItemType;
-    static readonly rabbitHide: ItemType;
-    static readonly rabbitSpawnEgg: ItemType;
-    static readonly rabbitStew: ItemType;
-    static readonly rail: ItemType;
-    static readonly raiserArmorTrimSmithingTemplate: ItemType;
-    static readonly ravagerSpawnEgg: ItemType;
-    static readonly rawCopper: ItemType;
-    static readonly rawCopperBlock: ItemType;
-    static readonly rawGold: ItemType;
-    static readonly rawGoldBlock: ItemType;
-    static readonly rawIron: ItemType;
-    static readonly rawIronBlock: ItemType;
-    static readonly recoveryCompass: ItemType;
-    static readonly redCandle: ItemType;
-    static readonly redCarpet: ItemType;
-    static readonly redConcrete: ItemType;
-    static readonly redDye: ItemType;
-    static readonly redFlower: ItemType;
-    static readonly redGlazedTerracotta: ItemType;
-    static readonly redMushroom: ItemType;
-    static readonly redMushroomBlock: ItemType;
-    static readonly redNetherBrick: ItemType;
-    static readonly redNetherBrickStairs: ItemType;
-    static readonly redSandstone: ItemType;
-    static readonly redSandstoneStairs: ItemType;
-    static readonly redShulkerBox: ItemType;
-    static readonly redStainedGlass: ItemType;
-    static readonly redStainedGlassPane: ItemType;
-    static readonly redstone: ItemType;
-    static readonly redstoneBlock: ItemType;
-    static readonly redstoneLamp: ItemType;
-    static readonly redstoneOre: ItemType;
-    static readonly redstoneTorch: ItemType;
-    static readonly redWool: ItemType;
-    static readonly reinforcedDeepslate: ItemType;
-    static readonly repeater: ItemType;
-    static readonly repeatingCommandBlock: ItemType;
-    static readonly respawnAnchor: ItemType;
-    static readonly ribArmorTrimSmithingTemplate: ItemType;
-    static readonly rottenFlesh: ItemType;
-    static readonly saddle: ItemType;
-    static readonly salmon: ItemType;
-    static readonly salmonBucket: ItemType;
-    static readonly salmonSpawnEgg: ItemType;
-    static readonly sand: ItemType;
-    static readonly sandstone: ItemType;
-    static readonly sandstoneStairs: ItemType;
-    static readonly sapling: ItemType;
-    static readonly scaffolding: ItemType;
-    static readonly sculk: ItemType;
-    static readonly sculkCatalyst: ItemType;
-    static readonly sculkSensor: ItemType;
-    static readonly sculkShrieker: ItemType;
-    static readonly sculkVein: ItemType;
-    static readonly scute: ItemType;
-    static readonly seagrass: ItemType;
-    static readonly seaLantern: ItemType;
-    static readonly seaPickle: ItemType;
-    static readonly sentryArmorTrimSmithingTemplate: ItemType;
-    static readonly shaperArmorTrimSmithingTemplate: ItemType;
-    static readonly sheafPotterySherd: ItemType;
-    static readonly shears: ItemType;
-    static readonly sheepSpawnEgg: ItemType;
-    static readonly shelterPotterySherd: ItemType;
-    static readonly shield: ItemType;
-    static readonly shroomlight: ItemType;
-    static readonly shulkerBox: ItemType;
-    static readonly shulkerShell: ItemType;
-    static readonly shulkerSpawnEgg: ItemType;
-    static readonly silenceArmorTrimSmithingTemplate: ItemType;
-    static readonly silverfishSpawnEgg: ItemType;
-    static readonly silverGlazedTerracotta: ItemType;
-    static readonly skeletonHorseSpawnEgg: ItemType;
-    static readonly skeletonSpawnEgg: ItemType;
-    static readonly skull: ItemType;
-    static readonly skullBannerPattern: ItemType;
-    static readonly skullPotterySherd: ItemType;
-    static readonly slime: ItemType;
-    static readonly slimeBall: ItemType;
-    static readonly slimeSpawnEgg: ItemType;
-    static readonly smallAmethystBud: ItemType;
-    static readonly smallDripleafBlock: ItemType;
-    static readonly smithingTable: ItemType;
-    static readonly smoker: ItemType;
-    static readonly smoothBasalt: ItemType;
-    static readonly smoothQuartzStairs: ItemType;
-    static readonly smoothRedSandstoneStairs: ItemType;
-    static readonly smoothSandstoneStairs: ItemType;
-    static readonly smoothStone: ItemType;
-    static readonly snifferEgg: ItemType;
-    static readonly snifferSpawnEgg: ItemType;
-    static readonly snortPotterySherd: ItemType;
-    static readonly snoutArmorTrimSmithingTemplate: ItemType;
-    static readonly snow: ItemType;
-    static readonly snowball: ItemType;
-    static readonly snowGolemSpawnEgg: ItemType;
-    static readonly snowLayer: ItemType;
-    static readonly soulCampfire: ItemType;
-    static readonly soulLantern: ItemType;
-    static readonly soulSand: ItemType;
-    static readonly soulSoil: ItemType;
-    static readonly soulTorch: ItemType;
-    static readonly spawnEgg: ItemType;
-    static readonly spiderEye: ItemType;
-    static readonly spiderSpawnEgg: ItemType;
-    static readonly spireArmorTrimSmithingTemplate: ItemType;
-    static readonly splashPotion: ItemType;
-    static readonly sponge: ItemType;
-    static readonly sporeBlossom: ItemType;
-    static readonly spruceBoat: ItemType;
-    static readonly spruceButton: ItemType;
-    static readonly spruceChestBoat: ItemType;
-    static readonly spruceDoor: ItemType;
-    static readonly spruceFence: ItemType;
-    static readonly spruceFenceGate: ItemType;
-    static readonly spruceHangingSign: ItemType;
-    static readonly spruceLog: ItemType;
-    static readonly sprucePressurePlate: ItemType;
-    static readonly spruceSign: ItemType;
-    static readonly spruceStairs: ItemType;
-    static readonly spruceTrapdoor: ItemType;
-    static readonly spyglass: ItemType;
-    static readonly squidSpawnEgg: ItemType;
-    static readonly stainedGlass: ItemType;
-    static readonly stainedGlassPane: ItemType;
-    static readonly stainedHardenedClay: ItemType;
-    static readonly stick: ItemType;
-    static readonly stickyPiston: ItemType;
-    static readonly stone: ItemType;
-    static readonly stoneAxe: ItemType;
-    static readonly stoneBlockSlab: ItemType;
-    static readonly stoneBlockSlab2: ItemType;
-    static readonly stoneBlockSlab3: ItemType;
-    static readonly stoneBlockSlab4: ItemType;
-    static readonly stonebrick: ItemType;
-    static readonly stoneBrickStairs: ItemType;
-    static readonly stoneButton: ItemType;
-    static readonly stonecutterBlock: ItemType;
-    static readonly stoneHoe: ItemType;
-    static readonly stonePickaxe: ItemType;
-    static readonly stonePressurePlate: ItemType;
-    static readonly stoneShovel: ItemType;
-    static readonly stoneStairs: ItemType;
-    static readonly stoneSword: ItemType;
-    static readonly straySpawnEgg: ItemType;
-    static readonly striderSpawnEgg: ItemType;
-    static readonly 'string': ItemType;
-    static readonly strippedAcaciaLog: ItemType;
-    static readonly strippedBambooBlock: ItemType;
-    static readonly strippedBirchLog: ItemType;
-    static readonly strippedCherryLog: ItemType;
-    static readonly strippedCherryWood: ItemType;
-    static readonly strippedCrimsonHyphae: ItemType;
-    static readonly strippedCrimsonStem: ItemType;
-    static readonly strippedDarkOakLog: ItemType;
-    static readonly strippedJungleLog: ItemType;
-    static readonly strippedMangroveLog: ItemType;
-    static readonly strippedMangroveWood: ItemType;
-    static readonly strippedOakLog: ItemType;
-    static readonly strippedSpruceLog: ItemType;
-    static readonly strippedWarpedHyphae: ItemType;
-    static readonly strippedWarpedStem: ItemType;
-    static readonly structureBlock: ItemType;
-    static readonly structureVoid: ItemType;
-    static readonly sugar: ItemType;
-    static readonly sugarCane: ItemType;
-    static readonly suspiciousGravel: ItemType;
-    static readonly suspiciousSand: ItemType;
-    static readonly suspiciousStew: ItemType;
-    static readonly sweetBerries: ItemType;
-    static readonly tadpoleBucket: ItemType;
-    static readonly tadpoleSpawnEgg: ItemType;
-    static readonly tallgrass: ItemType;
-    static readonly target: ItemType;
-    static readonly tideArmorTrimSmithingTemplate: ItemType;
-    static readonly tintedGlass: ItemType;
-    static readonly tnt: ItemType;
-    static readonly tntMinecart: ItemType;
-    static readonly torch: ItemType;
-    static readonly torchflower: ItemType;
-    static readonly torchflowerSeeds: ItemType;
-    static readonly totemOfUndying: ItemType;
-    static readonly traderLlamaSpawnEgg: ItemType;
-    static readonly trapdoor: ItemType;
-    static readonly trappedChest: ItemType;
-    static readonly trident: ItemType;
-    static readonly tripwireHook: ItemType;
-    static readonly tropicalFish: ItemType;
-    static readonly tropicalFishBucket: ItemType;
-    static readonly tropicalFishSpawnEgg: ItemType;
-    static readonly tubeCoral: ItemType;
-    static readonly tuff: ItemType;
-    static readonly turtleEgg: ItemType;
-    static readonly turtleHelmet: ItemType;
-    static readonly turtleSpawnEgg: ItemType;
-    static readonly twistingVines: ItemType;
-    static readonly undyedShulkerBox: ItemType;
-    static readonly verdantFroglight: ItemType;
-    static readonly vexArmorTrimSmithingTemplate: ItemType;
-    static readonly vexSpawnEgg: ItemType;
-    static readonly villagerSpawnEgg: ItemType;
-    static readonly vindicatorSpawnEgg: ItemType;
-    static readonly vine: ItemType;
-    static readonly wanderingTraderSpawnEgg: ItemType;
-    static readonly wardArmorTrimSmithingTemplate: ItemType;
-    static readonly wardenSpawnEgg: ItemType;
-    static readonly warpedButton: ItemType;
-    static readonly warpedDoor: ItemType;
-    static readonly warpedFence: ItemType;
-    static readonly warpedFenceGate: ItemType;
-    static readonly warpedFungus: ItemType;
-    static readonly warpedFungusOnAStick: ItemType;
-    static readonly warpedHangingSign: ItemType;
-    static readonly warpedHyphae: ItemType;
-    static readonly warpedNylium: ItemType;
-    static readonly warpedPlanks: ItemType;
-    static readonly warpedPressurePlate: ItemType;
-    static readonly warpedRoots: ItemType;
-    static readonly warpedSign: ItemType;
-    static readonly warpedSlab: ItemType;
-    static readonly warpedStairs: ItemType;
-    static readonly warpedStem: ItemType;
-    static readonly warpedTrapdoor: ItemType;
-    static readonly warpedWartBlock: ItemType;
-    static readonly waterBucket: ItemType;
-    static readonly waterlily: ItemType;
-    static readonly waxedCopper: ItemType;
-    static readonly waxedCutCopper: ItemType;
-    static readonly waxedCutCopperSlab: ItemType;
-    static readonly waxedCutCopperStairs: ItemType;
-    static readonly waxedExposedCopper: ItemType;
-    static readonly waxedExposedCutCopper: ItemType;
-    static readonly waxedExposedCutCopperSlab: ItemType;
-    static readonly waxedExposedCutCopperStairs: ItemType;
-    static readonly waxedOxidizedCopper: ItemType;
-    static readonly waxedOxidizedCutCopper: ItemType;
-    static readonly waxedOxidizedCutCopperSlab: ItemType;
-    static readonly waxedOxidizedCutCopperStairs: ItemType;
-    static readonly waxedWeatheredCopper: ItemType;
-    static readonly waxedWeatheredCutCopper: ItemType;
-    static readonly waxedWeatheredCutCopperSlab: ItemType;
-    static readonly waxedWeatheredCutCopperStairs: ItemType;
-    static readonly wayfinderArmorTrimSmithingTemplate: ItemType;
-    static readonly weatheredCopper: ItemType;
-    static readonly weatheredCutCopper: ItemType;
-    static readonly weatheredCutCopperSlab: ItemType;
-    static readonly weatheredCutCopperStairs: ItemType;
-    static readonly web: ItemType;
-    static readonly weepingVines: ItemType;
-    static readonly wheat: ItemType;
-    static readonly wheatSeeds: ItemType;
-    static readonly whiteCandle: ItemType;
-    static readonly whiteCarpet: ItemType;
-    static readonly whiteConcrete: ItemType;
-    static readonly whiteDye: ItemType;
-    static readonly whiteGlazedTerracotta: ItemType;
-    static readonly whiteShulkerBox: ItemType;
-    static readonly whiteStainedGlass: ItemType;
-    static readonly whiteStainedGlassPane: ItemType;
-    static readonly whiteWool: ItemType;
-    static readonly wildArmorTrimSmithingTemplate: ItemType;
-    static readonly witchSpawnEgg: ItemType;
-    static readonly witherRose: ItemType;
-    static readonly witherSkeletonSpawnEgg: ItemType;
-    static readonly witherSpawnEgg: ItemType;
-    static readonly wolfSpawnEgg: ItemType;
-    static readonly wood: ItemType;
-    static readonly woodenAxe: ItemType;
-    static readonly woodenButton: ItemType;
-    static readonly woodenDoor: ItemType;
-    static readonly woodenHoe: ItemType;
-    static readonly woodenPickaxe: ItemType;
-    static readonly woodenPressurePlate: ItemType;
-    static readonly woodenShovel: ItemType;
-    static readonly woodenSlab: ItemType;
-    static readonly woodenSword: ItemType;
-    static readonly wool: ItemType;
-    static readonly writableBook: ItemType;
-    static readonly yellowCandle: ItemType;
-    static readonly yellowCarpet: ItemType;
-    static readonly yellowConcrete: ItemType;
-    static readonly yellowDye: ItemType;
-    static readonly yellowFlower: ItemType;
-    static readonly yellowGlazedTerracotta: ItemType;
-    static readonly yellowShulkerBox: ItemType;
-    static readonly yellowStainedGlass: ItemType;
-    static readonly yellowStainedGlassPane: ItemType;
-    static readonly yellowWool: ItemType;
-    static readonly zoglinSpawnEgg: ItemType;
-    static readonly zombieHorseSpawnEgg: ItemType;
-    static readonly zombiePigmanSpawnEgg: ItemType;
-    static readonly zombieSpawnEgg: ItemType;
-    static readonly zombieVillagerSpawnEgg: ItemType;
-}
-
-/**
- * @beta
  * Contains a set of additional variable values for further
  * defining how rendering and animations function.
  */
@@ -9225,8 +8871,9 @@ export class MolangVariableMap {
      * - `<variable_name>.g` - Green color value [0-1]
      * - `<variable_name>.b` - Blue color value [0-1]
      *
+     * @throws This function can throw errors.
      */
-    setColorRGB(variableName: string, color: Color): MolangVariableMap;
+    setColorRGB(variableName: string, color: RGB): void;
     /**
      * @remarks
      * Adds the following variables to Molang:
@@ -9236,8 +8883,21 @@ export class MolangVariableMap {
      * - `<variable_name>.a` - Alpha (transparency) color value
      * [0-1]
      *
+     * @throws This function can throw errors.
      */
-    setColorRGBA(variableName: string, color: Color): MolangVariableMap;
+    setColorRGBA(variableName: string, color: RGBA): void;
+    /**
+     * @remarks
+     * Sets a numeric (decimal) value within the Molang variable
+     * map.
+     *
+     * @param variableName
+     * Name of the float-based number to set.
+     * @param number
+     * Value for the Molang-based variable to set.
+     * @throws This function can throw errors.
+     */
+    setFloat(variableName: string, number: number): void;
     /**
      * @remarks
      * Adds the following variables to Molang:
@@ -9249,8 +8909,9 @@ export class MolangVariableMap {
      * - `<variable_name>.direction_z` - Z value from the {@link
      * Vector3} provided
      *
+     * @throws This function can throw errors.
      */
-    setSpeedAndDirection(variableName: string, speed: number, direction: Vector3): MolangVariableMap;
+    setSpeedAndDirection(variableName: string, speed: number, direction: Vector3): void;
     /**
      * @remarks
      * Adds the following variables to Molang:
@@ -9261,8 +8922,9 @@ export class MolangVariableMap {
      * - `<variable_name>.z` - Z value from the {@link Vector3}
      * provided
      *
+     * @throws This function can throw errors.
      */
-    setVector3(variableName: string, vector: Vector3): MolangVariableMap;
+    setVector3(variableName: string, vector: Vector3): void;
 }
 
 /**
@@ -9495,9 +9157,20 @@ export class Player extends Entity {
     private constructor();
     /**
      * @beta
+     * @remarks
+     * The player's Camera.
+     *
      * @throws This property can throw when used.
      */
     readonly camera: Camera;
+    /**
+     * @beta
+     * @remarks
+     * If true, the player is currently emoting.
+     *
+     * @throws This property can throw when used.
+     */
+    readonly isEmoting: boolean;
     /**
      * @beta
      * @remarks
@@ -9585,6 +9258,7 @@ export class Player extends Entity {
      *
      * @param amount
      * Amount of experience to add. Note that this can be negative.
+     * Min/max bounds at -2^24 ~ 2^24
      * @returns
      * Returns the current experience of the Player.
      * @throws This function can throw errors.
@@ -9599,7 +9273,7 @@ export class Player extends Entity {
      * This function can't be called in read-only mode.
      *
      * @param amount
-     * Amount to add to the player.
+     * Amount to add to the player. Min/max bounds at -2^24 ~ 2^24
      * @returns
      * Returns the current level of the Player.
      * @throws This function can throw errors.
@@ -9644,12 +9318,25 @@ export class Player extends Entity {
     /**
      * @beta
      * @remarks
+     * Plays a music track that only this particular player can
+     * hear.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param trackId
+     * Identifier of the music track to play.
+     * @param musicOptions
+     * Additional options for the music track.
+     * @throws This function can throw errors.
+     */
+    playMusic(trackId: string, musicOptions?: MusicOptions): void;
+    /**
+     * @beta
+     * @remarks
      * Plays a sound that only this particular player can hear.
      *
      * This function can't be called in read-only mode.
      *
-     * @param soundID
-     * Identifier of the sound to play.
      * @param soundOptions
      * Additional optional options for the sound.
      * @throws This function can throw errors.
@@ -9678,7 +9365,7 @@ export class Player extends Entity {
      *   players[0].playSound("bucket.fill_water", playerSoundOptions);
      * ```
      */
-    playSound(soundID: string, soundOptions?: PlayerSoundOptions): void;
+    playSound(soundId: string, soundOptions?: PlayerSoundOptions): void;
     /**
      * @beta
      * @remarks
@@ -9690,6 +9377,25 @@ export class Player extends Entity {
      * @throws This function can throw errors.
      */
     postClientMessage(id: string, value: string): void;
+    /**
+     * @beta
+     * @remarks
+     * Queues an additional music track that only this particular
+     * player can hear. If a track is not playing, a music track
+     * will play.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @param trackId
+     * Identifier of the music track to play.
+     * @param musicOptions
+     * Additional options for the music track.
+     * @throws
+     * An error will be thrown if volume is less than 0.0.
+     * An error will be thrown if fade is less than 0.0.
+     *
+     */
+    queueMusic(trackId: string, musicOptions?: MusicOptions): void;
     /**
      * @beta
      * @remarks
@@ -9771,6 +9477,10 @@ export class Player extends Entity {
      * This function can't be called in read-only mode.
      *
      * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     setSpawnPoint(spawnPoint?: DimensionLocation): void;
     /**
@@ -9789,6 +9499,451 @@ export class Player extends Entity {
      * @throws This function can throw errors.
      */
     startItemCooldown(itemCategory: string, tickDuration: number): void;
+    /**
+     * @beta
+     * @remarks
+     * Stops any music tracks from playing for this particular
+     * player.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    stopMusic(): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event after a player
+ * breaks a block.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class PlayerBreakBlockAfterEvent extends BlockEvent {
+    private constructor();
+    /**
+     * @remarks
+     * Returns permutation information about this block before it
+     * was broken.
+     *
+     */
+    readonly brokenBlockPermutation: BlockPermutation;
+    /**
+     * @remarks
+     * The item stack that was used to break the block after the
+     * block was broken, or undefined if empty hand.
+     *
+     */
+    readonly itemStackAfterBreak?: ItemStack;
+    /**
+     * @remarks
+     * The item stack that was used to break the block before the
+     * block was broken, or undefined if empty hand.
+     *
+     */
+    readonly itemStackBeforeBreak?: ItemStack;
+    /**
+     * @remarks
+     * Player that broke the block for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * @beta
+ * Manages callbacks that are connected to when a player breaks
+ * a block.
+ */
+export class PlayerBreakBlockAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called when a block is broken
+     * by a player.
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerBreakBlockAfterEvent) => void,
+        options?: BlockEventOptions,
+    ): (arg: PlayerBreakBlockAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called when a player breaks a
+     * block.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerBreakBlockAfterEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event before a player
+ * breaks a block.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class PlayerBreakBlockBeforeEvent extends BlockEvent {
+    private constructor();
+    /**
+     * @remarks
+     * If set to true, cancels the block break event.
+     *
+     */
+    cancel: boolean;
+    /**
+     * @remarks
+     * The item stack that is being used to break the block, or
+     * undefined if empty hand.
+     *
+     */
+    itemStack?: ItemStack;
+    /**
+     * @remarks
+     * Player breaking the block for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * @beta
+ * Manages callbacks that are connected to before a player
+ * breaks a block.
+ */
+export class PlayerBreakBlockBeforeEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called before a block is broken
+     * by a player.
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerBreakBlockBeforeEvent) => void,
+        options?: BlockEventOptions,
+    ): (arg: PlayerBreakBlockBeforeEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called before a player breaks
+     * a block.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerBreakBlockBeforeEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information related to changes to a player's
+ * dimension having been changed.
+ */
+export class PlayerDimensionChangeAfterEvent {
+    private constructor();
+    /**
+     * @remarks
+     * The dimension the player is changing from.
+     *
+     */
+    readonly fromDimension: Dimension;
+    /**
+     * @remarks
+     * The location the player was at before changing dimensions.
+     *
+     */
+    readonly fromLocation: Vector3;
+    /**
+     * @remarks
+     * Handle to the player that is changing dimensions.
+     *
+     */
+    readonly player: Player;
+    /**
+     * @remarks
+     * The dimension that the player is changing to.
+     *
+     */
+    readonly toDimension: Dimension;
+    /**
+     * @remarks
+     * The location the player will spawn to after changing
+     * dimensions.
+     *
+     */
+    readonly toLocation: Vector3;
+}
+
+/**
+ * @beta
+ * Manages callbacks that are connected to successful player
+ * dimension changes.
+ */
+export class PlayerDimensionChangeAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Subscribes the specified callback to a player dimension
+     * change after event.
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(callback: (arg: PlayerDimensionChangeAfterEvent) => void): (arg: PlayerDimensionChangeAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes the specified callback from a player dimension
+     * change after event.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerDimensionChangeAfterEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event after a player
+ * interacts with a block.
+ */
+export class PlayerInteractWithBlockAfterEvent {
+    private constructor();
+    /**
+     * @remarks
+     * The block that will be interacted with.
+     *
+     */
+    readonly block: Block;
+    /**
+     * @remarks
+     * The face of the block that is being interacted with.
+     *
+     */
+    readonly blockFace: Direction;
+    /**
+     * @remarks
+     * Location relative to the bottom north-west corner of the
+     * block where the item is placed.
+     *
+     */
+    readonly faceLocation: Vector3;
+    /**
+     * @remarks
+     * The item stack that is being used in the interaction, or
+     * undefined if empty hand.
+     *
+     */
+    readonly itemStack?: ItemStack;
+    /**
+     * @remarks
+     * Source Player for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * @beta
+ */
+export class PlayerInteractWithBlockAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerInteractWithBlockAfterEvent) => void,
+    ): (arg: PlayerInteractWithBlockAfterEvent) => void;
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerInteractWithBlockAfterEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event before a player
+ * interacts with a block.
+ */
+export class PlayerInteractWithBlockBeforeEvent {
+    private constructor();
+    /**
+     * @remarks
+     * The block that will be interacted with.
+     *
+     */
+    readonly block: Block;
+    /**
+     * @remarks
+     * The face of the block that is being interacted with.
+     *
+     */
+    readonly blockFace: Direction;
+    /**
+     * @remarks
+     * If set to true the interaction will be cancelled.
+     *
+     */
+    cancel: boolean;
+    /**
+     * @remarks
+     * Location relative to the bottom north-west corner of the
+     * block where the item is placed.
+     *
+     */
+    readonly faceLocation: Vector3;
+    /**
+     * @remarks
+     * The item stack that is being used in the interaction, or
+     * undefined if empty hand.
+     *
+     */
+    readonly itemStack?: ItemStack;
+    /**
+     * @remarks
+     * Source Player for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * @beta
+ */
+export class PlayerInteractWithBlockBeforeEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerInteractWithBlockBeforeEvent) => void,
+    ): (arg: PlayerInteractWithBlockBeforeEvent) => void;
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerInteractWithBlockBeforeEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event after a player
+ * interacts with an entity.
+ */
+export class PlayerInteractWithEntityAfterEvent {
+    private constructor();
+    /**
+     * @remarks
+     * The item stack that is being used in the interaction, or
+     * undefined if empty hand.
+     *
+     */
+    readonly itemStack?: ItemStack;
+    /**
+     * @remarks
+     * Source Player for this event.
+     *
+     */
+    readonly player: Player;
+    /**
+     * @remarks
+     * The entity that will be interacted with.
+     *
+     */
+    readonly target: Entity;
+}
+
+/**
+ * @beta
+ */
+export class PlayerInteractWithEntityAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerInteractWithEntityAfterEvent) => void,
+    ): (arg: PlayerInteractWithEntityAfterEvent) => void;
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerInteractWithEntityAfterEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event before a player
+ * interacts with an entity.
+ */
+export class PlayerInteractWithEntityBeforeEvent {
+    private constructor();
+    /**
+     * @remarks
+     * If set to true the interaction will be cancelled.
+     *
+     */
+    cancel: boolean;
+    /**
+     * @remarks
+     * The item stack that is being used in the interaction, or
+     * undefined if empty hand.
+     *
+     */
+    readonly itemStack?: ItemStack;
+    /**
+     * @remarks
+     * Source Player for this event.
+     *
+     */
+    readonly player: Player;
+    /**
+     * @remarks
+     * The entity that will be interacted with.
+     *
+     */
+    readonly target: Entity;
+}
+
+/**
+ * @beta
+ */
+export class PlayerInteractWithEntityBeforeEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerInteractWithEntityBeforeEvent) => void,
+    ): (arg: PlayerInteractWithEntityBeforeEvent) => void;
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerInteractWithEntityBeforeEvent) => void): void;
 }
 
 /**
@@ -9880,6 +10035,153 @@ export class PlayerLeaveAfterEvent {
 // @ts-ignore Class inheritance allowed for native defined classes
 export class PlayerLeaveAfterEventSignal extends IPlayerLeaveAfterEventSignal {
     private constructor();
+}
+
+/**
+ * @beta
+ */
+export class PlayerLeaveBeforeEvent {
+    private constructor();
+    readonly player: Player;
+}
+
+/**
+ * @beta
+ */
+export class PlayerLeaveBeforeEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(callback: (arg: PlayerLeaveBeforeEvent) => void): (arg: PlayerLeaveBeforeEvent) => void;
+    /**
+     * @remarks
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerLeaveBeforeEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event where a player
+ * places a block.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class PlayerPlaceBlockAfterEvent extends BlockEvent {
+    private constructor();
+    /**
+     * @remarks
+     * Player that placed the block for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * @beta
+ * Manages callbacks that are connected to when a block is
+ * placed by a player.
+ */
+export class PlayerPlaceBlockAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called when a block is placed
+     * by a player.
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerPlaceBlockAfterEvent) => void,
+        options?: BlockEventOptions,
+    ): (arg: PlayerPlaceBlockAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called when an block is placed
+     * by a player.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerPlaceBlockAfterEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains information regarding an event before a player
+ * places a block.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class PlayerPlaceBlockBeforeEvent extends BlockEvent {
+    private constructor();
+    /**
+     * @remarks
+     * If set to true, cancels the block place event.
+     *
+     */
+    cancel: boolean;
+    /**
+     * @remarks
+     * The face of the block that the new block is being placed on.
+     *
+     */
+    readonly face: Direction;
+    /**
+     * @remarks
+     * Location relative to the bottom north-west corner of the
+     * block where the new block is being placed onto.
+     *
+     */
+    readonly faceLocation: Vector3;
+    /**
+     * @remarks
+     * The item being used to place the block.
+     *
+     */
+    itemStack: ItemStack;
+    /**
+     * @remarks
+     * Player that is placing the block for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * @beta
+ * Manages callbacks that are connected to before a block is
+ * placed by a player.
+ */
+export class PlayerPlaceBlockBeforeEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called before a block is placed
+     * by a player.
+     *
+     * This function can't be called in read-only mode.
+     *
+     */
+    subscribe(
+        callback: (arg: PlayerPlaceBlockBeforeEvent) => void,
+        options?: BlockEventOptions,
+    ): (arg: PlayerPlaceBlockBeforeEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called before an block is
+     * placed by a player.
+     *
+     * This function can't be called in read-only mode.
+     *
+     * @throws This function can throw errors.
+     */
+    unsubscribe(callback: (arg: PlayerPlaceBlockBeforeEvent) => void): void;
 }
 
 /**
@@ -10182,38 +10484,6 @@ export class ProjectileHitEntityAfterEventSignal {
 
 /**
  * @beta
- * Provides methods that should be used within the World
- * Initialize event to register dynamic properties that can be
- * used and stored within Minecraft.
- */
-export class PropertyRegistry {
-    private constructor();
-    /**
-     * @remarks
-     * Registers a dynamic property for a particular entity type
-     * (e.g., a minecraft:skeleton.).
-     *
-     * This function can't be called in read-only mode.
-     *
-     * @throws This function can throw errors.
-     */
-    registerEntityTypeDynamicProperties(
-        propertiesDefinition: DynamicPropertiesDefinition,
-        entityTypeOrId: EntityType | string,
-    ): void;
-    /**
-     * @remarks
-     * Registers a globally available dynamic property for a world.
-     *
-     * This function can't be called in read-only mode.
-     *
-     * @throws This function can throw errors.
-     */
-    registerWorldDynamicProperties(propertiesDefinition: DynamicPropertiesDefinition): void;
-}
-
-/**
- * @beta
  * Contains objectives and participants for the scoreboard.
  */
 export class Scoreboard {
@@ -10278,12 +10548,16 @@ export class Scoreboard {
      *
      * This function can't be called in read-only mode.
      *
+     * @returns
+     * Returns the previous `ScoreboardObjective` set at the
+     * display slot, if no objective was previously set it returns
+     * `undefined`.
      * @throws This function can throw errors.
      */
     setObjectiveAtDisplaySlot(
         displaySlotId: DisplaySlotId,
         objectiveDisplaySetting: ScoreboardObjectiveDisplayOptions,
-    ): ScoreboardObjective;
+    ): ScoreboardObjective | undefined;
 }
 
 /**
@@ -10317,7 +10591,13 @@ export class ScoreboardIdentity {
      *
      * @throws This function can throw errors.
      */
-    getEntity(): Entity;
+    getEntity(): Entity | undefined;
+    /**
+     * @remarks
+     * Returns true if the ScoreboardIdentity reference is still
+     * valid.
+     *
+     */
     isValid(): boolean;
 }
 
@@ -10385,6 +10665,12 @@ export class ScoreboardObjective {
      * @throws This function can throw errors.
      */
     hasParticipant(participant: Entity | ScoreboardIdentity | string): boolean;
+    /**
+     * @remarks
+     * Returns true if the ScoreboardObjective reference is still
+     * valid.
+     *
+     */
     isValid(): boolean;
     /**
      * @remarks
@@ -10542,7 +10828,7 @@ export class ScriptEventCommandMessageAfterEvent {
      * that initiated the NPC dialogue.
      *
      */
-    readonly initiator: Entity;
+    readonly initiator?: Entity;
     /**
      * @remarks
      * Optional additional data passed in with the script event
@@ -10556,14 +10842,14 @@ export class ScriptEventCommandMessageAfterEvent {
      * (e.g., a commandblock.)
      *
      */
-    readonly sourceBlock: Block;
+    readonly sourceBlock?: Block;
     /**
      * @remarks
      * Source entity if this command was triggered by an entity
      * (e.g., a NPC).
      *
      */
-    readonly sourceEntity: Entity;
+    readonly sourceEntity?: Entity;
     /**
      * @remarks
      * Returns the type of source that fired this command.
@@ -11274,6 +11560,10 @@ export class World {
     broadcastClientMessage(id: string, value: string): void;
     /**
      * @beta
+     */
+    clearDynamicProperties(): void;
+    /**
+     * @beta
      * @remarks
      * Returns the absolute time since the start of the world.
      *
@@ -11389,6 +11679,14 @@ export class World {
     getDynamicProperty(identifier: string): boolean | number | string | Vector3 | undefined;
     /**
      * @beta
+     */
+    getDynamicPropertyIds(): string[];
+    /**
+     * @beta
+     */
+    getDynamicPropertyTotalByteCount(): number;
+    /**
+     * @beta
      * @remarks
      * Returns an entity based on the provided id.
      *
@@ -11464,7 +11762,7 @@ export class World {
      *   players[0].playSound("bucket.fill_water", playerSoundOptions);
      * ```
      */
-    playMusic(trackID: string, musicOptions?: MusicOptions): void;
+    playMusic(trackId: string, musicOptions?: MusicOptions): void;
     /**
      * @beta
      * @remarks
@@ -11502,7 +11800,7 @@ export class World {
      *   players[0].playSound("bucket.fill_water", playerSoundOptions);
      * ```
      */
-    playSound(soundID: string, location: Vector3, soundOptions?: WorldSoundOptions): void;
+    playSound(soundId: string, location: Vector3, soundOptions?: WorldSoundOptions): void;
     /**
      * @beta
      * @remarks
@@ -11511,22 +11809,16 @@ export class World {
      *
      * This function can't be called in read-only mode.
      *
+     * @param trackId
+     * Identifier of the music track to play.
+     * @param musicOptions
+     * Additional options for the music track.
      * @throws
      * An error will be thrown if volume is less than 0.0.
      * An error will be thrown if fade is less than 0.0.
      *
      */
-    queueMusic(trackID: string, musicOptions?: MusicOptions): void;
-    /**
-     * @beta
-     * @remarks
-     * Removes a specified property.
-     *
-     * This function can't be called in read-only mode.
-     *
-     * @throws This function can throw errors.
-     */
-    removeDynamicProperty(identifier: string): boolean;
+    queueMusic(trackId: string, musicOptions?: MusicOptions): void;
     /**
      * @beta
      * @remarks
@@ -11589,14 +11881,16 @@ export class World {
      * within the overworld dimension.
      * @throws
      * Throws if the provided spawn location is out of bounds.
+     *
+     * {@link Error}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
      */
     setDefaultSpawnLocation(spawnLocation: Vector3): void;
     /**
      * @beta
      * @remarks
      * Sets a specified property to a value.
-     *
-     * This function can't be called in read-only mode.
      *
      * @param identifier
      * The property identifier.
@@ -11658,7 +11952,7 @@ export class World {
      *   mc.world.setDynamicProperty("samplelibrary:longerjson", paintStr);
      * ```
      */
-    setDynamicProperty(identifier: string, value: boolean | number | string | Vector3): void;
+    setDynamicProperty(identifier: string, value?: boolean | number | string | Vector3): void;
     /**
      * @beta
      * @remarks
@@ -11694,26 +11988,12 @@ export class WorldAfterEvents {
     /**
      * @beta
      * @remarks
-     * This event fires for a block that is broken by a player.
-     *
-     */
-    readonly blockBreak: BlockBreakAfterEventSignal;
-    /**
-     * @beta
-     * @remarks
      * This event fires for each BlockLocation destroyed by an
      * explosion. It is fired after the blocks have already been
      * destroyed.
      *
      */
     readonly blockExplode: BlockExplodeAfterEventSignal;
-    /**
-     * @beta
-     * @remarks
-     * This event fires for a block that is placed by a player.
-     *
-     */
-    readonly blockPlace: BlockPlaceAfterEventSignal;
     /**
      * @remarks
      * This event fires when a button is pushed.
@@ -11754,14 +12034,25 @@ export class WorldAfterEvents {
     readonly entityDie: EntityDieAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * This event fires when entity health changes in any degree.
+     *
      */
     readonly entityHealthChanged: EntityHealthChangedAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * This event fires when an entity hits (that is, melee
+     * attacks) a block.
+     *
      */
     readonly entityHitBlock: EntityHitBlockAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * This event fires when an entity hits (that is, melee
+     * attacks) another entity.
+     *
      */
     readonly entityHitEntity: EntityHitEntityAfterEventSignal;
     /**
@@ -11773,8 +12064,19 @@ export class WorldAfterEvents {
     readonly entityHurt: EntityHurtAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * Fires when an entity is loaded.
+     *
      */
-    readonly entityRemoved: EntityRemovedAfterEventSignal;
+    readonly entityLoad: EntityLoadAfterEventSignal;
+    /**
+     * @beta
+     * @remarks
+     * Fires when an entity is removed (for example, potentially
+     * unloaded, or removed after being killed).
+     *
+     */
+    readonly entityRemove: EntityRemoveAfterEventSignal;
     /**
      * @beta
      * @remarks
@@ -11791,6 +12093,9 @@ export class WorldAfterEvents {
     readonly explosion: ExplosionAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * This event fires when a chargeable item completes charging.
+     *
      */
     readonly itemCompleteUse: ItemCompleteUseAfterEventSignal;
     /**
@@ -11805,10 +12110,17 @@ export class WorldAfterEvents {
     readonly itemDefinitionEvent: ItemDefinitionAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * This event fires when a chargeable item is released from
+     * charging.
+     *
      */
     readonly itemReleaseUse: ItemReleaseUseAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * This event fires when a chargeable item starts charging.
+     *
      */
     readonly itemStartUse: ItemStartUseAfterEventSignal;
     /**
@@ -11824,6 +12136,9 @@ export class WorldAfterEvents {
     readonly itemStartUseOn: ItemStartUseOnAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * This event fires when a chargeable item stops charging.
+     *
      */
     readonly itemStopUse: ItemStopUseAfterEventSignal;
     /**
@@ -11851,6 +12166,11 @@ export class WorldAfterEvents {
      *
      */
     readonly itemUseOn: ItemUseOnAfterEventSignal;
+    /**
+     * @remarks
+     * A lever has been pulled.
+     *
+     */
     readonly leverAction: LeverActionAfterEventSignal;
     /**
      * @beta
@@ -11868,6 +12188,28 @@ export class WorldAfterEvents {
      */
     readonly pistonActivate: PistonActivateAfterEventSignal;
     /**
+     * @beta
+     * @remarks
+     * This event fires for a block that is broken by a player.
+     *
+     */
+    readonly playerBreakBlock: PlayerBreakBlockAfterEventSignal;
+    /**
+     * @beta
+     * @remarks
+     * Fires when a player moved to a different dimension.
+     *
+     */
+    readonly playerDimensionChange: PlayerDimensionChangeAfterEventSignal;
+    /**
+     * @beta
+     */
+    readonly playerInteractWithBlock: PlayerInteractWithBlockAfterEventSignal;
+    /**
+     * @beta
+     */
+    readonly playerInteractWithEntity: PlayerInteractWithEntityAfterEventSignal;
+    /**
      * @remarks
      * This event fires when a player joins a world.  See also
      * playerSpawn for another related event you can trap for when
@@ -11882,6 +12224,13 @@ export class WorldAfterEvents {
      */
     readonly playerLeave: PlayerLeaveAfterEventSignal;
     /**
+     * @beta
+     * @remarks
+     * This event fires for a block that is placed by a player.
+     *
+     */
+    readonly playerPlaceBlock: PlayerPlaceBlockAfterEventSignal;
+    /**
      * @remarks
      * This event fires when a player spawns or respawns. Note that
      * an additional flag within this event will tell you whether
@@ -11891,10 +12240,18 @@ export class WorldAfterEvents {
     readonly playerSpawn: PlayerSpawnAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * A pressure plate has popped back up (i.e., there are no
+     * entities on the pressure plate.)
+     *
      */
     readonly pressurePlatePop: PressurePlatePopAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * A pressure plate has pushed (at least one entity has moved
+     * onto a pressure plate.)
+     *
      */
     readonly pressurePlatePush: PressurePlatePushAfterEventSignal;
     /**
@@ -11913,10 +12270,16 @@ export class WorldAfterEvents {
     readonly projectileHitEntity: ProjectileHitEntityAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * A target block was hit.
+     *
      */
     readonly targetBlockHit: TargetBlockHitAfterEventSignal;
     /**
      * @beta
+     * @remarks
+     * A trip wire was tripped.
+     *
      */
     readonly tripWireTrip: TripWireTripAfterEventSignal;
     /**
@@ -11968,6 +12331,14 @@ export class WorldBeforeEvents {
     /**
      * @beta
      * @remarks
+     * Fires before an entity is removed from the world (for
+     * example, unloaded or removed after being killed.)
+     *
+     */
+    readonly entityRemove: EntityRemoveBeforeEventSignal;
+    /**
+     * @beta
+     * @remarks
      * This event is fired after an explosion occurs.
      *
      */
@@ -12003,6 +12374,32 @@ export class WorldBeforeEvents {
      *
      */
     readonly pistonActivate: PistonActivateBeforeEventSignal;
+    /**
+     * @beta
+     * @remarks
+     * This event fires before a block is broken by a player.
+     *
+     */
+    readonly playerBreakBlock: PlayerBreakBlockBeforeEventSignal;
+    /**
+     * @beta
+     */
+    readonly playerInteractWithBlock: PlayerInteractWithBlockBeforeEventSignal;
+    /**
+     * @beta
+     */
+    readonly playerInteractWithEntity: PlayerInteractWithEntityBeforeEventSignal;
+    /**
+     * @beta
+     */
+    readonly playerLeave: PlayerLeaveBeforeEventSignal;
+    /**
+     * @beta
+     * @remarks
+     * This event fires before a block is placed by a player.
+     *
+     */
+    readonly playerPlaceBlock: PlayerPlaceBlockBeforeEventSignal;
 }
 
 /**
@@ -12015,28 +12412,6 @@ export class WorldBeforeEvents {
  */
 export class WorldInitializeAfterEvent {
     private constructor();
-    /**
-     * @remarks
-     * Contains methods for scripts to initialize and register
-     * dynamic properties they may wish to use within a world.
-     *
-     * @example propertyRegistration.js
-     * ```typescript
-     * import { DynamicPropertiesDefinition, EntityTypes, world } from '@minecraft/server';
-     * import { MinecraftEntityTypes } from '@minecraft/vanilla-data';
-     *
-     * world.afterEvents.worldInitialize.subscribe(e => {
-     *     let def = new DynamicPropertiesDefinition();
-     *
-     *     def.defineNumber('rpgStrength');
-     *     def.defineString('rpgRole', 16);
-     *     def.defineBoolean('rpgIsHero');
-     *
-     *     e.propertyRegistry.registerEntityTypeDynamicProperties(def, EntityTypes.get(MinecraftEntityTypes.Skeleton));
-     * });
-     * ```
-     */
-    readonly propertyRegistry: PropertyRegistry;
 }
 
 /**
@@ -12067,6 +12442,27 @@ export class WorldInitializeAfterEventSignal {
      * @throws This function can throw errors.
      */
     unsubscribe(callback: (arg: WorldInitializeAfterEvent) => void): void;
+}
+
+/**
+ * @beta
+ * Contains optional parameters for registering a block event.
+ */
+export interface BlockEventOptions {
+    /**
+     * @remarks
+     * If this value is set, this event will only fire if the
+     * impacted block's type matches this parameter.
+     *
+     */
+    blockTypes?: string[];
+    /**
+     * @remarks
+     * If this value is set, this event will only fire if the
+     * impacted block's permutation matches this parameter.
+     *
+     */
+    permutations?: BlockPermutation[];
 }
 
 /**
@@ -12248,36 +12644,106 @@ export interface BoundingBox {
 /**
  * @beta
  */
+export interface CameraDefaultOptions {
+    easeOptions: CameraEaseOptions;
+}
+
+/**
+ * @beta
+ * Contains options associated with a camera ease operation.
+ */
 export interface CameraEaseOptions {
+    /**
+     * @remarks
+     * Time for the ease operation.
+     *
+     */
     easeTime?: number;
+    /**
+     * @remarks
+     * Type of ease operation to use.
+     *
+     */
     easeType?: EasingType;
 }
 
 /**
  * @beta
+ * Used to initiate a full-screen color fade.
  */
 export interface CameraFadeOptions {
-    fadeColor?: ScriptColorRGB;
+    /**
+     * @remarks
+     * Fade color to use.
+     *
+     */
+    fadeColor?: RGB;
+    /**
+     * @remarks
+     * Time in seconds for the fade-in, hold, and fade-out seconds.
+     *
+     */
     fadeTime?: CameraFadeTimeOptions;
 }
 
 /**
  * @beta
+ * Contains timings for a fade transition.
  */
 export interface CameraFadeTimeOptions {
+    /**
+     * @remarks
+     * Time, in seconds, for a fade-in.
+     *
+     */
     fadeInTime: number;
+    /**
+     * @remarks
+     * Time, in seconds, for a fade-out.
+     *
+     */
     fadeOutTime: number;
+    /**
+     * @remarks
+     * Time, in seconds, to hold the full screen color.
+     *
+     */
     holdTime: number;
 }
 
 /**
  * @beta
  */
-export interface Color {
-    alpha: number;
-    blue: number;
-    green: number;
-    red: number;
+export interface CameraSetFacingOptions {
+    easeOptions?: CameraEaseOptions;
+    facingEntity: Entity;
+    location?: Vector3;
+}
+
+/**
+ * @beta
+ */
+export interface CameraSetLocationOptions {
+    easeOptions?: CameraEaseOptions;
+    location: Vector3;
+}
+
+/**
+ * @beta
+ */
+export interface CameraSetPosOptions {
+    easeOptions?: CameraEaseOptions;
+    facingLocation: Vector3;
+    location?: Vector3;
+}
+
+/**
+ * @beta
+ */
+export interface CameraSetRotOptions {
+    easeOptions?: CameraEaseOptions;
+    location?: Vector3;
+    rotation: Vector2;
 }
 
 /**
@@ -12297,7 +12763,15 @@ export interface CompoundBlockVolumeItem {
      * negative space in the overall compound block volume.
      *
      */
-    action: CompoundBlockVolumeAction;
+    action?: CompoundBlockVolumeAction;
+    /**
+     * @remarks
+     * The relativity enumeration determines whether the
+     * BlockVolume specified is positioned relative to the parent
+     * compound block volume origin, or in absolute world space.
+     *
+     */
+    locationRelativity?: CompoundBlockVolumePositionRelativity;
     /**
      * @remarks
      * The volume of space
@@ -12314,25 +12788,25 @@ export interface CompoundBlockVolumeItem {
 export interface DimensionLocation {
     /**
      * @remarks
-     * The dimension.
+     * Dimension that this coordinate is associated with.
      *
      */
     dimension: Dimension;
     /**
      * @remarks
-     * The x coordinate.
+     * X component of this dimension-location.
      *
      */
     x: number;
     /**
      * @remarks
-     * The y coordinate.
+     * Y component of this dimension-location.
      *
      */
     y: number;
     /**
      * @remarks
-     * The z coordinate.
+     * Z component of this dimension-location.
      *
      */
     z: number;
@@ -12867,9 +13341,14 @@ export interface PlayerSoundOptions {
 
 /**
  * @beta
- * Defines a JSON structure that is used for more flexible
+ * Defines a JSON structure that is used for more flexible.
  */
 export interface RawMessage {
+    /**
+     * @remarks
+     * Provides a raw-text equivalent of the current message.
+     *
+     */
     rawtext?: RawMessage[];
     /**
      * @remarks
@@ -12892,6 +13371,13 @@ export interface RawMessage {
      *
      */
     translate?: string;
+    /**
+     * @remarks
+     * Arguments for the translation token. Can be either an array
+     * of strings or RawMessage containing an array of raw text
+     * objects.
+     *
+     */
     with?: string[] | RawMessage;
 }
 
@@ -12924,7 +13410,75 @@ export interface RawMessageScore {
  * `BlockSignComponent.getRawText` for examples.
  */
 export interface RawText {
+    /**
+     * @remarks
+     * A serialization of the current value of an associated sign.
+     *
+     */
     rawtext?: RawMessage[];
+}
+
+/**
+ * @beta
+ * Represents a fully customizable color within Minecraft.
+ */
+export interface RGB {
+    /**
+     * @remarks
+     * Determines a color's blue component. Valid values are
+     * between 0 and 1.0.
+     *
+     */
+    blue: number;
+    /**
+     * @remarks
+     * Determines a color's green component. Valid values are
+     * between 0 and 1.0.
+     *
+     */
+    green: number;
+    /**
+     * @remarks
+     * Determines a color's red component. Valid values are between
+     * 0 and 1.0.
+     *
+     */
+    red: number;
+}
+
+/**
+ * @beta
+ * Represents a fully customizable color within Minecraft.
+ */
+export interface RGBA {
+    /**
+     * @remarks
+     * Determines a color's alpha (opacity) component. Valid values
+     * are between 0 (transparent) and 1.0 (opaque).
+     *
+     */
+    alpha: number;
+    /**
+     * @remarks
+     * Determines a color's blue component. Valid values are
+     * between 0 and 1.0.
+     *
+     */
+    blue: number;
+    /**
+     * @remarks
+     * Determines a color's green component. Valid values are
+     * between 0 and 1.0.
+     *
+     */
+    green: number;
+    /**
+     * @remarks
+     * Determines a color's red component. Valid values are between
+     * 0 and 1.0.
+     *
+     */
+    red: number;
 }
 
 /**
@@ -12945,57 +13499,6 @@ export interface ScoreboardObjectiveDisplayOptions {
      *
      */
     sortOrder?: ObjectiveSortOrder;
-}
-
-/**
- * @beta
- */
-export interface ScriptCameraDefaultOptions {
-    easeOptions: CameraEaseOptions;
-}
-
-/**
- * @beta
- */
-export interface ScriptCameraSetFacingOptions {
-    easeOptions?: CameraEaseOptions;
-    facingEntity: Entity;
-    location?: Vector3;
-}
-
-/**
- * @beta
- */
-export interface ScriptCameraSetLocationOptions {
-    easeOptions?: CameraEaseOptions;
-    location: Vector3;
-}
-
-/**
- * @beta
- */
-export interface ScriptCameraSetPosOptions {
-    easeOptions?: CameraEaseOptions;
-    facingLocation: Vector3;
-    location?: Vector3;
-}
-
-/**
- * @beta
- */
-export interface ScriptCameraSetRotOptions {
-    easeOptions?: CameraEaseOptions;
-    location?: Vector3;
-    rotation: Vector2;
-}
-
-/**
- * @beta
- */
-export interface ScriptColorRGB {
-    blue: number;
-    green: number;
-    red: number;
 }
 
 /**
