@@ -137,6 +137,7 @@ function playerRanking(player) {
         .filter(Boolean); // nullを除外
       kdEntries.sort((a, b) => b.value - a.value);
       const rankIndex = kdEntries.findIndex(entry => entry.playerId === player.id);
+      if (rankIndex === -1) continue;
       const kd = kdEntries[rankIndex].value;
       rows.push(`  ${rankName}: §a#${rankIndex + 1}§r ${kd.toFixed(1)}`);
       continue;
