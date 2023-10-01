@@ -1,5 +1,5 @@
 import { Player, ScoreboardIdentityType, world } from '@minecraft/server';
-import { rankicon as formatName, getScore } from './util/function';
+import { rankicon, getScore } from './util/function';
 import { db } from './Database/index';
 
 /** @typedef {{ playerId: string, value: number }} RankEntry */
@@ -15,6 +15,18 @@ export const RankType = /** @type {const} */ ({
   Achievements: 'achhowmany',
 });
 /** @typedef {RankType[keyof RankType]} RankTypes */
+
+/**
+ * @param {Player|string} player Player or playerId
+ * @returns {string}
+ */
+function formatName(player) {
+  const playerName = player instanceof Player
+    ? player.name
+    : db.get('users', player) ?? '§7不明なプレイヤー';
+  const icon = rankicon(playerName);
+  return icon ? `${icon} ${playerName}` : playerName;
+}
 
 /**
  * @param {RankTypes|Player} mode ランキングの種類またはプレイヤー(個別表示用)
@@ -49,7 +61,7 @@ function globalRanking(type) {
     const result = timeEntries.slice(0, 10).map((entry, i) => {
       const hours = getScore(entry.playerId, type + 'h', true);
       const minutes = getScore(entry.playerId, type + 'm', true);
-      return `  §a#${i + 1}§r ${formatName(entry.playerId, true)}§r: ${hours}時間 ${minutes}分`;
+      return `  §a#${i + 1}§r ${formatName(entry.playerId)}§r: ${hours}時間 ${minutes}分`;
     });
     rows.push(...result);
 
@@ -90,7 +102,7 @@ function playerRanking(player) {
 
   const excluded = getExcluded();
   if (excluded.includes(player.id)) { // 除外リストに入ってたら
-    rows.push('§oランキングが無効化されています');
+    rows.push('§7§oランキングが無効化されています');
     return rows.join('\n');
   }
   

@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "type-stable": "npm i @minecraft/server@1.4.0-beta.1.20.10-stable -D & npm i @minecraft/server-ui@1.2.0-beta.1.20.10-stable -D",
-    "type-preview": "npm i @minecraft/server@1.6.0-beta.1.20.30-preview.25 -D & npm i @minecraft/server-ui@1.2.0-beta.1.20.30-preview.25 -D",
+    "type-stable": "npm i @minecraft/server@1.6.0-beta.1.20.30-stable -D & npm i @minecraft/server-ui@1.2.0-beta.1.20.30-stable -D",
+    "type-preview": "npm i @minecraft/server@1.7.0-beta.1.20.40-preview.22 -D & npm i @minecraft/server-ui@1.2.0-beta.1.20.40-preview.22 -D",
     "lint": "eslint . --ext .js"
   },
   "author": "tutinoko2048",
@@ -18,8 +18,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@minecraft/vanilla-data": "^1.20.10-preview.23",
-    "discord-api-types": "^0.37.52",
-    "discord.js": "^14.12.1"
+    "@minecraft/vanilla-data": "1.20.30"
   }
 }
