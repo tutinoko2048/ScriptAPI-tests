@@ -31,10 +31,10 @@ function formatName(player) {
 /**
  * @param {RankTypes|Player} mode ランキングの種類またはプレイヤー(個別表示用)
  * @returns {string} ランキング本体
- * @example updateRanking(RankType.ServerTime);
- * updateRanking(player);
+ * @example getRanking(RankType.ServerTime);
+ * getRanking(player);
  */
-export function updateRanking(mode) {
+export function getRanking(mode) {
   if (mode instanceof Player) {
     return playerRanking(mode);
   } else {
