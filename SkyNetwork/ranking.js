@@ -71,7 +71,7 @@ function globalRanking(type) {
     const killEntries = getSorted(RankType.Kills, excluded);
     const kdEntries = killEntries
       .map(entry => {
-        const deaths = getScore(entry.playerId, RankType.Deaths);
+        const deaths = getScore(entry.playerId, RankType.Deaths, true);
         if (entry.value + deaths < 100) return null; // K+D 100より下はnullをセット
         entry.value = entry.value / deaths;
         return entry;
@@ -112,7 +112,7 @@ function playerRanking(player) {
     if (type === RankType.ServerTime || type === RankType.PlayTime) {
       const hourEntries = getSorted(type + 'h', excluded); // 'xxxtimeh'
       const timeEntries = hourEntries.map(entry => {
-        entry.value = (entry.value * 60) + getScore(entry.playerId, type + 'm'); // 時間と分の合計
+        entry.value = (entry.value * 60) + getScore(entry.playerId, type + 'm', true); // 時間と分の合計
         return entry;
       });
       timeEntries.sort((a, b) => b.value - a.value);
@@ -129,7 +129,7 @@ function playerRanking(player) {
       const killEntries = getSorted(RankType.Kills, excluded);
       const kdEntries = killEntries
         .map(entry => {
-          const deaths = getScore(entry.playerId, RankType.Deaths);
+          const deaths = getScore(entry.playerId, RankType.Deaths, true);
           if (entry.value + deaths < 100) return null; // K+D 100より下はnullをセット
           entry.value = entry.value / deaths;
           return entry;
