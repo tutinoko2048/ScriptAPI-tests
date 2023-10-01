@@ -2,7 +2,8 @@ import { Player, ScoreboardIdentityType, world } from '@minecraft/server';
 import { rankicon, getScore } from './util/function';
 import { db } from './Database/index';
 
-/** @typedef {{ playerId: string, value: number }} RankEntry */
+// K+Dいくつ以上をランキングに反映するか
+const KDFilter = 100;
 
 export const RankType = /** @type {const} */ ({
   ServerTime: 'servertime',
@@ -15,6 +16,8 @@ export const RankType = /** @type {const} */ ({
   Achievements: 'achhowmany',
 });
 /** @typedef {RankType[keyof RankType]} RankTypes */
+
+/** @typedef {{ playerId: string, value: number }} RankEntry */
 
 /**
  * @param {Player|string} player Player or playerId
@@ -72,7 +75,7 @@ function globalRanking(type) {
     const kdEntries = killEntries
       .map(entry => {
         const deaths = getScore(entry.playerId, RankType.Deaths, true);
-        if (entry.value + deaths < 100) return null; // K+D 100より下はnullをセット
+        if (entry.value + deaths < KDFilter) return null; // K+D 100より下はnullをセット
         entry.value = entry.value / deaths;
         return entry;
       })
@@ -130,14 +133,17 @@ function playerRanking(player) {
       const kdEntries = killEntries
         .map(entry => {
           const deaths = getScore(entry.playerId, RankType.Deaths, true);
-          if (entry.value + deaths < 100) return null; // K+D 100より下はnullをセット
+          if (entry.value + deaths < KDFilter) return null; // K+D 100より下はnullをセット
           entry.value = entry.value / deaths;
           return entry;
         })
         .filter(Boolean); // nullを除外
       kdEntries.sort((a, b) => b.value - a.value);
       const rankIndex = kdEntries.findIndex(entry => entry.playerId === player.id);
-      if (rankIndex === -1) continue;
+      if (rankIndex === -1) {
+        rows.push(`  ${rankName}: §7#-§r ${getKD(player.id).toFixed(1)} §7(キル数とデス数の合計が${KDFilter}を超えていないためランキングには反映されません)§r`);
+        continue;
+      }
       const kd = kdEntries[rankIndex].value;
       rows.push(`  ${rankName}: §a#${rankIndex + 1}§r ${kd.toFixed(1)}`);
       continue;
