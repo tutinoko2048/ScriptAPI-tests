@@ -1,0 +1,24 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "fcc8732d-300a-40e0-8a5d-613df2291a24": {
+        "type": "Compound",
+        "value": {
+          "tn:configData": {
+            "type": "String",
+            "value": "{\"reachC\":{\"maxReach\":3},\"others\":{\"tpsToScore\":{\"enabled\":true},\"debug\":true},\"autoClicker\":{\"maxCPS\":10},\"creative\":{\"state\":false},\"entityCounter\":{\"kill\":true,\"detect\":{\"minecraft:item\":200}},\"flyA\":{\"minFallDistance\":-0.1},\"speedA\":{\"maxVelocity\":0.2,\"excludeTag\":\"bypass\"}}"
+          },
+          "tn:ownerId": {
+            "type": "String",
+            "value": "-4294967295"
+          },
+          "tn:unbanQueue": {
+            "type": "String",
+            "value": "[\"steve\",\"tutinoko2048\",\"aaa\"]"
+          }
+        }
+      }
+    }
+  }
+]

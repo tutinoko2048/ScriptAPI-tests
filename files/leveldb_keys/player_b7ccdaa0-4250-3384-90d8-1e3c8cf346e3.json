@@ -1,0 +1,15 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "SelfSignedId": {
+        "type": "String",
+        "value": "b7ccdaa0-4250-3384-90d8-1e3c8cf346e3"
+      },
+      "ServerId": {
+        "type": "String",
+        "value": "player_server_7f7a20d4-95ad-4745-98f0-6308552cfb98"
+      }
+    }
+  }
+]

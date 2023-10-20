@@ -1,0 +1,19 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "MsaId": {
+        "type": "String",
+        "value": "58e733f5-d553-334d-aa0e-63e8fa12c7dc"
+      },
+      "SelfSignedId": {
+        "type": "String",
+        "value": "98446391-b390-3da3-ab81-6b4721efac9c"
+      },
+      "ServerId": {
+        "type": "String",
+        "value": "player_server_eda3b99a-dcb5-420d-9020-aad4efe5cf6b"
+      }
+    }
+  }
+]

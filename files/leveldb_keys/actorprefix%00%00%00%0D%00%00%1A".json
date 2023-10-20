@@ -1,0 +1,211 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "Chested": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color2": {
+        "type": "Byte",
+        "value": 0
+      },
+      "FallDistance": {
+        "type": "Float",
+        "value": 0.0
+      },
+      "Invulnerable": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAngry": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAutonomous": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsBaby": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsEating": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGliding": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGlobal": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsIllagerCaptain": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOrphaned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOutOfControl": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsRoaring": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsScared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsStunned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsSwimming": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTamed": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTrusting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "LootDropped": {
+        "type": "Byte",
+        "value": 0
+      },
+      "MarkVariant": {
+        "type": "Int",
+        "value": 0
+      },
+      "Motion": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "OnGround": {
+        "type": "Byte",
+        "value": 1
+      },
+      "OwnerNew": {
+        "type": "Long",
+        "value": -1
+      },
+      "PortalCooldown": {
+        "type": "Int",
+        "value": 0
+      },
+      "Pos": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            84.5,
+            -57.5,
+            -235.5
+          ]
+        }
+      },
+      "Rotation": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "Saddled": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sheared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "ShowBottom": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sitting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "SkinID": {
+        "type": "Int",
+        "value": 0
+      },
+      "Strength": {
+        "type": "Int",
+        "value": 0
+      },
+      "StrengthMax": {
+        "type": "Int",
+        "value": 0
+      },
+      "Tags": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      },
+      "UniqueID": {
+        "type": "Long",
+        "value": -55834568158
+      },
+      "Variant": {
+        "type": "Int",
+        "value": 0
+      },
+      "definitions": {
+        "type": "List",
+        "value": {
+          "type_List": "String",
+          "value_List": [
+            "+minecraft:ender_crystal",
+            "+",
+            "+crystal_exploding"
+          ]
+        }
+      },
+      "identifier": {
+        "type": "String",
+        "value": "minecraft:ender_crystal"
+      },
+      "internalComponents": {
+        "type": "Compound",
+        "value": {
+          "EntityStorageKeyComponent": {
+            "type": "Compound",
+            "value": {
+              "StorageKey": {
+                "type": "String",
+                "value": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,2458 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "Air": {
+        "type": "Short",
+        "value": 300
+      },
+      "Armor": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "AttackTime": {
+        "type": "Short",
+        "value": 0
+      },
+      "Attributes": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:player.experience"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 24791.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 24791.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:player.level"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 5.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 5.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:player.saturation"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:player.hunger"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:attack_damage"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 2048.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 2048.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:follow_range"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.27585938572883606
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:player.exhaustion"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 1024.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": -1024.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 1024.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": -1024.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:luck"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:lava_movement"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:underwater_movement"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.10000000149011612
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.10000000149011612
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:movement"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:knockback_resistance"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:absorption"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:health"
+              }
+            }
+          ]
+        }
+      },
+      "Chested": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color2": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Dead": {
+        "type": "Byte",
+        "value": 0
+      },
+      "DeathTime": {
+        "type": "Short",
+        "value": 0
+      },
+      "DimensionId": {
+        "type": "Int",
+        "value": 0
+      },
+      "DynamicProperties": {
+        "type": "Compound",
+        "value": {
+          "fcc8732d-300a-40e0-8a5d-613df2291a24": {
+            "type": "Compound",
+            "value": {
+              "tn:banExpireAt": {
+                "type": "Double",
+                "value": 1697162951971.0
+              },
+              "tn:isBanned": {
+                "type": "Byte",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "EnchantmentSeed": {
+        "type": "Int",
+        "value": 821215765
+      },
+      "EnderChestInventory": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 0
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 1
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 2
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 3
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 4
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 5
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 6
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 7
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 8
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 9
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 10
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 11
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 12
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 13
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 14
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 15
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 16
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 17
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 18
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 19
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 20
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 21
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 22
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 23
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 24
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 25
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 26
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "FallDistance": {
+        "type": "Float",
+        "value": 0.0
+      },
+      "HasSeenCredits": {
+        "type": "Byte",
+        "value": 0
+      },
+      "HurtTime": {
+        "type": "Short",
+        "value": 0
+      },
+      "Inventory": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 0
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 1
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 2
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 3
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 4
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 5
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 6
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 7
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 8
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 9
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 10
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 11
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 12
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 13
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 14
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 15
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 16
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 17
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 18
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 19
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 20
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 21
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 22
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 23
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 24
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 25
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 26
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 27
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 28
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 29
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 30
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 31
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 32
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 33
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 34
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "Slot": {
+                "type": "Byte",
+                "value": 35
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "Invulnerable": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAngry": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAutonomous": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsBaby": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsEating": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGliding": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGlobal": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsIllagerCaptain": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOrphaned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOutOfControl": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsPregnant": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsRoaring": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsScared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsStunned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsSwimming": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTamed": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTrusting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "LeasherID": {
+        "type": "Long",
+        "value": -1
+      },
+      "LootDropped": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Mainhand": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "MapIndex": {
+        "type": "Int",
+        "value": 1
+      },
+      "MarkVariant": {
+        "type": "Int",
+        "value": 0
+      },
+      "NaturalSpawn": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Offhand": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "OnGround": {
+        "type": "Byte",
+        "value": 1
+      },
+      "OwnerNew": {
+        "type": "Long",
+        "value": -1
+      },
+      "PlayerGameMode": {
+        "type": "Int",
+        "value": 0
+      },
+      "PlayerLevel": {
+        "type": "Int",
+        "value": 0
+      },
+      "PlayerLevelProgress": {
+        "type": "Float",
+        "value": 0.0
+      },
+      "PlayerUIItems": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      },
+      "PortalCooldown": {
+        "type": "Int",
+        "value": 0
+      },
+      "Pos": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            74.06385803222656,
+            -58.37998962402344,
+            77.38282012939453
+          ]
+        }
+      },
+      "Rotation": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            145.7830810546875,
+            0.0
+          ]
+        }
+      },
+      "Saddled": {
+        "type": "Byte",
+        "value": 0
+      },
+      "SelectedContainerId": {
+        "type": "Int",
+        "value": 0
+      },
+      "SelectedInventorySlot": {
+        "type": "Int",
+        "value": 0
+      },
+      "Sheared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "ShowBottom": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sitting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "SkinID": {
+        "type": "Int",
+        "value": 0
+      },
+      "SleepTimer": {
+        "type": "Short",
+        "value": 0
+      },
+      "Sleeping": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sneaking": {
+        "type": "Byte",
+        "value": 0
+      },
+      "SpawnBlockPositionX": {
+        "type": "Int",
+        "value": -2147483648
+      },
+      "SpawnBlockPositionY": {
+        "type": "Int",
+        "value": -2147483648
+      },
+      "SpawnBlockPositionZ": {
+        "type": "Int",
+        "value": -2147483648
+      },
+      "SpawnDimension": {
+        "type": "Int",
+        "value": 3
+      },
+      "SpawnX": {
+        "type": "Int",
+        "value": -2147483648
+      },
+      "SpawnY": {
+        "type": "Int",
+        "value": -2147483648
+      },
+      "SpawnZ": {
+        "type": "Int",
+        "value": -2147483648
+      },
+      "Strength": {
+        "type": "Int",
+        "value": 0
+      },
+      "StrengthMax": {
+        "type": "Int",
+        "value": 0
+      },
+      "Surface": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Tags": {
+        "type": "List",
+        "value": {
+          "type_List": "String",
+          "value_List": [
+            "bypass"
+          ]
+        }
+      },
+      "TargetID": {
+        "type": "Long",
+        "value": -1
+      },
+      "TimeSinceRest": {
+        "type": "Int",
+        "value": 9023
+      },
+      "TradeExperience": {
+        "type": "Int",
+        "value": 0
+      },
+      "TradeTier": {
+        "type": "Int",
+        "value": 0
+      },
+      "UniqueID": {
+        "type": "Long",
+        "value": -249108103167
+      },
+      "Variant": {
+        "type": "Int",
+        "value": 2048
+      },
+      "WardenThreatDecreaseTimer": {
+        "type": "Int",
+        "value": 0
+      },
+      "WardenThreatLevel": {
+        "type": "Int",
+        "value": 0
+      },
+      "WardenThreatLevelIncreaseCooldown": {
+        "type": "Int",
+        "value": 0
+      },
+      "abilities": {
+        "type": "Compound",
+        "value": {
+          "attackmobs": {
+            "type": "Byte",
+            "value": 1
+          },
+          "attackplayers": {
+            "type": "Byte",
+            "value": 1
+          },
+          "build": {
+            "type": "Byte",
+            "value": 1
+          },
+          "doorsandswitches": {
+            "type": "Byte",
+            "value": 1
+          },
+          "flySpeed": {
+            "type": "Float",
+            "value": 0.05000000074505806
+          },
+          "flying": {
+            "type": "Byte",
+            "value": 0
+          },
+          "instabuild": {
+            "type": "Byte",
+            "value": 0
+          },
+          "invulnerable": {
+            "type": "Byte",
+            "value": 0
+          },
+          "lightning": {
+            "type": "Byte",
+            "value": 0
+          },
+          "mayfly": {
+            "type": "Byte",
+            "value": 0
+          },
+          "mine": {
+            "type": "Byte",
+            "value": 1
+          },
+          "op": {
+            "type": "Byte",
+            "value": 0
+          },
+          "opencontainers": {
+            "type": "Byte",
+            "value": 1
+          },
+          "teleport": {
+            "type": "Byte",
+            "value": 0
+          },
+          "walkSpeed": {
+            "type": "Float",
+            "value": 0.10000000149011612
+          }
+        }
+      },
+      "boundX": {
+        "type": "Int",
+        "value": 0
+      },
+      "boundY": {
+        "type": "Int",
+        "value": 0
+      },
+      "boundZ": {
+        "type": "Int",
+        "value": 0
+      },
+      "canPickupItems": {
+        "type": "Byte",
+        "value": 0
+      },
+      "definitions": {
+        "type": "List",
+        "value": {
+          "type_List": "String",
+          "value_List": [
+            "+minecraft:player",
+            "+"
+          ]
+        }
+      },
+      "expDropEnabled": {
+        "type": "Byte",
+        "value": 1
+      },
+      "fogCommandStack": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      },
+      "format_version": {
+        "type": "String",
+        "value": "1.12.0"
+      },
+      "hasBoundOrigin": {
+        "type": "Byte",
+        "value": 0
+      },
+      "hasSetCanPickupItems": {
+        "type": "Byte",
+        "value": 1
+      },
+      "identifier": {
+        "type": "String",
+        "value": "minecraft:player"
+      },
+      "internalComponents": {
+        "type": "Compound",
+        "value": {
+          "EntityStorageKeyComponent": {
+            "type": "Compound",
+            "value": {
+              "StorageKey": {
+                "type": "String",
+                "value": ""
+              }
+            }
+          }
+        }
+      },
+      "permissionsLevel": {
+        "type": "Int",
+        "value": 0
+      },
+      "playerPermissionsLevel": {
+        "type": "Int",
+        "value": 1
+      },
+      "recipe_unlocking": {
+        "type": "Compound",
+        "value": {
+          "unlocked_recipes": {
+            "type": "List",
+            "value": {
+              "type_List": "String",
+              "value_List": [
+                "minecraft:WorkBench_recipeId"
+              ]
+            }
+          },
+          "used_contexts": {
+            "type": "Int",
+            "value": 2
+          }
+        }
+      }
+    }
+  }
+]

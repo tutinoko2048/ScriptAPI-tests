@@ -1,0 +1,14 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "AutonomousEntityList": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      }
+    }
+  }
+]
