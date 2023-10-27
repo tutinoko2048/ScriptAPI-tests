@@ -87,7 +87,7 @@ function globalRanking(type) {
     rows.push(...result);
 
   } else { // その他特殊処理がいらないランキング
-    const entries = getSorted(type, excluded);
+    const entries = getSorted(type, excluded).slice(0, 10);
     const result = entries.map((entry, i) =>
       `  §a#${i + 1}§r ${formatName(entry.playerId)}§r: ${entry.value}`
     );
