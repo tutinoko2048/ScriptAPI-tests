@@ -1,6 +1,6 @@
 {
   "include": [ "scripts/", "SkyNetwork/" ],
-  "exclude": [ "node_modules" ],
+  "exclude": [ "node_modules", "scripts" ],
   "files": [ "./index.d.ts" ],
   "compilerOptions": {
     "allowJs": true,
