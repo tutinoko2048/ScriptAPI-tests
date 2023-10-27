@@ -54,6 +54,14 @@ function globalRanking(type) {
   if (!rankName) throw new TypeError(`Invalid rank type: ${type}`);
   /** @type {string[]} */
   const rows = [ `${type} ランキング\n` ];
+  let rank = 0;
+  let previousValue;
+  const rankNext = (value, index) => {
+    if (value !== previousValue) {
+      rank = index + 1;
+      previousValue = value;
+    }
+  }
 
   const excluded = getExcluded();
   if (type === RankType.ServerTime || type === RankType.PlayTime) {
@@ -64,9 +72,10 @@ function globalRanking(type) {
     });
     timeEntries.sort((a, b) => b.value - a.value);
     const result = timeEntries.slice(0, 10).map((entry, i) => {
+      rankNext(entry.value, i);
       const hours = getScore(entry.playerId, type + 'h', true);
       const minutes = getScore(entry.playerId, type + 'm', true);
-      return `  §a#${i + 1}§r ${formatName(entry.playerId)}§r: ${hours}時間 ${minutes}分`;
+      return `  §a#${rank}§r ${formatName(entry.playerId)}§r: ${hours}時間 ${minutes}分`;
     });
     rows.push(...result);
 
@@ -81,16 +90,18 @@ function globalRanking(type) {
       })
       .filter(Boolean); // null除外
     kdEntries.sort((a, b) => b.value - a.value);
-    const result = kdEntries.slice(0, 10).map((entry, i) =>
-      `  §a#${i + 1}§r ${formatName(entry.playerId)}§r: ${entry.value.toFixed(1)}`
-    );
+    const result = kdEntries.slice(0, 10).map((entry, i) => {
+      rankNext(entry.value, i);
+      return `  §a#${rank}§r ${formatName(entry.playerId)}§r: ${entry.value.toFixed(1)}`;
+    });
     rows.push(...result);
 
   } else { // その他特殊処理がいらないランキング
     const entries = getSorted(type, excluded).slice(0, 10);
-    const result = entries.map((entry, i) =>
-      `  §a#${i + 1}§r ${formatName(entry.playerId)}§r: ${entry.value}`
-    );
+    const result = entries.map((entry, i) => {
+      rankNext(entry.value, i);
+      return `  §a#${rank}§r ${formatName(entry.playerId)}§r: ${entry.value}`;
+    });
     rows.push(...result);
   }
 
@@ -180,7 +191,6 @@ function getExcluded() {
     .map(e => e[0]); // key(id)の配列に変換
   return excluded;
 }
-
 
 /** @param {string} playerId */
 export function getKD(playerId) {
