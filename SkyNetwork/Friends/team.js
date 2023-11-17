@@ -3,7 +3,7 @@ import { world } from '@minecraft/server';
 import * as util from './util';
 import { FriendAPI } from './FriendManager';
 
-const DEBUG = false;
+const DEBUG = true;
 
 /** @typedef {import('@minecraft/server').Player} Player */
 
@@ -71,14 +71,14 @@ export function selectTeam(target, teams, isStart) {
 
   // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
-  debugLogs.push(`exclude as 0 player: ${scores.filter(x => !isStart && x.count === 0).map(x => x.team)}`);
+  debugLogs.push(`Teams excluded as 0 player: ${scores.filter(x => !isStart && x.count === 0).map(x => x.team)}`);
   
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
   
   // 人数0除外+1番人数が少ないチーム
   const sorted = (scores.filter(d => isStart || !!d.count));
-  const zeroExists = scores.some(x => !x.count) // 人数0が一つでもあるかどうか
+  const zeroExists = scores.some(x => !x.count); // 人数0が一つでもあるかどうか
   sorted.sort((team1, team2) => {
     // ベッド存在を優先
     if (isBedGame() && (bedExists(team1.team) !== bedExists(team2.team))) {
@@ -94,9 +94,9 @@ export function selectTeam(target, teams, isStart) {
     team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
-  debugLogs.push(`teamData: ${JSON.stringify(sorted)}`);
+  debugLogs.push(`teamData: ${JSON.stringify(Object.fromEntries(sorted.map(x => [x.team, { hasFriend: x.hasFriend, count: x.count }])))}`);
   debugLogs.push(`sortOrder: ${sorted.map(x => x.team).join(', ')}`);
-  debugLogs.push(`selected: ${sorted[0].team}`);
+  debugLogs.push(`team selection result: ${sorted[0].team}`);
 
   const tag = sorted[0].team;
   for (const [ team, score ] of Object.entries(teamHPs)) {
@@ -109,8 +109,7 @@ export function selectTeam(target, teams, isStart) {
   if (!tag) target.sendMessage('§cチームの振り分けに失敗しました 管理者に連絡してください');
   
   if (DEBUG) {
-    debugLogs.push('='.repeat(10));
-    console.warn(debugLogs.join('\n'));
+    console.warn(debugLogs.join('\n') + '\n');
   }
 
   return tag;
