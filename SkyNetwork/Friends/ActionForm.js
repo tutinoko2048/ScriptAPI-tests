@@ -1,5 +1,5 @@
+import { Player } from '@minecraft/server';
 import { ActionFormData } from '@minecraft/server-ui';
-
 
 export class ActionForm {
   constructor() {
@@ -18,7 +18,7 @@ export class ActionForm {
   
   /**
    * 
-   * @param {import('@minecraft/server').Player} player 
+   * @param {Player} player 
    * @returns {Promise<import('./ActionFormResponse').ActionFormResponse>}
    */
   async show(player) {

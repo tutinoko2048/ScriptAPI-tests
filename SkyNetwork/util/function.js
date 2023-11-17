@@ -1,7 +1,7 @@
-import { world } from '@minecraft/server';
+import { world, Player, Entity } from '@minecraft/server';
 
 /**
- * @param {import('@minecraft/server').Player|string} player
+ * @param {Player|string} player
  * @param {boolean} [isId]
  * @returns {string}
  */
@@ -12,7 +12,7 @@ export function rankicon(player, isId) {
 }
 
 /**
- * @param {import('@minecraft/server').Entity|string} target 
+ * @param {Entity|string} target 
  * @param {string} objective 
  * @param {boolean} [useZero] 
  * @returns {number|undefined}

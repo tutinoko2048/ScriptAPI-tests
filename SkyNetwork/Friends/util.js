@@ -1,11 +1,9 @@
 // @ts-check
 
-import { world, system, Player } from '@minecraft/server';
+import { world, system, Player, Entity } from '@minecraft/server';
 import * as UI from '@minecraft/server-ui';
 
 const dimension = world.getDimension('overworld');
-
-/** @typedef {import('@minecraft/server').Entity} Entity */
 
 /**
  * @arg {Entity|string} target

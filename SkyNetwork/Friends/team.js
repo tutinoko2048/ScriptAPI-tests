@@ -1,11 +1,9 @@
 // @ts-check
-import { world } from '@minecraft/server';
+import { world, Player } from '@minecraft/server';
 import * as util from './util';
 import { FriendAPI } from './FriendManager';
 
 const DEBUG = true;
-
-/** @typedef {import('@minecraft/server').Player} Player */
 
 // ワールド参加時 redけす
 // ゲーム終了時 red, redd を*で全部消し飛ばす
