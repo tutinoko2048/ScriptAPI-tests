@@ -2,6 +2,7 @@
 import { world, Player } from '@minecraft/server';
 import * as util from './util';
 import { FriendAPI } from './FriendManager';
+import { ActionForm } from './ActionForm';
 
 const DEBUG = true;
 
@@ -31,8 +32,14 @@ const isBedGame = () => getGame() === 1;
  * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
  */
-export function joinTeam(player, teams, isStart) {
-  const team = selectTeam(player, teams, isStart); // チームを決める
+export async function joinTeam(player, teams, isStart) {
+  let team;
+  try {
+    team = await selectTeam(player, teams, isStart);
+  } catch (e) {
+    console.error(e, e.stack);
+    return;
+  }
 
   // bedが存在していない=100より小さい時タグ付与
   // @ts-ignore
@@ -44,7 +51,6 @@ export function joinTeam(player, teams, isStart) {
   if (!player.hasTag(team + "d")) player.addTag(team + "d"); // リログ用につけておく
   
   player.sendMessage('§c§l敵チームとの協力プレイは禁止です！\n§r§b敵チームとの協力プレイをすると、サーバーからBANされます！');
-  
   player.sendMessage(`あなたは${TeamColor[team]}§l${team.toUpperCase()}チーム§r§fに加入しました`);
   player.addTag(TeamTag[team]);
 }
@@ -53,10 +59,10 @@ export function joinTeam(player, teams, isStart) {
  * @param {Player} target
  * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
- * @returns {keyof TeamTag} プレイヤーが参加するチームのタグ
+ * @returns {Promise<keyof TeamTag>} プレイヤーが参加するチームのタグ
  */
-export function selectTeam(target, teams, isStart) {
-  const debugLogs = [`team selection start (player: ${target.name}, isStart:${isStart}, game: ${getGame()}`];
+export async function selectTeam(target, teams, isStart) {
+  const debugLogs = [`TeamSelection (name: ${target.name}, start: ${isStart}, game: ${getGame()}`];
 
   const friendList = FriendAPI.getFriends(target.id);
   const players = world.getPlayers();
@@ -65,7 +71,7 @@ export function selectTeam(target, teams, isStart) {
   const teamHPs = /** @type {{ [key in keyof TeamTag]: number }} */ (
     Object.fromEntries(teams.map(team => [ team, util.getScore(`${team}player`, team) ]))
   );
-  debugLogs.push(`teamHPs: ${JSON.stringify(teamHPs)}`);
+  debugLogs.push(`TeamHP: ${JSON.stringify(teamHPs)}`);
 
   // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
@@ -74,8 +80,8 @@ export function selectTeam(target, teams, isStart) {
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
   
-  // 人数0除外+1番人数が少ないチーム
-  const sorted = (scores.filter(d => isStart || !!d.count));
+  const sorted = shuffleArray(scores.filter(d => isStart || !!d.count)); // 人数0除外+1番人数が少ないチーム
+
   const zeroExists = scores.some(x => !x.count); // 人数0が一つでもあるかどうか
   sorted.sort((team1, team2) => {
     // ベッド存在を優先
@@ -92,9 +98,8 @@ export function selectTeam(target, teams, isStart) {
     team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
-  debugLogs.push(`teamData: ${JSON.stringify(Object.fromEntries(sorted.map(x => [x.team, { hasFriend: x.hasFriend, count: x.count }])))}`);
-  debugLogs.push(`sortOrder: ${sorted.map(x => x.team).join(', ')}`);
-  debugLogs.push(`team selection result: ${sorted[0].team}`);
+  debugLogs.push(`TeamData: ${JSON.stringify(Object.fromEntries(sorted.map(x => [x.team, { fnd: x.hasFriend, cnt: x.count }])))}`);
+  debugLogs.push(`TeamSelection result: ${sorted[0].team}`);
 
   const tag = sorted[0].team;
   for (const [ team, score ] of Object.entries(teamHPs)) {
@@ -106,11 +111,26 @@ export function selectTeam(target, teams, isStart) {
   
   if (!tag) target.sendMessage('§cチームの振り分けに失敗しました 管理者に連絡してください');
   
-  if (DEBUG) {
-    console.warn(debugLogs.join('\n') + '\n');
-  }
+  if (DEBUG) console.warn(debugLogs.join('\n') + '\n');
 
   return tag;
+}
+
+/**
+ * @param {Player} player
+ * @param {(keyof TeamTag)[]} teams
+ * @returns {Promise<(keyof TeamTag) | 'auto' |undefined>}
+ */
+async function askTeam(player, teams) {
+  const form = new ActionForm();
+  form.title('チームを選択');
+  form.body('希望するチームを選択してください。');
+  form.button('§lおまかせ', 'textures/blocks/wool_colored_white', 'auto');
+  for (const team of teams)
+    form.button(`${TeamColor[team]}${team.toUpperCase()}`, `textures/blocks/wool_colored_${team}`, team);
+  const { canceled, button } = await form.show(player);
+  if (canceled) return;
+  return button.id;
 }
 
 /**
@@ -130,4 +150,17 @@ function getTeamCount(players, teams) {
 /** @returns {number|undefined} */
 function getGame() {
   return util.getScore('system', 'game');
+}
+
+/**
+ * @template T
+ * @param {T[]} array
+ * @returns {T[]}
+ */
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
