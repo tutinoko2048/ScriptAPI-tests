@@ -1,0 +1,14 @@
+{
+  "include": [ "./src/*.ts" ],
+  "exclude": [],
+  "compilerOptions": {
+    "module": "node16",
+    "target": "es2021",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "outDir": "./src",
+    "declaration": true
+  }
+}

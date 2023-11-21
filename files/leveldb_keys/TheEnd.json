@@ -1,0 +1,76 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "data": {
+        "type": "Compound",
+        "value": {
+          "DragonFight": {
+            "type": "Compound",
+            "value": {
+              "DragonFightVersion": {
+                "type": "Byte",
+                "value": 0
+              },
+              "DragonKilled": {
+                "type": "Byte",
+                "value": 0
+              },
+              "DragonSpawned": {
+                "type": "Byte",
+                "value": 0
+              },
+              "DragonUUID": {
+                "type": "Long",
+                "value": -1
+              },
+              "Gateways": {
+                "type": "List",
+                "value": {
+                  "type_List": "Int",
+                  "value_List": [
+                    15,
+                    7,
+                    17,
+                    5,
+                    4,
+                    9,
+                    10,
+                    6,
+                    8,
+                    12,
+                    16,
+                    19,
+                    3,
+                    18,
+                    1,
+                    14,
+                    2,
+                    11,
+                    13,
+                    0
+                  ]
+                }
+              },
+              "IsRespawning": {
+                "type": "Byte",
+                "value": 0
+              },
+              "PreviouslyKilled": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          },
+          "LimboEntities": {
+            "type": "List",
+            "value": {
+              "type_List": "undefined",
+              "value_List": []
+            }
+          }
+        }
+      }
+    }
+  }
+]

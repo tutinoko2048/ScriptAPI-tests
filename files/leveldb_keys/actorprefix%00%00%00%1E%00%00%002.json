@@ -1,0 +1,352 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "Chested": {
+        "type": "Byte",
+        "value": 0
+      },
+      "CollisionPos": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            -127.0,
+            -60.0,
+            -172.0
+          ]
+        }
+      },
+      "Color": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color2": {
+        "type": "Byte",
+        "value": 0
+      },
+      "FallDistance": {
+        "type": "Float",
+        "value": 0.0
+      },
+      "Invulnerable": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAngry": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAutonomous": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsBaby": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsEating": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGliding": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGlobal": {
+        "type": "Byte",
+        "value": 1
+      },
+      "IsIllagerCaptain": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOrphaned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOutOfControl": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsRoaring": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsScared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsStunned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsSwimming": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTamed": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTrusting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "LootDropped": {
+        "type": "Byte",
+        "value": 0
+      },
+      "MarkVariant": {
+        "type": "Int",
+        "value": 0
+      },
+      "Motion": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "OnGround": {
+        "type": "Byte",
+        "value": 1
+      },
+      "OwnerID": {
+        "type": "Long",
+        "value": -4294967295
+      },
+      "OwnerNew": {
+        "type": "Long",
+        "value": -4294967295
+      },
+      "PortalCooldown": {
+        "type": "Int",
+        "value": 0
+      },
+      "Pos": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            -126.9712905883789,
+            -60.0,
+            -171.74771118164062
+          ]
+        }
+      },
+      "Rotation": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            -143.1659393310547,
+            -28.177814483642578
+          ]
+        }
+      },
+      "Saddled": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sheared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "ShowBottom": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sitting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "SkinID": {
+        "type": "Int",
+        "value": 0
+      },
+      "Strength": {
+        "type": "Int",
+        "value": 0
+      },
+      "StrengthMax": {
+        "type": "Int",
+        "value": 0
+      },
+      "StuckToBlockPos": {
+        "type": "List",
+        "value": {
+          "type_List": "Int",
+          "value_List": [
+            -127,
+            -61,
+            -172
+          ]
+        }
+      },
+      "Tags": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      },
+      "TargetID": {
+        "type": "Long",
+        "value": -1
+      },
+      "UniqueID": {
+        "type": "Long",
+        "value": -128849018830
+      },
+      "Variant": {
+        "type": "Int",
+        "value": 0
+      },
+      "auxValue": {
+        "type": "Byte",
+        "value": 25
+      },
+      "definitions": {
+        "type": "List",
+        "value": {
+          "type_List": "String",
+          "value_List": [
+            "+minecraft:arrow",
+            "+",
+            "+minecraft:player_arrow"
+          ]
+        }
+      },
+      "enchantFlame": {
+        "type": "Byte",
+        "value": 0
+      },
+      "enchantInfinity": {
+        "type": "Byte",
+        "value": 1
+      },
+      "enchantPower": {
+        "type": "Byte",
+        "value": 0
+      },
+      "enchantPunch": {
+        "type": "Byte",
+        "value": 0
+      },
+      "identifier": {
+        "type": "String",
+        "value": "minecraft:arrow"
+      },
+      "internalComponents": {
+        "type": "Compound",
+        "value": {
+          "EntityStorageKeyComponent": {
+            "type": "Compound",
+            "value": {
+              "StorageKey": {
+                "type": "String",
+                "value": ""
+              }
+            }
+          }
+        }
+      },
+      "isCreative": {
+        "type": "Byte",
+        "value": 1
+      },
+      "mobEffects": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Ambient": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Amplifier": {
+                "type": "Byte",
+                "value": 1
+              },
+              "DisplayOnScreenTextureAnimation": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Duration": {
+                "type": "Int",
+                "value": 1
+              },
+              "DurationEasy": {
+                "type": "Int",
+                "value": 1
+              },
+              "DurationHard": {
+                "type": "Int",
+                "value": 1
+              },
+              "DurationNormal": {
+                "type": "Int",
+                "value": 1
+              },
+              "FactorCalculationData": {
+                "type": "Compound",
+                "value": {
+                  "change_timestamp": {
+                    "type": "Int",
+                    "value": 0
+                  },
+                  "factor_current": {
+                    "type": "Float",
+                    "value": 0.0
+                  },
+                  "factor_previous": {
+                    "type": "Float",
+                    "value": 0.0
+                  },
+                  "factor_start": {
+                    "type": "Float",
+                    "value": 0.0
+                  },
+                  "factor_target": {
+                    "type": "Float",
+                    "value": 0.0
+                  },
+                  "had_applied": {
+                    "type": "Byte",
+                    "value": 0
+                  },
+                  "had_last_tick": {
+                    "type": "Byte",
+                    "value": 0
+                  },
+                  "padding_duration": {
+                    "type": "Int",
+                    "value": 0
+                  }
+                }
+              },
+              "Id": {
+                "type": "Byte",
+                "value": 7
+              },
+              "ShowParticles": {
+                "type": "Byte",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      "player": {
+        "type": "Byte",
+        "value": 1
+      }
+    }
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "events_enabled": {
+        "type": "Byte",
+        "value": 1
+      },
+      "minecraft:ender_dragon_event": {
+        "type": "Byte",
+        "value": 1
+      },
+      "minecraft:pillager_patrols_event": {
+        "type": "Byte",
+        "value": 1
+      },
+      "minecraft:wandering_trader_event": {
+        "type": "Byte",
+        "value": 1
+      }
+    }
+  }
+]

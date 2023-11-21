@@ -1,0 +1,753 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "Air": {
+        "type": "Short",
+        "value": 300
+      },
+      "Armor": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            },
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "AttackTime": {
+        "type": "Short",
+        "value": 0
+      },
+      "Attributes": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Base": {
+                "type": "Float",
+                "value": 3.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 3.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 3.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 3.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 3.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 3.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:attack_damage"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 2048.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 2048.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:follow_range"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 1024.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": -1024.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 1024.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": -1024.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:luck"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:lava_movement"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.019999999552965164
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:underwater_movement"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.23000000417232513
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.23000000417232513
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 3.4028234663852886e+38
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:movement"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.03855171054601669
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 1.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Modifiers": {
+                "type": "List",
+                "value": {
+                  "type_List": "Compound",
+                  "value_List": [
+                    {
+                      "Amount": {
+                        "type": "Float",
+                        "value": 0.03855171054601669
+                      },
+                      "Name": {
+                        "type": "String",
+                        "value": "RandomSpawnBonus"
+                      },
+                      "Operand": {
+                        "type": "Int",
+                        "value": 2
+                      },
+                      "Operation": {
+                        "type": "Int",
+                        "value": 0
+                      },
+                      "UUIDLeast": {
+                        "type": "Long",
+                        "value": -5445178238703144195
+                      },
+                      "UUIDMost": {
+                        "type": "Long",
+                        "value": -4391065492226947424
+                      }
+                    }
+                  ]
+                }
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:knockback_resistance"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 16.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:absorption"
+              }
+            },
+            {
+              "Base": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Current": {
+                "type": "Float",
+                "value": 18.0
+              },
+              "DefaultMax": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "DefaultMin": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Max": {
+                "type": "Float",
+                "value": 20.0
+              },
+              "Min": {
+                "type": "Float",
+                "value": 0.0
+              },
+              "Name": {
+                "type": "String",
+                "value": "minecraft:health"
+              }
+            }
+          ]
+        }
+      },
+      "Chested": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color2": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Dead": {
+        "type": "Byte",
+        "value": 0
+      },
+      "DeathTime": {
+        "type": "Short",
+        "value": 0
+      },
+      "FallDistance": {
+        "type": "Float",
+        "value": 0.0
+      },
+      "HurtTime": {
+        "type": "Short",
+        "value": 0
+      },
+      "Invulnerable": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAngry": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAutonomous": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsBaby": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsEating": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGliding": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGlobal": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsIllagerCaptain": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOrphaned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOutOfControl": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsPregnant": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsRoaring": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsScared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsStunned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsSwimming": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTamed": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTrusting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "LeasherID": {
+        "type": "Long",
+        "value": -1
+      },
+      "LootDropped": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Mainhand": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "MarkVariant": {
+        "type": "Int",
+        "value": 0
+      },
+      "NaturalSpawn": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Offhand": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "Count": {
+                "type": "Byte",
+                "value": 0
+              },
+              "Damage": {
+                "type": "Short",
+                "value": 0
+              },
+              "Name": {
+                "type": "String",
+                "value": ""
+              },
+              "WasPickedUp": {
+                "type": "Byte",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "OnGround": {
+        "type": "Byte",
+        "value": 1
+      },
+      "OwnerNew": {
+        "type": "Long",
+        "value": -1
+      },
+      "Persistent": {
+        "type": "Byte",
+        "value": 1
+      },
+      "PortalCooldown": {
+        "type": "Int",
+        "value": 0
+      },
+      "Pos": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            100.0,
+            50.0,
+            0.0
+          ]
+        }
+      },
+      "Rotation": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            -54.350250244140625,
+            0.0
+          ]
+        }
+      },
+      "Saddled": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sheared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "ShowBottom": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sitting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "SkinID": {
+        "type": "Int",
+        "value": 0
+      },
+      "SpawnedByNight": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Strength": {
+        "type": "Int",
+        "value": 0
+      },
+      "StrengthMax": {
+        "type": "Int",
+        "value": 0
+      },
+      "Surface": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Tags": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      },
+      "TargetID": {
+        "type": "Long",
+        "value": -1
+      },
+      "TradeExperience": {
+        "type": "Int",
+        "value": 0
+      },
+      "TradeTier": {
+        "type": "Int",
+        "value": 0
+      },
+      "UniqueID": {
+        "type": "Long",
+        "value": -201863462894
+      },
+      "Variant": {
+        "type": "Int",
+        "value": 2
+      },
+      "boundX": {
+        "type": "Int",
+        "value": 0
+      },
+      "boundY": {
+        "type": "Int",
+        "value": 0
+      },
+      "boundZ": {
+        "type": "Int",
+        "value": 0
+      },
+      "canPickupItems": {
+        "type": "Byte",
+        "value": 0
+      },
+      "definitions": {
+        "type": "List",
+        "value": {
+          "type_List": "String",
+          "value_List": [
+            "+minecraft:husk",
+            "+",
+            "+minecraft:zombie_husk_adult"
+          ]
+        }
+      },
+      "expDropEnabled": {
+        "type": "Byte",
+        "value": 1
+      },
+      "hasBoundOrigin": {
+        "type": "Byte",
+        "value": 0
+      },
+      "hasSetCanPickupItems": {
+        "type": "Byte",
+        "value": 1
+      },
+      "identifier": {
+        "type": "String",
+        "value": "minecraft:husk"
+      },
+      "internalComponents": {
+        "type": "Compound",
+        "value": {
+          "EntityStorageKeyComponent": {
+            "type": "Compound",
+            "value": {
+              "StorageKey": {
+                "type": "String",
+                "value": ""
+              }
+            }
+          }
+        }
+      },
+      "portal_transition": {
+        "type": "Compound",
+        "value": {
+          "axis": {
+            "type": "Int",
+            "value": 0
+          },
+          "dimension": {
+            "type": "Int",
+            "value": 0
+          },
+          "x": {
+            "type": "Float",
+            "value": 16.44757843017578
+          },
+          "y": {
+            "type": "Float",
+            "value": -61.0
+          },
+          "z": {
+            "type": "Float",
+            "value": 1.7400903701782227
+          }
+        }
+      }
+    }
+  }
+]

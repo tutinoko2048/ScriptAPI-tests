@@ -133,3 +133,10 @@ package-lock.json
 yarn.lock
 
 .codesandbox
+
+bdsx/
+wine/
+server/
+GreenFrogMCBE/
+ScoreboardExtractor/worlds/test
+test/

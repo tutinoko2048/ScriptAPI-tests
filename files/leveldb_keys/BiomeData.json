@@ -1,0 +1,155 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "list": {
+        "type": "List",
+        "value": {
+          "type_List": "Compound",
+          "value_List": [
+            {
+              "id": {
+                "type": "Byte",
+                "value": 10
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 11
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 12
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.25
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 13
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.375
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 26
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 30
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 31
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 46
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": 47
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": -116
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.5
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": -74
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": -73
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": -72
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            },
+            {
+              "id": {
+                "type": "Byte",
+                "value": -71
+              },
+              "snowAccumulation": {
+                "type": "Float",
+                "value": 0.125
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+]

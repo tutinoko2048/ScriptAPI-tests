@@ -1,0 +1,262 @@
+[
+  {
+    "type": "Compound",
+    "value": {
+      "Age": {
+        "type": "Short",
+        "value": 2772
+      },
+      "Chested": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Color2": {
+        "type": "Byte",
+        "value": 0
+      },
+      "FallDistance": {
+        "type": "Float",
+        "value": 0.0
+      },
+      "Health": {
+        "type": "Short",
+        "value": 5
+      },
+      "Invulnerable": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAngry": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsAutonomous": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsBaby": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsEating": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGliding": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsGlobal": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsIllagerCaptain": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOrphaned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsOutOfControl": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsRoaring": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsScared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsStunned": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsSwimming": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTamed": {
+        "type": "Byte",
+        "value": 0
+      },
+      "IsTrusting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Item": {
+        "type": "Compound",
+        "value": {
+          "Block": {
+            "type": "Compound",
+            "value": {
+              "name": {
+                "type": "String",
+                "value": "minecraft:ladder"
+              },
+              "states": {
+                "type": "Compound",
+                "value": {
+                  "facing_direction": {
+                    "type": "Int",
+                    "value": 0
+                  }
+                }
+              },
+              "version": {
+                "type": "Int",
+                "value": 18095666
+              }
+            }
+          },
+          "Count": {
+            "type": "Byte",
+            "value": 48
+          },
+          "Damage": {
+            "type": "Short",
+            "value": 0
+          },
+          "Name": {
+            "type": "String",
+            "value": "minecraft:ladder"
+          },
+          "WasPickedUp": {
+            "type": "Byte",
+            "value": 0
+          }
+        }
+      },
+      "LootDropped": {
+        "type": "Byte",
+        "value": 0
+      },
+      "MarkVariant": {
+        "type": "Int",
+        "value": 0
+      },
+      "Motion": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            0.0,
+            0.0,
+            1.401298464324817e-45
+          ]
+        }
+      },
+      "OnGround": {
+        "type": "Byte",
+        "value": 1
+      },
+      "OwnerID": {
+        "type": "Long",
+        "value": -1
+      },
+      "OwnerNew": {
+        "type": "Long",
+        "value": -1
+      },
+      "PortalCooldown": {
+        "type": "Int",
+        "value": 0
+      },
+      "Pos": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            -83.84175872802734,
+            -59.875,
+            56.089942932128906
+          ]
+        }
+      },
+      "Rotation": {
+        "type": "List",
+        "value": {
+          "type_List": "Float",
+          "value_List": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "Saddled": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sheared": {
+        "type": "Byte",
+        "value": 0
+      },
+      "ShowBottom": {
+        "type": "Byte",
+        "value": 0
+      },
+      "Sitting": {
+        "type": "Byte",
+        "value": 0
+      },
+      "SkinID": {
+        "type": "Int",
+        "value": 0
+      },
+      "Strength": {
+        "type": "Int",
+        "value": 0
+      },
+      "StrengthMax": {
+        "type": "Int",
+        "value": 0
+      },
+      "Tags": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      },
+      "UniqueID": {
+        "type": "Long",
+        "value": -128849018548
+      },
+      "Variant": {
+        "type": "Int",
+        "value": 0
+      },
+      "definitions": {
+        "type": "List",
+        "value": {
+          "type_List": "undefined",
+          "value_List": []
+        }
+      },
+      "identifier": {
+        "type": "String",
+        "value": "minecraft:item"
+      },
+      "internalComponents": {
+        "type": "Compound",
+        "value": {
+          "EntityStorageKeyComponent": {
+            "type": "Compound",
+            "value": {
+              "StorageKey": {
+                "type": "String",
+                "value": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

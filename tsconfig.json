@@ -1,7 +1,7 @@
 {
-  "include": [ "scripts/", "Friends/" ],
-  "exclude": [ "node_modules", "Friends/team.js" ],
-  "files": [ "index.d.ts" ],
+  "include": [ "scripts/", "SkyNetwork/" ],
+  "exclude": [ "node_modules", "scripts" ],
+  "files": [ "./index.d.ts" ],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
