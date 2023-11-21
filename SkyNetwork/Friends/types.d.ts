@@ -26,3 +26,10 @@ export interface User {
   /** Whether this user is online or not */
   online?: boolean;
 }
+
+declare global {
+  interface ObjectConstructor {
+    // strict typing
+    entries<T extends Record<string, any>>(object: T): [keyof T, T[keyof T]][];
+  }
+}
