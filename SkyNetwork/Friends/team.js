@@ -79,7 +79,7 @@ export async function selectTeam(target, teams, isStart) {
   
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
-  
+
   const sorted = shuffleArray(scores.filter(d => isStart || !!d.count)); // 人数0除外+1番人数が少ないチーム
 
   const zeroExists = scores.some(x => !x.count); // 人数0が一つでもあるかどうか
@@ -102,31 +102,30 @@ export async function selectTeam(target, teams, isStart) {
   debugLogs.push(`TeamSelection result: ${sorted[0].team}`);
 
   const tag = sorted[0].team;
-  for (const [ team, score ] of Object.entries(teamHPs)) {
-    if (target.hasTag(team + "d")) {
-      target.removeTag(team + "d");
-      if (score != 0) return /** @type {keyof TeamTag} */ (team);
-    }
-  }
   
   if (!tag) target.sendMessage('§cチームの振り分けに失敗しました 管理者に連絡してください');
-  
   if (DEBUG) console.warn(debugLogs.join('\n') + '\n');
-
   return tag;
 }
 
 /**
  * @param {Player} player
  * @param {(keyof TeamTag)[]} teams
- * @returns {Promise<(keyof TeamTag) | 'auto' |undefined>}
+ * @param {boolean} isStart
+ * @returns {Promise<(keyof TeamTag) | 'auto' | undefined>}
  */
-async function askTeam(player, teams) {
+async function askTeam(player, teams, isStart) {
+  const scores = getTeamCount(world.getPlayers(), teams);
+  const filteredTeams = scores
+    .filter(t => isStart || !!t.count)
+    .sort((t1, t2) => t1.count - t2.count)
+    .map(t => t.team); // 人数0除外+少ない順
+
   const form = new ActionForm();
   form.title('チームを選択');
   form.body('希望するチームを選択してください。');
   form.button('§lおまかせ', 'textures/blocks/wool_colored_white', 'auto');
-  for (const team of teams)
+  for (const team of filteredTeams)
     form.button(`${TeamColor[team]}${team.toUpperCase()}`, `textures/blocks/wool_colored_${team}`, team);
   const { canceled, button } = await form.show(player);
   if (canceled) return;
@@ -140,17 +139,12 @@ async function askTeam(player, teams) {
  */
 function getTeamCount(players, teams) {
   return teams.map(team => (
-    {
-      team,
-      count: players.filter(p => p.hasTag(team)).length
-    }
-  ))
+    { team, count: players.filter(p => p.hasTag(team)).length }
+  ));
 }
 
 /** @returns {number|undefined} */
-function getGame() {
-  return util.getScore('system', 'game');
-}
+function getGame() { return util.getScore('system', 'game') }
 
 /**
  * @template T
