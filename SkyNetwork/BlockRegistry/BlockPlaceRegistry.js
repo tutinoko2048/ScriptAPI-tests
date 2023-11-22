@@ -114,7 +114,10 @@ export class BlockPlaceRegistry {
     for (const key of keys) {
       if (!key.startsWith(PREFIX)) continue;
       const index = Number(key.slice(PREFIX.length));
-      if (Number.isNaN(index)) throw Error(`wrong key: ${key}`);
+      if (Number.isNaN(index)) {
+        console.error(`Found invalid key: ${key}`);
+        continue;
+      }
       this._cache[index] = JSON.parse(
         world.getDynamicProperty(/** @type {PlaceKey} */ (key)) ?? '[]'
       );
