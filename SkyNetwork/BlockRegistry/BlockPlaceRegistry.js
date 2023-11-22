@@ -1,9 +1,10 @@
-import { system, world } from '@minecraft/server';
+import { world } from '@minecraft/server';
 
 /** @typedef {import('@minecraft/server').Vector3} Vector3 */
 /** @typedef {import('./DynamicProperty').PlaceKey} PlaceKey */
 
-const PROPERTY_MAX_SIZE = 32760;
+const PROPERTY_MAX_SIZE = 20000;
+const PREFIX = 'registry:place'
 
 export class BlockPlaceRegistry {
   static _currentKeyIndex = 0;
@@ -11,18 +12,16 @@ export class BlockPlaceRegistry {
   /** @type {Vector3[][]} */
   static _cache = [];
 
+  static _cacheLoaded = false;
+
   /** @returns {Vector3[]} */
   static get() {
-    const keys = world.getDynamicPropertyIds();
+    if (!this._cacheLoaded) this._load();
+
     /** @type {Vector3[]} */
     const result = [];
-    for (const key of keys) {
-      if (!key.startsWith('registry:place')) continue;
-      const values = JSON.parse(
-        world.getDynamicProperty(/** @type {PlaceKey} */ (key)) ?? '[]'
-      );
-      result.push(...values);
-    }
+
+    for (const value of this._cache) result.push(...value);
     return result;
   }
 
@@ -32,7 +31,12 @@ export class BlockPlaceRegistry {
   /** @param {Vector3[]} locations */
   static putMany(...locations) {
     /** @type {Vector3[]} */
-    const blocks = JSON.parse(world.getDynamicProperty(this._getCurrentKey()) ?? '[]');
+    let blocks;
+    if (this._cacheLoaded) {
+      blocks = this._cache[this._currentKeyIndex];
+    } else {
+      blocks = JSON.parse(world.getDynamicProperty(this._getCurrentKey()) ?? '[]');
+    }
     blocks.push(...locations);
     
     this._trySave(locations);
@@ -51,6 +55,7 @@ export class BlockPlaceRegistry {
     } else {
       try {
         world.setDynamicProperty(this._getCurrentKey(), stringified);
+        this._cache[this._currentKeyIndex] = values;
       } catch (e) {
         sizeCheck = false;
       }
@@ -66,7 +71,7 @@ export class BlockPlaceRegistry {
 
   /** @returns {import('./DynamicProperty').PlaceKey} */
   static _getCurrentKey() {
-    return `registry:place${this._currentKeyIndex}`;
+    return `${PREFIX}${this._currentKeyIndex}`;
   }
 
   /**
@@ -85,8 +90,22 @@ export class BlockPlaceRegistry {
   static reset() {
     const keys = world.getDynamicPropertyIds();
     for (const key of keys) {
-      if (key.startsWith('registry:place')) world.setDynamicProperty(key);
+      if (key.startsWith(PREFIX)) world.setDynamicProperty(key);
     }
     this._currentKeyIndex = 0;
+    this._cache.length = 0;
+  }
+
+  static _load() {
+    const keys = world.getDynamicPropertyIds();
+    for (const key of keys) {
+      if (!key.startsWith(PREFIX)) continue;
+      const index = Number(key.slice(PREFIX.length));
+      if (Number.isNaN(index)) throw Error(`wrong key: ${key}`);
+      this._cache[index] = JSON.parse(
+        world.getDynamicProperty(/** @type {PlaceKey} */ (key)) ?? '[]'
+      );
+    }
+    this._cacheLoaded = true;
   }
 }
