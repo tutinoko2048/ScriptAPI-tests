@@ -6,6 +6,17 @@ import { world } from '@minecraft/server';
 const PROPERTY_MAX_SIZE = 20000;
 const PREFIX = 'registry:place';
 
+/** 
+ * @param {any} item
+ * @returns {item is Vector3}
+ */
+const isVector3 = (item) => (
+  typeof item === 'object' &&
+  typeof item.x === 'number' &&
+  typeof item.y === 'number' &&
+  typeof item.z === 'number'
+);
+
 export class BlockPlaceRegistry {
   static _currentKeyIndex = 0;
 
@@ -20,26 +31,28 @@ export class BlockPlaceRegistry {
 
     /** @type {Vector3[]} */
     const result = [];
-
     for (const value of this._cache) result.push(...value);
     return result;
   }
 
   /** @param {Vector3} location */
-  static put(location) { this.putMany(location) }
+  static put(location) {
+    if (!isVector3(location)) throw TypeError('Unexpected argument type');
+    this.putMany(location);
+  }
 
   /** @param {Vector3[]} locations */
   static putMany(...locations) {
     /** @type {Vector3[]} */
-    let blocks;
+    let baseData;
     if (this._cacheLoaded) {
-      blocks = this._cache[this._currentKeyIndex];
+      baseData = this._cache[this._currentKeyIndex] ?? [];
     } else {
-      blocks = JSON.parse(world.getDynamicProperty(this._getCurrentKey()) ?? '[]');
+      baseData = JSON.parse(world.getDynamicProperty(this._getCurrentKey()) ?? '[]');
     }
-    blocks.push(...locations);
+    baseData.push(...locations);
     
-    this._trySave(locations);
+    this._trySave(baseData);
   }
 
   /** 
