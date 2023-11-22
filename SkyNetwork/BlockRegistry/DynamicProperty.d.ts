@@ -1,4 +1,4 @@
-import * as mc from '@minecraft/server'
+import '@minecraft/server';
 
 type PlaceKey = `registry:place${number}`;
 
