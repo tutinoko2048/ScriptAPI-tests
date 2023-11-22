@@ -3,7 +3,7 @@ import { world } from '@minecraft/server';
 /** @typedef {import('@minecraft/server').Vector3} Vector3 */
 /** @typedef {import('./DynamicProperty').PlaceKey} PlaceKey */
 
-const PROPERTY_MAX_SIZE = 20000;
+const PROPERTY_MAX_SIZE = 12000;
 const PREFIX = 'registry:place';
 
 /** 
@@ -18,6 +18,9 @@ const isVector3 = (item) => (
 );
 
 export class BlockPlaceRegistry {
+  /** @readonly */
+  static PROPERTY_MAX_SIZE = PROPERTY_MAX_SIZE;
+
   static _currentKeyIndex = 0;
 
   /** @type {Vector3[][]} */
