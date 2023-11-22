@@ -4,7 +4,7 @@ import { world } from '@minecraft/server';
 /** @typedef {import('./DynamicProperty').PlaceKey} PlaceKey */
 
 const PROPERTY_MAX_SIZE = 20000;
-const PREFIX = 'registry:place'
+const PREFIX = 'registry:place';
 
 export class BlockPlaceRegistry {
   static _currentKeyIndex = 0;
