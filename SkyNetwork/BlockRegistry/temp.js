@@ -102,7 +102,7 @@ function resetMap() {
       /** @type {import('@minecraft/server').Block} */
       let block;
       try {
-        block = overworld.getBlock(location);
+        block = dimension.getBlock(location);
       } catch (e) {
         if (!(e instanceof LocationInUnloadedChunkError)) console.error(e, e.stack)
         console.error(`[resetMap] Unloaded location: ${location.x}, ${location.y}, ${location.z}`);
