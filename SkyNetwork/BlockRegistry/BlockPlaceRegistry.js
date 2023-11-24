@@ -5,6 +5,7 @@ import { world } from '@minecraft/server';
 
 const PROPERTY_MAX_SIZE = 12000;
 const PREFIX = 'registry:place';
+const INDEX_KEY = 'registry:index_place';
 
 /** 
  * @param {any} item
@@ -46,13 +47,10 @@ export class BlockPlaceRegistry {
 
   /** @param {Vector3[]} locations */
   static putMany(...locations) {
+    if (!this._cacheLoaded) this._load();
+
     /** @type {Vector3[]} */
-    let baseData;
-    if (this._cacheLoaded) {
-      baseData = this._cache[this._currentKeyIndex] ?? [];
-    } else {
-      baseData = JSON.parse(world.getDynamicProperty(this._getCurrentKey()) ?? '[]');
-    }
+    const baseData = this._cache[this._currentKeyIndex] ?? [];
     baseData.push(...locations);
     
     this._trySave(baseData);
@@ -63,24 +61,25 @@ export class BlockPlaceRegistry {
    * @param {Vector3[]} [swap]
    */
   static _trySave(values, swap = []) {
-    let sizeCheck = true;
+    let sizeOK = true;
 
     const stringified = JSON.stringify(values);
     if (stringified.length > PROPERTY_MAX_SIZE) {
-      sizeCheck = false;
+      sizeOK = false;
     } else {
       try {
         world.setDynamicProperty(this._getCurrentKey(), stringified);
         this._cache[this._currentKeyIndex] = values;
       } catch (e) {
-        sizeCheck = false;
+        sizeOK = false;
       }
     }
     
-    if (!sizeCheck) {
+    if (!sizeOK) {
       swap.push(values.shift());
       this._trySave(values, swap);
       this._currentKeyIndex++;
+      world.setDynamicProperty(INDEX_KEY, this._currentKeyIndex);
       this._trySave(swap);
     }
   }
@@ -109,10 +108,12 @@ export class BlockPlaceRegistry {
       if (key.startsWith(PREFIX)) world.setDynamicProperty(key);
     }
     this._currentKeyIndex = 0;
+    world.setDynamicProperty(INDEX_KEY);
     this._cache.length = 0;
   }
 
   static _load() {
+    this._currentKeyIndex = world.getDynamicProperty(INDEX_KEY) ?? 0;
     const keys = world.getDynamicPropertyIds();
     for (const key of keys) {
       if (!key.startsWith(PREFIX)) continue;
@@ -126,5 +127,11 @@ export class BlockPlaceRegistry {
       );
     }
     this._cacheLoaded = true;
+  }
+
+  static _unload() {
+    this._cache.length = 0;
+    this._cacheLoaded = false;
+    this._currentKeyIndex = 0;
   }
 }
