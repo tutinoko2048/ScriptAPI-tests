@@ -39,19 +39,28 @@ const liquids = [
   'minecraft:lava_bucket',
   'minecraft:water_bucket'
 ];
-
-world.afterEvents.itemUseOn.subscribe(ev => {
-  if (!liquids.includes(ev.itemStack.typeId)) return;
+world.afterEvents.playerInteractWithBlock.subscribe(ev => {
+  const { block, itemStack, player, blockFace } = ev;
+  if (!liquids.includes(itemStack?.typeId)) return;
   // 触ったブロックと触った面を元に置いた液体の座標を計算
-  const { x, y, z } = Vector.add(ev.block.location, directionToRelative[ev.blockFace]);
+  const { x, y, z } = Vector.add(block.location, directionToRelative[blockFace]);
   try {
-      BlockPlaceRegistry.put({ x, y, z }); // native classはJSON.stringifyできないからオブジェクトに変換
+    BlockPlaceRegistry.put({ x, y, z }); // native classはJSON.stringifyできないからオブジェクトに変換
   } catch (e) {
-    ev.source.sendMessage(`§cエラーが発生しました。以下のコードを管理者にお知らせください。\n${e}`);
+    player.sendMessage(`§cエラーが発生しました。以下のコードを管理者にお知らせください。\n${e}`);
     console.error(e, e.stack);
   }
 });
 
+world.beforeEvents.playerInteractWithBlock.subscribe(ev => {
+  const { block, itemStack, player } = ev;
+  if (itemStack?.typeId !== 'minecraft:water_bucket') return;
+  
+  if (block.type.canBeWaterlogged && !block.isWaterlogged) {
+    ev.cancel = true;
+    player.sendMessage('§o§7このブロックに対してバケツを使用することはできません');
+  }
+});
 
 
 
@@ -65,13 +74,17 @@ system.afterEvents.scriptEventReceive.subscribe(ev => {
   }
 
   // 確認用にこれも追加しておいてほしい
-  if (id === "debug:log_place_registry_count") {
+  if (id === "debug:place_registry_count") {
     const locations = BlockPlaceRegistry.get();
     console.warn(`[BlockPlaceRegistry] current blocks: ${locations.length}`);
   }
 });
 
+
 function resetMap() {
+  const loopIntervalTicks = 0;
+  const breakCountPerLoop = 4;
+  
   const queue = BlockPlaceRegistry.get();
   const startAt = Date.now();
   console.warn(`[resetMap] start resetting ${queue.length} blocks.`);
@@ -79,24 +92,33 @@ function resetMap() {
     if (queue.length === 0) {
       system.clearRun(intervalId);
       BlockPlaceRegistry.reset();
-      setScore('cleaning', 'game', 0);
       console.warn(`[resetMap] complete, took ${Math.round((Date.now() - startAt) / 1000)} seconds.`);
       return;
     }
-    const location = queue.shift();
+    
+    for (let i = 0; i < breakCountPerLoop; i++) {
+      const location = queue.shift();
 
-    /** @type {import('@minecraft/server').Block|undefined} */
-    let block;
-    try {
-      block = dimension.getBlock(location);
-    } catch (e) {
-      if (!(e instanceof LocationInUnloadedChunkError)) throw e;
-      console.error(`[resetMap] Unloaded location: ${location.x}, ${location.y}, ${location.z}`);
+      /** @type {import('@minecraft/server').Block} */
+      let block;
+      try {
+        block = overworld.getBlock(location);
+      } catch (e) {
+        if (!(e instanceof LocationInUnloadedChunkError)) console.error(e, e.stack)
+        console.error(`[resetMap] Unloaded location: ${location.x}, ${location.y}, ${location.z}`);
+      }
+      if (!block) continue;
+      if (block.type.canBeWaterlogged) block.isWaterlogged = false;
+      block.setType('minecraft:sponge');
+      block.setType('minecraft:air');
+      
+      if (queue.length === 0) break;
     }
-    if (!block) return;
-    if (block.type.canBeWaterlogged) block.isWaterlogged = false;
-    block.setType('minecraft:sponge');
-    block.setType('minecraft:air');
+    
     setScore('cleaning', 'game', queue.length / 10);
-  }, 1);
+    
+  }, loopIntervalTicks);
 }
+
+
+
