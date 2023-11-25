@@ -25,7 +25,13 @@ const TeamColor = /** @type {const} */ ({
   lime: '§a'
 });
 
-const isBedGame = () => getGame() === 1;
+/** @enum {'Bed' | 'Kill' | 'Core' | 'Boss'} */
+export const PlayStyle = /** @type {const} */ ({
+  Bed: 1,
+  Kill: 2,
+  Core: 3,
+  Boss: 4
+});
 
 /**
  * @param {Player} player 参加させるプレイヤー
@@ -42,8 +48,7 @@ export async function joinTeam(player, teams, isStart) {
   }
 
   // bedが存在していない=100より小さい時タグ付与
-  // @ts-ignore
-  if (isBedGame() && util.getScore(`${team}player`, team, true) < 100) {
+  if (getGame() === PlayStyle.Bed && util.getScore(`${team}player`, team, true) < 100) {
     player.addTag('notrespawn');
   }
   
@@ -75,17 +80,30 @@ export async function selectTeam(target, teams, isStart) {
 
   // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
-  debugLogs.push(`Teams excluded as 0 player: ${scores.filter(x => !isStart && x.count === 0).map(x => x.team)}`);
+  //debugLogs.push(`Teams excluded as 0 player: ${scores.filter(x => !isStart && x.count === 0).map(x => x.team)}`);
   
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
 
-  const sorted = shuffleArray(scores.filter(d => isStart || !!d.count)); // 人数0除外+1番人数が少ないチーム
+  const currentGame = getGame();
+
+  const sorted = shuffleArray(
+    scores.filter(d => {
+      if (isStart) return true;
+      if (!d.count) return false;
+      if (
+        (currentGame === PlayStyle.Core || currentGame === PlayStyle.Boss) &&
+        util.getScore(`${d.team}hp`, d.team) === 0
+      ) return false;
+      
+      return true;
+    })
+  ); // 人数0除外+1番人数が少ないチーム
 
   const zeroExists = scores.some(x => !x.count); // 人数0が一つでもあるかどうか
   sorted.sort((team1, team2) => {
     // ベッド存在を優先
-    if (isBedGame() && (bedExists(team1.team) !== bedExists(team2.team))) {
+    if (getGame() === PlayStyle.Bed && (bedExists(team1.team) !== bedExists(team2.team))) {
       return bedExists(team1.team) ? -1 : 1;
     }
 
