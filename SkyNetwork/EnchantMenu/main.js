@@ -22,7 +22,7 @@ const icons = {
   back: 'textures/ui/icon_import'
 }
 
-/** @type {Map<string, import('../../typing').EnchantList>} */
+/** @type {Map<string, import('./types').EnchantList>} */
 const enchantListMap = new Map();
 
 export class EnchantMenu {
@@ -147,7 +147,7 @@ export class EnchantMenu {
 
 /**
  * @arg {number} slot
- * @returns {import('../../typing').EnchantList}
+ * @returns {import('./types').EnchantList}
  */
 function createEnchantList(slot) {
   return {
@@ -176,7 +176,8 @@ export function randomEnchants(enchantList, lv, enchantTypes = getEnchantmentTyp
   enchantList.addEnchantment(enchant);
   
   // 確率でエンチャを追加
-  if (util.random(1, 100) <= enchantAddRate[lv]) randomEnchants(enchantList, lv, filterTypes(enchantList, filteredTypes, enchant.type.id));
+  if (util.random(1, 100) <= enchantAddRate[lv])
+    randomEnchants(enchantList, lv, filterTypes(enchantList, filteredTypes, enchant.type.id));
   return enchantList;
 }
 
@@ -218,8 +219,9 @@ function getItemEnchants(item) {
  */
 function filterTypes(enchantList, enchantTypes, ignoreType) {
   return enchantTypes.filter(type => (
-    enchantList.canAddEnchantment(new Enchantment(type, 1)) && type != ignoreType)
-  )
+    enchantList.canAddEnchantment(new Enchantment(type, 1)) &&
+    type != ignoreType
+  ));
 }
 
 function getEnchantLevel(maxLevel, lv) {
