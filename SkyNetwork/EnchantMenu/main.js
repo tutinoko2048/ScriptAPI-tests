@@ -1,6 +1,6 @@
 // EnchantMenu v1 by RetoRuto9900K
 
-import { EnchantmentTypes, Enchantment, EnchantmentList, ItemStack, Player } from '@minecraft/server';
+import { EnchantmentTypes, Enchantment, EnchantmentList, ItemStack, Player, EnchantmentSlot, ItemLockMode } from '@minecraft/server';
 import { ActionFormData } from '@minecraft/server-ui';
 import * as util from './util';
 import { enchantCost, enchantAddRate, ignores, enchantLevelRate } from './enchant_config';
@@ -23,24 +23,37 @@ const icons = {
 }
 
 /** @type {Map<string, import('./types').EnchantList>} */
-const enchantListMap = new Map();
+const enchantListCache = new Map();
 
 export class EnchantMenu {
   /** @arg {Player} player */
   constructor(player) {
     this.player = player;
-    this.main().catch(e => console.error(e, e.stack));
+    this.slot = player.getComponent('minecraft:inventory').container.getSlot(player.selectedSlot);
+    this.item = this.slot.getItem(); // cache item
+
+    const previousLockMode = this.slot.lockMode;
+    this.main()
+      .catch(e => console.error(e, e.stack))
+      .finally(() => { // form閉じた時
+        if (!this.item) return;
+        this.slot.setItem(this.item);
+        this.slot.lockMode = previousLockMode;
+      });
   }
   
+  /** @returns {Promise<void>} */
   async main(message = '') {
-    const handItem = util.getHandItem(this.player);
-    const enchants = getItemEnchants(handItem);
-    if (!enchants) { // もうエンチャついてたら弾く
+    const enchants = getItemEnchants(this.item);
+    if (!enchants) {
       this.player.sendMessage('§cそのアイテムにはエンチャントを付与できません');
       this.player.playSound(sounds.error);
       return;
     }
     this.player.playSound(sounds.open);
+
+    this.slot.lockMode = ItemLockMode.slot; // form開いてる間は触れないように
+
     const form = new ActionFormData();
     const body = [
       '§l現在のエンチャント§r',
@@ -57,29 +70,26 @@ export class EnchantMenu {
     if (selection === 0) return await this.selectLevel();
     if (selection === 1) {
       const res = await util.confirmForm(this.player, { body: '本当にエンチャントを削除しますか？' });
-      if (res) clearEnchant(this.player);
-      else await this.main();
+      if (res) {
+        this.item.getComponent('minecraft:enchantments').removeAllEnchantments();
+        this.player.playSound(sounds.clear);
+
+      } else await this.main();
     }
   }
   
   async selectLevel() {
-    const item = util.getHandItem(this.player);
-    if (!item) {
-      this.player.sendMessage('§cそのアイテムにはエンチャントを付与できません');
-      this.player.playSound(sounds.error);
-      return;
-    }
-    const enchantSlot = item.getComponent('minecraft:enchantments')?.enchantments?.slot;
+    const enchantSlot = this.item.getComponent('minecraft:enchantments')?.enchantments?.slot;
     if (enchantSlot === undefined || enchantSlot === 0) {
       this.player.sendMessage('§cそのアイテムにはエンチャントを付与できません');
       this.player.playSound(sounds.error);
       return;
     }
     
-    let enchants = enchantListMap.get(`${this.player.id}+${enchantSlot}`); // get from cache
+    let enchants = enchantListCache.get(`${this.player.id}+${enchantSlot}`); // get from cache
     if (!enchants) {
       enchants = createEnchantList(enchantSlot); // generate list
-      enchantListMap.set(`${this.player.id}+${enchantSlot}`, createEnchantList(enchantSlot));
+      enchantListCache.set(`${this.player.id}+${enchantSlot}`, createEnchantList(enchantSlot));
     }
     
     const lapis = util.getItemAmount(this.player, enchantCost.item); // get player's lapis
@@ -117,12 +127,11 @@ export class EnchantMenu {
       const lv = selection + 1;
       if (!this.buyEnchant(lv)) return this.player.playSound(sounds.error); // button[0] = lv1
       
-      item.getComponent('minecraft:enchantments').enchantments = enchants[lv]; // apply enchants
-      util.setHandItem(this.player, item); // apply item
+      this.item.getComponent('minecraft:enchantments').enchantments = enchants[lv]; // apply enchants
       
       this.player.playSound(sounds.enchant);
       
-      enchantListMap.set(`${this.player.id}+${enchantSlot}`, createEnchantList(enchantSlot)); //  generate list
+      enchantListCache.set(`${this.player.id}+${enchantSlot}`, createEnchantList(enchantSlot)); //  regenerate list
     }
     if (selection === 3) return await this.main();
   }
@@ -134,7 +143,7 @@ export class EnchantMenu {
      this.player.sendMessage(`§cレベルが足りません ${this.player.level} < ${cost.level}`);
      return false;
     }
-    const itemAmount = util.getItemAmount(this.player, enchantCost.item); // get player's lapis
+    const itemAmount = util.getItemAmount(this.player, enchantCost.item);
     if (itemAmount < cost.amount) {
       this.player.sendMessage(`§cアイテムが足りません (%item.dye.blue.name が ${cost.amount}個必要です)`);
       return false;
@@ -171,7 +180,7 @@ export function randomEnchants(enchantList, lv, enchantTypes = getEnchantmentTyp
 
   const enchant = new Enchantment(
     enchantType,
-    getEnchantLevel(enchantType.maxLevel, lv)
+    calcEnchantLevel(enchantType.maxLevel, lv)
   );
   enchantList.addEnchantment(enchant);
   
@@ -181,54 +190,35 @@ export function randomEnchants(enchantList, lv, enchantTypes = getEnchantmentTyp
   return enchantList;
 }
 
-/** @arg {Player} player */
-function clearEnchant(player) {
-  const item = util.getHandItem(player);
-  
-  const enchantment = item?.getComponent('minecraft:enchantments');
-  if (!enchantment) {
-    player.sendMessage('§c削除するエンチャントがありません');
-    player.playSound(sounds.error);
-    return;
-  }
-  
-  if ([...enchantment.enchantments].length === 0) { /* 何もない時の処理 */ }
-  
-  enchantment.removeAllEnchantments();
-  
-  util.setHandItem(player, item);
-  player.playSound(sounds.clear);
-}
-
 /**
  * @arg {ItemStack} item
- * @returns {?Enchantment[]}
+ * @returns {Enchantment[] | undefined}
  */
 function getItemEnchants(item) {
-  if (!item) return null;
+  if (!item) return undefined;
   const list = item.getComponent('minecraft:enchantments')?.enchantments;
-  if (!list || list.slot === 0) return null; // slotが無い=エンチャ不可
+  if (!list || list.slot === EnchantmentSlot.none) return null; // slotが無い=エンチャ不可
   return [...list];
 }
 
 /**
  * @arg {EnchantmentList} enchantList
  * @arg {MinecraftEnchantmentTypes[]} enchantTypes
- * @arg {string} [ignoreType]
+ * @arg {string} [ignoredType]
  * @returns {MinecraftEnchantmentTypes[]}
  */
-function filterTypes(enchantList, enchantTypes, ignoreType) {
+function filterTypes(enchantList, enchantTypes, ignoredType) {
   return enchantTypes.filter(type => (
     enchantList.canAddEnchantment(new Enchantment(type, 1)) &&
-    type != ignoreType
+    type !== ignoredType
   ));
 }
 
-function getEnchantLevel(maxLevel, lv) {
+function calcEnchantLevel(maxLevel, lv) {
   const enchLevel = Math.round(util.lot(enchantLevelRate[lv]) * maxLevel);
   return enchLevel === 0 ? 1 : enchLevel;
 }
 
-function checkCost(lapis, lapisNeeds, level, levelNeeds) {
-  return lapis >= lapisNeeds && level >= levelNeeds;
+function checkCost(lapis, lapisNeeded, level, levelNeeded) {
+  return lapis >= lapisNeeded && level >= levelNeeded;
 }

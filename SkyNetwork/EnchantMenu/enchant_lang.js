@@ -1,4 +1,4 @@
-import { MinecraftEnchantmentTypes, MinecraftEnchantmentTypes as Types } from './lib/MinecraftEnchantmentTypes';
+import { MinecraftEnchantmentTypes as Types } from './lib/MinecraftEnchantmentTypes';
 
 export const enchantLang = {
   [Types.Power]: 'enchantment.arrowDamage',
