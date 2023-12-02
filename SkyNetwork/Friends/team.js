@@ -25,7 +25,12 @@ const TeamColor = /** @type {const} */ ({
   lime: '§a'
 });
 
-const isBedGame = () => getGame() === 1;
+export const PlayStyle = /** @type {const} */ ({
+  Bed: 1,
+  Kill: 2,
+  Core: 3,
+  Boss: 4
+});
 
 /**
  * @param {Player} player 参加させるプレイヤー
@@ -37,13 +42,12 @@ export async function joinTeam(player, teams, isStart) {
   try {
     team = await selectTeam(player, teams, isStart);
   } catch (e) {
-    console.error(e, e.stack);
+    console.error(`[joinTeam] ${e}`, e.stack);
     return;
   }
 
   // bedが存在していない=100より小さい時タグ付与
-  // @ts-ignore
-  if (isBedGame() && util.getScore(`${team}player`, team, true) < 100) {
+  if (getGame() === PlayStyle.Bed && util.getScore(`${team}player`, team, true) < 100) {
     player.addTag('notrespawn');
   }
   
@@ -62,7 +66,7 @@ export async function joinTeam(player, teams, isStart) {
  * @returns {Promise<keyof TeamTag>} プレイヤーが参加するチームのタグ
  */
 export async function selectTeam(target, teams, isStart) {
-  const debugLogs = [`TeamSelection (name: ${target.name}, start: ${isStart}, game: ${getGame()}`];
+  const debugLogs = [`TeamSelection (pl: ${target.name}, start: ${isStart}, game: ${getGame()})`];
 
   const friendList = FriendAPI.getFriends(target.id);
   const players = world.getPlayers();
@@ -75,17 +79,28 @@ export async function selectTeam(target, teams, isStart) {
 
   // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
-  debugLogs.push(`Teams excluded as 0 player: ${scores.filter(x => !isStart && x.count === 0).map(x => x.team)}`);
   
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
 
-  const sorted = shuffleArray(scores.filter(d => isStart || !!d.count)); // 人数0除外+1番人数が少ないチーム
+  const currentGame = getGame();
+
+  const sorted = shuffleArray(
+    scores.filter(d => { // 人数0除外
+      if (isStart) return true;
+      if (!d.count) return false;
+      if (
+        (currentGame === PlayStyle.Core || currentGame === PlayStyle.Boss) &&
+        util.getScore(`${d.team}hp`, d.team) === 0
+      ) return false;
+      return true;
+    })
+  );
 
   const zeroExists = scores.some(x => !x.count); // 人数0が一つでもあるかどうか
   sorted.sort((team1, team2) => {
     // ベッド存在を優先
-    if (isBedGame() && (bedExists(team1.team) !== bedExists(team2.team))) {
+    if (currentGame === PlayStyle.Bed && (bedExists(team1.team) !== bedExists(team2.team))) {
       return bedExists(team1.team) ? -1 : 1;
     }
 
@@ -98,7 +113,8 @@ export async function selectTeam(target, teams, isStart) {
     team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
-  debugLogs.push(`TeamData: ${JSON.stringify(Object.fromEntries(sorted.map(x => [x.team, { fnd: x.hasFriend, cnt: x.count }])))}`);
+  const debugMsg = sorted.map(x => `- [${x.team}] ${x.count}, HP: ${teamHPs[x.team]}, ${x.hasFriend ? 'hasFriend' : ''}`).join('\n');
+  debugLogs.push(`TeamData:\n${debugMsg}`);
   debugLogs.push(`TeamSelection result: ${sorted[0].team}`);
 
   const tag = sorted[0].team;
