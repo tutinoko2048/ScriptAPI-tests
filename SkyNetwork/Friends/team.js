@@ -32,9 +32,11 @@ export const PlayStyle = /** @type {const} */ ({
   Boss: 4
 });
 
+/** @typedef {keyof TeamTag} Teams */
+
 /**
  * @param {Player} player 参加させるプレイヤー
- * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
+ * @param {Teams[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
  */
 export async function joinTeam(player, teams, isStart) {
@@ -61,7 +63,7 @@ export async function joinTeam(player, teams, isStart) {
 
 /**
  * @param {Player} target
- * @param {(keyof TeamTag)[]} teams 振り分けに使うチーム名の配列
+ * @param {Teams[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
  * @returns {Promise<keyof TeamTag>} プレイヤーが参加するチームのタグ
  */
@@ -79,25 +81,15 @@ export async function selectTeam(target, teams, isStart) {
   );
 
   // 全チームそれぞれの人数 = redplayers
-  const scores = getTeamCount(players, teams);
+  const scores = getTeamCount(teams);
   
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
 
-  const sorted = shuffleArray(
-    scores.filter(d => { // 人数0除外
-      if (isStart) return true;
-      if (!d.count) return false;
-      if (
-        (currentGame === PlayStyle.Core || currentGame === PlayStyle.Boss) &&
-        util.getScore(`${d.team}hp`, d.team) === 0
-      ) return false;
-      return true;
-    })
-  );
-
+  const joinableTeamData = shuffleArray(isStart ? scores : filterJoinableTeam(teams));
+  
   const zeroExists = scores.some(x => !x.count); // 人数0が一つでもあるかどうか
-  sorted.sort((team1, team2) => {
+  joinableTeamData.sort((team1, team2) => {
     // ベッド存在を優先
     if (currentGame === PlayStyle.Bed && (bedExists(team1.team) !== bedExists(team2.team))) {
       return bedExists(team1.team) ? -1 : 1;
@@ -112,11 +104,11 @@ export async function selectTeam(target, teams, isStart) {
     team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
-  const debugMsg = sorted.map(x => `${x.team}(${x.count}): ${teamHPs[x.team]}HP${x.hasFriend?', fnd':''}`).join(' | ');
-  debugLogs.push(`TeamData (${sorted.length}/${teams.length} teams):\n${debugMsg}`);
-  debugLogs.push(`Result: ${sorted[0].team}`);
+  const debugMsg = joinableTeamData.map(x => `${x.team}(${x.count}): ${teamHPs[x.team]}HP${x.hasFriend?', fnd':''}`).join(' | ');
+  debugLogs.push(`TeamData (${joinableTeamData.length}/${teams.length} teams):\n${debugMsg}`);
+  debugLogs.push(`Result: ${joinableTeamData[0].team}`);
 
-  const tag = sorted[0].team;
+  const tag = joinableTeamData[0].team;
   
   if (!tag) target.sendMessage('§cチームの振り分けに失敗しました 管理者に連絡してください');
   if (DEBUG) console.warn(debugLogs.join('\n') + '\n');
@@ -125,34 +117,50 @@ export async function selectTeam(target, teams, isStart) {
 
 /**
  * @param {Player} player
- * @param {(keyof TeamTag)[]} teams
+ * @param {Teams[]} teams
  * @param {boolean} isStart
- * @returns {Promise<(keyof TeamTag) | 'auto' | undefined>}
+ * @returns {Promise<Teams | undefined>}
  */
 async function askTeam(player, teams, isStart) {
-  const scores = getTeamCount(world.getPlayers(), teams);
-  const filteredTeams = scores
-    .filter(t => isStart || !!t.count)
+  const scores = getTeamCount(teams);
+  const sortedTeams = shuffleArray(isStart ? scores : filterJoinableTeam(teams))
     .sort((t1, t2) => t1.count - t2.count)
-    .map(t => t.team); // 人数0除外+少ない順
+    .map(t => t.team);
 
   const form = new ActionForm();
   form.title('チームを選択');
   form.body('希望するチームを選択してください。');
   form.button('§lおまかせ', 'textures/blocks/wool_colored_white', 'auto');
-  for (const team of filteredTeams)
+  for (const team of sortedTeams)
     form.button(`${TeamColor[team]}${team.toUpperCase()}`, `textures/blocks/wool_colored_${team}`, team);
   const { canceled, button } = await form.show(player);
-  if (canceled) return;
+  if (canceled || button.id == 'auto') return;
   return button.id;
 }
 
 /**
- * @param {Player[]} players
- * @param {(keyof TeamTag)[]} teams
- * @returns {{ team: keyof TeamTag, count: number, hasFriend?: boolean }[]}
+ * @param {Teams[]} teams
+ * @returns {{ team: Teams, count: number, hasFriend?: boolean }[]}
  */
-function getTeamCount(players, teams) {
+function filterJoinableTeam(teams) {
+  const currentGame = getGame();
+  const scores = getTeamCount(teams);
+  return scores.filter(d => {
+    if (!d.count) return false;
+    if (
+      (currentGame === PlayStyle.Core || currentGame === PlayStyle.Boss) &&
+      util.getScore(`${d.team}hp`, d.team) === 0 // 壊されてた場合参加不可
+    ) return false;
+    return true;
+  });
+}
+
+/**
+ * @param {Teams[]} teams
+ * @returns {{ team: Teams, count: number, hasFriend?: boolean }[]}
+ */
+function getTeamCount(teams) {
+  const players = world.getPlayers();
   return teams.map(team => (
     { team, count: players.filter(p => p.hasTag(team)).length }
   ));
