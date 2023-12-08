@@ -66,7 +66,9 @@ export async function joinTeam(player, teams, isStart) {
  * @returns {Promise<keyof TeamTag>} プレイヤーが参加するチームのタグ
  */
 export async function selectTeam(target, teams, isStart) {
-  const debugLogs = [`TeamSelection (pl: ${target.name}, start: ${isStart}, game: ${getGame()})`];
+  const currentGame = getGame();
+  const gameName = Object.keys(PlayStyle).find(k => PlayStyle[k] === currentGame);
+  const debugLogs = [ `[selectTeam] ${target.name} | game: ${gameName}(${currentGame})${isStart ? ', isStart' : ''}` ];
 
   const friendList = FriendAPI.getFriends(target.id);
   const players = world.getPlayers();
@@ -75,15 +77,12 @@ export async function selectTeam(target, teams, isStart) {
   const teamHPs = /** @type {{ [key in keyof TeamTag]: number }} */ (
     Object.fromEntries(teams.map(team => [ team, util.getScore(`${team}player`, team) ]))
   );
-  debugLogs.push(`TeamHP: ${JSON.stringify(teamHPs)}`);
 
   // 全チームそれぞれの人数 = redplayers
   const scores = getTeamCount(players, teams);
   
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
-
-  const currentGame = getGame();
 
   const sorted = shuffleArray(
     scores.filter(d => { // 人数0除外
@@ -113,9 +112,9 @@ export async function selectTeam(target, teams, isStart) {
     team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
-  const debugMsg = sorted.map(x => `- [${x.team}] ${x.count}, HP: ${teamHPs[x.team]}, ${x.hasFriend ? 'hasFriend' : ''}`).join('\n');
-  debugLogs.push(`TeamData:\n${debugMsg}`);
-  debugLogs.push(`TeamSelection result: ${sorted[0].team}`);
+  const debugMsg = sorted.map(x => `${x.team}(${x.count}): ${teamHPs[x.team]}HP${x.hasFriend?', fnd':''}`).join(' | ');
+  debugLogs.push(`TeamData (${sorted.length}/${teams.length} teams):\n${debugMsg}`);
+  debugLogs.push(`Result: ${sorted[0].team}`);
 
   const tag = sorted[0].team;
   
