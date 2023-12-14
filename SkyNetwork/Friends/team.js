@@ -68,6 +68,9 @@ export async function joinTeam(player, teams, isStart) {
  * @returns {Promise<keyof TeamTag>} プレイヤーが参加するチームのタグ
  */
 export async function selectTeam(target, teams, isStart) {
+  console.warn(`[selectTeam] asking: ${target.name}`);
+  const selectedTeam = await askTeam(target, teams, isStart);
+
   const currentGame = getGame();
   const gameName = Object.keys(PlayStyle).find(k => PlayStyle[k] === currentGame);
   const debugLogs = [ `[selectTeam] ${target.name} | game: ${gameName}(${currentGame})${isStart ? ', isStart' : ''}` ];
@@ -86,10 +89,10 @@ export async function selectTeam(target, teams, isStart) {
   /** @param {keyof TeamTag} team */
   const bedExists = (team) => teamHPs[team] === 100;
 
-  const joinableTeamData = shuffleArray(isStart ? scores : filterJoinableTeam(teams));
+  const joinableTeams = shuffleArray(isStart ? scores : filterJoinableTeam(teams));
   
-  const zeroExists = scores.some(x => !x.count); // 人数0が一つでもあるかどうか
-  joinableTeamData.sort((team1, team2) => {
+  const zeroExists = joinableTeams.some(x => !x.count); // 人数0が一つでもあるかどうか
+  joinableTeams.sort((team1, team2) => {
     // ベッド存在を優先
     if (currentGame === PlayStyle.Bed && (bedExists(team1.team) !== bedExists(team2.team))) {
       return bedExists(team1.team) ? -1 : 1;
@@ -100,15 +103,18 @@ export async function selectTeam(target, teams, isStart) {
       return team1.count - team2.count;
     }
 
+    // 選択されたチームを優先
+    if (selectedTeam && team1.team === selectedTeam) return -1;
+
     // 同じ人数の時 フレンドがいる方を優先
     team1.hasFriend ??= onlineFriends.some(p => p.hasTag(team1.team)); // hasTagの回数を減らすために保存しておく
     return team1.hasFriend ? -1 : 1;
   });
-  const debugMsg = joinableTeamData.map(x => `${x.team}(${x.count}): ${teamHPs[x.team]}HP${x.hasFriend?', fnd':''}`).join(' | ');
-  debugLogs.push(`TeamData (${joinableTeamData.length}/${teams.length} teams):\n${debugMsg}`);
-  debugLogs.push(`Result: ${joinableTeamData[0].team}`);
+  const debugMsg = joinableTeams.map(x => `${x.team}(${x.count}): ${teamHPs[x.team]}HP${x.hasFriend?', fnd':''}`).join(' | ');
+  debugLogs.push(`TeamData (${joinableTeams.length}/${teams.length} teams):\n${debugMsg}`);
+  debugLogs.push(`Result: ${joinableTeams[0].team} (choice: ${selectedTeam})`);
 
-  const tag = joinableTeamData[0].team;
+  const tag = joinableTeams[0].team;
   
   if (!tag) target.sendMessage('§cチームの振り分けに失敗しました 管理者に連絡してください');
   if (DEBUG) console.warn(debugLogs.join('\n') + '\n');
@@ -116,12 +122,12 @@ export async function selectTeam(target, teams, isStart) {
 }
 
 /**
- * @param {Player} player
+ * @param {Player} target
  * @param {Teams[]} teams
  * @param {boolean} isStart
  * @returns {Promise<Teams | undefined>}
  */
-async function askTeam(player, teams, isStart) {
+async function askTeam(target, teams, isStart) {
   const scores = getTeamCount(teams);
   const sortedTeams = shuffleArray(isStart ? scores : filterJoinableTeam(teams))
     .sort((t1, t2) => t1.count - t2.count)
@@ -133,7 +139,7 @@ async function askTeam(player, teams, isStart) {
   form.button('§lおまかせ', 'textures/blocks/wool_colored_white', 'auto');
   for (const team of sortedTeams)
     form.button(`${TeamColor[team]}${team.toUpperCase()}`, `textures/blocks/wool_colored_${team}`, team);
-  const { canceled, button } = await form.show(player);
+  const { canceled, button } = await form.show(target);
   if (canceled || button.id == 'auto') return;
   return button.id;
 }
