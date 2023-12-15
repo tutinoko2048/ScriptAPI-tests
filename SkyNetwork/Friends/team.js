@@ -38,6 +38,7 @@ export const PlayStyle = /** @type {const} */ ({
  * @param {Player} player 参加させるプレイヤー
  * @param {Teams[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
+ * @returns {Promise<boolean>} チーム選択が完了したかどうか キャンセルした場合falseを返します
  */
 export async function joinTeam(player, teams, isStart) {
   let team;
@@ -45,8 +46,10 @@ export async function joinTeam(player, teams, isStart) {
     team = await selectTeam(player, teams, isStart);
   } catch (e) {
     console.error(`[joinTeam] ${e}`, e.stack);
-    return;
+    return false;
   }
+  
+  if (!team) return false;
 
   // bedが存在していない=100より小さい時タグ付与
   if (getGame() === PlayStyle.Bed && util.getScore(`${team}player`, team, true) < 100) {
@@ -59,17 +62,19 @@ export async function joinTeam(player, teams, isStart) {
   player.sendMessage('§c§l敵チームとの協力プレイは禁止です！\n§r§b敵チームとの協力プレイをすると、サーバーからBANされます！');
   player.sendMessage(`あなたは${TeamColor[team]}§l${team.toUpperCase()}チーム§r§fに加入しました`);
   player.addTag(TeamTag[team]);
+  return true;
 }
 
 /**
  * @param {Player} target
  * @param {Teams[]} teams 振り分けに使うチーム名の配列
  * @param {boolean} [isStart] ゲーム開始時かどうか
- * @returns {Promise<keyof TeamTag>} プレイヤーが参加するチームのタグ
+ * @returns {Promise<keyof TeamTag | undefined>} プレイヤーが参加するチームのタグ
  */
 export async function selectTeam(target, teams, isStart) {
   console.warn(`[selectTeam] asking: ${target.name}`);
-  const selectedTeam = await askTeam(target, teams, isStart);
+  const { canceled, selectedTeam } = await askTeam(target, teams, isStart);
+  if (canceled) return;
 
   const currentGame = getGame();
   const gameName = Object.keys(PlayStyle).find(k => PlayStyle[k] === currentGame);
@@ -125,13 +130,18 @@ export async function selectTeam(target, teams, isStart) {
  * @param {Player} target
  * @param {Teams[]} teams
  * @param {boolean} isStart
- * @returns {Promise<Teams | undefined>}
+ * @returns {Promise<{ selectedTeam?: Teams, canceled?: boolean }>}
  */
 async function askTeam(target, teams, isStart) {
   const scores = getTeamCount(teams);
   const sortedTeams = shuffleArray(isStart ? scores : filterJoinableTeam(teams))
     .sort((t1, t2) => t1.count - t2.count)
     .map(t => t.team);
+
+  if (sortedTeams.length === 0) {
+    target.sendMessage(`§cError: 参加できるチームがありません`);
+    return { canceled: true }
+  }
 
   const form = new ActionForm();
   form.title('チームを選択');
@@ -140,8 +150,9 @@ async function askTeam(target, teams, isStart) {
   for (const team of sortedTeams)
     form.button(`${TeamColor[team]}${team.toUpperCase()}`, `textures/blocks/wool_colored_${team}`, team);
   const { canceled, button } = await form.show(target);
-  if (canceled || button.id == 'auto') return;
-  return button.id;
+  if (canceled) return { canceled: true }
+  if (button.id == 'auto') return { selectedTeam: undefined }
+  return { selectedTeam: button.id }
 }
 
 /**
