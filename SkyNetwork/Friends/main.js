@@ -5,7 +5,7 @@ import { FriendAPI, FriendManager } from './FriendManager';
 import { FriendMenu } from './FriendMenu';
 import * as util from './util';
 
-export * from './team';
+export * from './TeamManager';
 export * from './FriendMenu';
 
 const friends = new FriendManager();
