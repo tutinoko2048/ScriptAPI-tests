@@ -53,3 +53,7 @@ export const ignores = [
   MinecraftEnchantmentTypes.Binding,
   MinecraftEnchantmentTypes.Vanishing,
 ];
+
+export const customMaxLevels = {
+  //[MinecraftEnchantmentTypes.Sharpness]: 4
+}

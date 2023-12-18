@@ -1,20 +1,20 @@
 import * as mc from '@minecraft/server';
+import { MinecraftEnchantmentTypesUnion } from './scripts/EnchantMenu/lib/MinecraftEnchantmentTypes';
+import { EnchantmentList } from './EnchantmentList';
+
 declare module '@minecraft/server' {
-  interface ItemStack {
-    getComponent(componentId: 'minecraft:enchantments'): mc.ItemEnchantsComponent;
-  }
-
-  interface Entity {
-    getComponent(componentId: 'minecraft:inventory'): mc.EntityInventoryComponent;
-  }
-
   interface EnchantmentType {
-    readonly id: import('./scripts/EnchantMenu/lib/MinecraftEnchantmentTypes').MinecraftEnchantmentTypesUnion;
+    readonly id: MinecraftEnchantmentTypesUnion;
   }
 }
 
-export interface EnchantList {
-  1: mc.EnchantmentList;
-  2: mc.EnchantmentList;
-  3: mc.EnchantmentList;
+export type EnchantmentTable = Record<number, EnchantmentList>
+/*
+  1: EnchantmentList;
+  2: EnchantmentList;
+  3: EnchantmentList;
+}*/
+
+export interface EnchantmentCache {
+  [itemId: string]: EnchantmentTable;
 }

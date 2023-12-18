@@ -11,20 +11,15 @@
   },
   "author": "tutinoko2048",
   "devDependencies": {
-    "@babel/plugin-transform-named-capturing-groups-regex": "^7.22.5",
-    "@minecraft/server": "1.7.0-beta.1.20.40-stable",
-    "@minecraft/server-net": "1.0.0-beta.1.20.30-stable",
-    "@minecraft/server-ui": "1.2.0-beta.1.20.40-stable",
+    "@minecraft/server": "1.9.0-beta.1.20.60-preview.23",
+    "@minecraft/server-net": "1.0.0-beta.1.20.50-stable",
+    "@minecraft/server-ui": "1.2.0-beta.1.20.60-preview.23",
     "eslint": "^8.39.0",
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@babel/cli": "^7.23.4",
-    "@babel/core": "^7.23.6",
-    "@babel/preset-env": "^7.23.6",
     "@minecraft/vanilla-data": "1.20.30",
     "axios": "^1.6.0",
-    "babel-plugin-transform-modern-regexp": "^0.0.6",
     "discord-api-types": "^0.37.58",
     "eslint-plugin-jsdoc": "^46.9.0"
   }

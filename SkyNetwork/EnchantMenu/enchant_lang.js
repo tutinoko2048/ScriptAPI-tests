@@ -1,3 +1,4 @@
+import { EnchantmentType } from '@minecraft/server';
 import { MinecraftEnchantmentTypes as Types } from './lib/MinecraftEnchantmentTypes';
 
 export const enchantLang = {
@@ -54,8 +55,11 @@ export const enchantLevels = {
   10: 'X',
 }
 
-/** @arg {string} enchantType */
-export const getEnchantLang = (enchantType) => enchantLang[enchantType] ?? enchantType;
+/** @arg {string | EnchantmentType} enchantType */
+export function getEnchantLang(enchantType) {
+  const enchId = typeof enchantType === 'string' ? enchantType : enchantType.id;
+  return enchantLang[enchId] ?? enchId;
+}
 
 /** @arg {number} level */
 export const getLevelLang = (level) => (1 <= level && level <= 10) ? enchantLevels[level] : level;

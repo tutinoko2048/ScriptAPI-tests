@@ -1,11 +1,14 @@
 // EnchantMenu v1 by RetoRuto9900K
 
-import { EnchantmentTypes, Enchantment, EnchantmentList, ItemStack, Player, EnchantmentSlot, ItemLockMode } from '@minecraft/server';
+import { EnchantmentTypes, Player, ItemLockMode, ItemType } from '@minecraft/server';
 import { ActionFormData } from '@minecraft/server-ui';
 import * as util from './util';
-import { enchantCost, enchantAddRate, ignores, enchantLevelRate } from './enchant_config';
+import { enchantCost, enchantAddRate, ignores, enchantLevelRate, customMaxLevels } from './enchant_config';
 import { getEnchantLang, getLevelLang } from './enchant_lang';
 import { MinecraftEnchantmentTypes } from './lib/MinecraftEnchantmentTypes';
+import { EnchantmentList } from './EnchantmentList';
+
+/** @typedef {import('@minecraft/server').Enchantment} Enchantment */
 
 const getEnchantmentTypes = () => Object.values(MinecraftEnchantmentTypes).filter(id => !ignores.includes(id)).slice();
 const sounds = {
@@ -22,7 +25,7 @@ const icons = {
   back: 'textures/ui/icon_import'
 }
 
-/** @type {Map<string, import('./types').EnchantList>} */
+/** @type {Map<string, import('./types').EnchantmentCache>} */
 const enchantListCache = new Map();
 
 export class EnchantMenu {
@@ -44,7 +47,7 @@ export class EnchantMenu {
   
   /** @returns {Promise<void>} */
   async main(message = '') {
-    const enchants = getItemEnchants(this.item);
+    const enchants = this.item?.getComponent('minecraft:enchantable')?.getEnchantments();
     if (!enchants) {
       this.player.sendMessage('§cそのアイテムにはエンチャントを付与できません');
       this.player.playSound(sounds.error);
@@ -57,7 +60,7 @@ export class EnchantMenu {
     const form = new ActionFormData();
     const body = [
       '§l現在のエンチャント§r',
-      ...(enchants.length ? enchants.map(ench => `- %${getEnchantLang(ench.type.id)} ${getLevelLang(ench.level)}`) : ['§7なし§r']),
+      ...(enchants.length ? enchants.map(ench => `- %${getEnchantLang(ench.type)} ${getLevelLang(ench.level)}`) : ['§7なし§r']),
       ' '
     ].join('\n');
     form.title('Enchantment Menu')
@@ -71,7 +74,7 @@ export class EnchantMenu {
     if (selection === 1) {
       const res = await util.confirmForm(this.player, { body: '本当にエンチャントを削除しますか？' });
       if (res) {
-        this.item.getComponent('minecraft:enchantments').removeAllEnchantments();
+        this.item.getComponent('minecraft:enchantable').removeAllEnchantments();
         this.player.playSound(sounds.clear);
 
       } else await this.main();
@@ -79,18 +82,17 @@ export class EnchantMenu {
   }
   
   async selectLevel() {
-    const enchantSlot = this.item.getComponent('minecraft:enchantments')?.enchantments?.slot;
-    if (enchantSlot === undefined || enchantSlot === 0) {
+    const enchantable = this.item.getComponent('minecraft:enchantable');
+    if (!enchantable) {
       this.player.sendMessage('§cそのアイテムにはエンチャントを付与できません');
       this.player.playSound(sounds.error);
       return;
     }
     
-    let enchants = enchantListCache.get(`${this.player.id}+${enchantSlot}`); // get from cache
-    if (!enchants) {
-      enchants = createEnchantList(enchantSlot); // generate list
-      enchantListCache.set(`${this.player.id}+${enchantSlot}`, createEnchantList(enchantSlot));
-    }
+    if (!enchantListCache.has(this.player.id)) enchantListCache.set(this.player.id, {});
+    const cache = enchantListCache.get(this.player.id);
+    if (!(this.item.typeId in cache)) cache[this.item.typeId] = createEnchantmentTable(this.item.type);
+    const table = cache[this.item.typeId]; // get from cache
     
     const lapis = util.getItemAmount(this.player, enchantCost.item); // get player's lapis
     /** @type {{ [level: number]: boolean }} */
@@ -99,8 +101,8 @@ export class EnchantMenu {
     
     /** @param {EnchantmentList} list */
     const getHint = (list) => {
-      const ench = [...list][0];
-      return ench ? `%${getEnchantLang(ench.type.id)} ${getLevelLang(ench.level)}` : '-';
+      const ench = list.getEnchantments()[0];
+      return ench ? `%${getEnchantLang(ench.type)} ${getLevelLang(ench.level)}` : '-';
     }
     
     const form = new ActionFormData();
@@ -116,7 +118,7 @@ export class EnchantMenu {
       */
     ].join('\n'));
     [1,2,3].forEach(lv => form.button(
-      `§l${canBuy[lv] ? '§2' : '§c'}Lv.${lv}§8 ${getHint(enchants[lv])}...`,
+      `§l${canBuy[lv] ? '§2' : '§c'}Lv.${lv}§8 ${getHint(table[lv])}...`,
       `textures/ui/dust_${canBuy[lv] ? '' : 'un'}selectable_${lv}`
     ));
     form.button('戻る', icons.back);
@@ -126,12 +128,13 @@ export class EnchantMenu {
     if ([0, 1, 2].includes(selection)) { // 0 or 1 or 2
       const lv = selection + 1;
       if (!this.buyEnchant(lv)) return this.player.playSound(sounds.error); // button[0] = lv1
-      
-      this.item.getComponent('minecraft:enchantments').enchantments = enchants[lv]; // apply enchants
-      
+
+      enchantable.removeAllEnchantments(); // clear enchants
+      enchantable.addEnchantments(table[lv].getEnchantments()); // apply
       this.player.playSound(sounds.enchant);
       
-      enchantListCache.set(`${this.player.id}+${enchantSlot}`, createEnchantList(enchantSlot)); //  regenerate list
+      // regenerate enchants
+      cache[this.item.typeId] = createEnchantmentTable(this.item.type);
     }
     if (selection === 3) return await this.main();
   }
@@ -155,14 +158,14 @@ export class EnchantMenu {
 }
 
 /**
- * @arg {number} slot
- * @returns {import('./types').EnchantList}
+ * @arg {ItemType} itemType
+ * @returns {import('./types').EnchantmentTable}
  */
-function createEnchantList(slot) {
+function createEnchantmentTable(itemType) {
   return {
-    1: randomEnchants(new EnchantmentList(slot), 1),
-    2: randomEnchants(new EnchantmentList(slot), 2),
-    3: randomEnchants(new EnchantmentList(slot), 3)
+    1: randomEnchants(new EnchantmentList(itemType), 1),
+    2: randomEnchants(new EnchantmentList(itemType), 2),
+    3: randomEnchants(new EnchantmentList(itemType), 3)
   }
 }
 
@@ -178,27 +181,16 @@ export function randomEnchants(enchantList, lv, enchantTypes = getEnchantmentTyp
   const enchantType = enchantId && EnchantmentTypes.get(enchantId);
   if (!enchantType) return enchantList;
 
-  const enchant = new Enchantment(
-    enchantType,
-    calcEnchantLevel(enchantType.maxLevel, lv)
-  );
+  const enchant = {
+    type: enchantType,
+    level: calcEnchantLevel(customMaxLevels[enchantType.id] ?? enchantType.maxLevel, lv)
+  }
   enchantList.addEnchantment(enchant);
   
   // 確率でエンチャを追加
   if (util.random(1, 100) <= enchantAddRate[lv])
     randomEnchants(enchantList, lv, filterTypes(enchantList, filteredTypes, enchant.type.id));
   return enchantList;
-}
-
-/**
- * @arg {ItemStack} item
- * @returns {Enchantment[] | undefined}
- */
-function getItemEnchants(item) {
-  if (!item) return undefined;
-  const list = item.getComponent('minecraft:enchantments')?.enchantments;
-  if (!list || list.slot === EnchantmentSlot.none) return null; // slotが無い=エンチャ不可
-  return [...list];
 }
 
 /**
@@ -209,7 +201,7 @@ function getItemEnchants(item) {
  */
 function filterTypes(enchantList, enchantTypes, ignoredType) {
   return enchantTypes.filter(type => (
-    enchantList.canAddEnchantment(new Enchantment(type, 1)) &&
+    enchantList.canAddEnchantment({ type, level: 1 }) &&
     type !== ignoredType
   ));
 }
