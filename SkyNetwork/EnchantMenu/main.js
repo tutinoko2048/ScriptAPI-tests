@@ -47,13 +47,14 @@ export class EnchantMenu {
   
   /** @returns {Promise<void>} */
   async main(message = '') {
-    const enchants = this.item?.getComponent('minecraft:enchantable')?.getEnchantments();
-    if (!enchants) {
+    const enchantable = this.item?.getComponent('minecraft:enchantable');
+    if (!enchantable) {
       this.player.sendMessage('§cそのアイテムにはエンチャントを付与できません');
       this.player.playSound(sounds.error);
       return;
     }
     this.player.playSound(sounds.open);
+    const enchants = enchantable.getEnchantments();
 
     this.slot.lockMode = ItemLockMode.slot; // form開いてる間は触れないように
 
@@ -74,7 +75,7 @@ export class EnchantMenu {
     if (selection === 1) {
       const res = await util.confirmForm(this.player, { body: '本当にエンチャントを削除しますか？' });
       if (res) {
-        this.item.getComponent('minecraft:enchantable').removeAllEnchantments();
+        enchantable.removeAllEnchantments();
         this.player.playSound(sounds.clear);
 
       } else await this.main();
@@ -94,7 +95,7 @@ export class EnchantMenu {
     if (!(this.item.typeId in cache)) cache[this.item.typeId] = createEnchantmentTable(this.item.type);
     const table = cache[this.item.typeId]; // get from cache
     
-    const lapis = util.getItemAmount(this.player, enchantCost.item); // get player's lapis
+    const lapis = util.getItemAmount(this.player, enchantCost.item);
     /** @type {{ [level: number]: boolean }} */
     const canBuy = {};
     [1,2,3].forEach(lv => canBuy[lv] = checkCost(lapis, enchantCost[lv].amount, this.player.level, enchantCost[lv].level));
@@ -125,14 +126,14 @@ export class EnchantMenu {
       
     const { canceled, selection } = await form.show(this.player);
     if (canceled) return;
-    if ([0, 1, 2].includes(selection)) { // 0 or 1 or 2
+    if ([0, 1, 2].includes(selection)) {
       const lv = selection + 1;
-      if (!this.buyEnchant(lv)) return this.player.playSound(sounds.error); // button[0] = lv1
+      if (!this.buyEnchant(lv)) return this.player.playSound(sounds.error);
 
       enchantable.removeAllEnchantments(); // clear enchants
       enchantable.addEnchantments(table[lv].getEnchantments()); // apply
       this.player.playSound(sounds.enchant);
-      
+
       // regenerate enchants
       cache[this.item.typeId] = createEnchantmentTable(this.item.type);
     }
