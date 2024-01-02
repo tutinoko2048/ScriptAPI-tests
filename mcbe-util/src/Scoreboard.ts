@@ -1,3 +1,5 @@
+import * as nbt from 'prismarine-nbt';
+
 export enum ScoreboardIdentityType {
   Player = "Player",
   Entity = "Entity",
@@ -101,14 +103,14 @@ export class ScoreboardScoreInfo {
   }
 }
 export class Scoreboard {
-  data: any;
+  data: nbt.NBT;
   
   constructor(data: any) {
     this.data = data;
   }
   
   getObjectives(): ScoreboardObjective[] {
-    return this.data.Objectives.value.value.map(data => new ScoreboardObjective(this, data))
+    return this.data.value.Objectives.value.value.map(data => new ScoreboardObjective(this, data))
   }
   
   getObjective(objectiveId: string): ScoreboardObjective | undefined {
@@ -116,6 +118,8 @@ export class Scoreboard {
   }
   
   getParticipants(): ScoreboardIdentity[] {
-    return this.data.Entries.value.value.map(data => new ScoreboardIdentity(this, data));
+    const entries = this.data.value.Entries;
+    entries.value
+    return this.data.value.Entries.value.value.map(data => new ScoreboardIdentity(this, data));
   }
 }
