@@ -1,0 +1,47 @@
+{
+    "name": "bdsx-project",
+    "version": "1.0.0",
+    "description": "bdsx project",
+    "private": true,
+    "author": "YOU!",
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        "bdsx": "file:bdsx",
+        "blessed": "^0.1.81",
+        "colors": "1.4.0 || ^1.4.3",
+        "esbuild": "^0.19.12",
+        "follow-redirects": "^1.14.7",
+        "glob": "^7.2.3",
+        "node-html-parser": "^5.2.0",
+        "progress": "^2.0.3",
+        "semver": "^7.3.8",
+        "source-map": "~0.6.1",
+        "strip-json-comments": "^3.1.1",
+        "ts-node": "^10.4.0",
+        "tslib": "^2.3.1",
+        "typescript": "^5.2.2",
+        "unzipper": "^0.10.11"
+    },
+    "devDependencies": {
+        "@actions/core": "^1.10.0",
+        "@actions/github": "^5.1.1",
+        "@types/blessed": "^0.1.19",
+        "@types/follow-redirects": "^1.13.1",
+        "@types/glob": "^7.2.0",
+        "@types/node": "^12.20.36",
+        "@types/progress": "^2.0.5",
+        "@types/semver": "^7.3.13",
+        "@types/unzipper": "^0.10.4",
+        "@typescript-eslint/eslint-plugin": "^5.48.1",
+        "@typescript-eslint/parser": "^5.48.1",
+        "eslint": "^8.31.0",
+        "eslint-plugin-github": "^4.6.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-unicorn": "^40.1.0",
+        "jszip": "^3.10.1",
+        "prettier": "^2.8.1"
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "include": ["bdsx-src"],
+  "exclude": ["node_modules", "bdsx-src/pdbparser/globals"],
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": ["es2017"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "alwaysStrict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "resolveJsonModule": true,
+    "inlineSourceMap": true,
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "outDir": "./bdsx/bdsx",
+    "allowJs": true
+  }
+}
