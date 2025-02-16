@@ -34,11 +34,12 @@ SkyNetworkでは、工夫次第で優位に立ちまわることができる「�
 詳しくは[公式サイト](https://www.skynetwork-mcbe.net/how-to-join)をチェック！  
 フレンド機能にも対応しているのでSwitchやPS4版でも参加できます。
 
-<br />
-<br />
-<br />
-<br />
-<br />
+# 紹介動画
+[公式サイトをご覧ください！！](https://www.skynetwork-mcbe.net/play-video)
+
+<br/>
+<br/>
+<br/>
 
 ---
 ※ガチャも引けます
